@@ -87,10 +87,10 @@
     ethereum-cryptography "^2.0.0"
     micro-ftch "^0.3.1"
 
-"@fluent.xyz/sdk-core@0.2.91":
-  version "0.2.91"
-  resolved "https://registry.yarnpkg.com/@fluent.xyz/sdk-core/-/sdk-core-0.2.91.tgz#2333bd71bbee6a82e8eadd38c51431453839e874"
-  integrity sha512-eOizPt/OBxakLhLzhDFnVneeAzuQsvTkt0+lYS+alpbHzeyQqyA0IhtFvih0W4uT7FSlW5oF/+jlkw+oif8LKw==
+"@fluent.xyz/sdk-core@0.2.94":
+  version "0.2.94"
+  resolved "https://registry.yarnpkg.com/@fluent.xyz/sdk-core/-/sdk-core-0.2.94.tgz#f67db6e699f7021fcf8e6325c2b60b6dae3fa174"
+  integrity sha512-p2H8VY2IAQHAOCTO1uv5IZgOgnbiMfxJhK3nnLd5LdlWQfN4EETjlnmzAkl00WjkfSACdBQzFfl0tuY6bSeAPQ==
   dependencies:
     "@ethereumjs/rlp" "^5.0.2"
     "@tanstack/react-query" "5.45.1"

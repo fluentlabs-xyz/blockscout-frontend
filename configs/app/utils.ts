@@ -1,5 +1,4 @@
-import { DEVNET_EXPLORER_HOST, DEVNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/dist/config/devnet-config';
-import { TESTNET_EXPLORER_HOST, TESTNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/dist/config/testnet-config';
+import { DEVNET_EXPLORER_HOST, DEVNET_EXPLORER_URL, TESTNET_EXPLORER_HOST, TESTNET_EXPLORER_URL } from '@fluent.xyz/sdk-core';
 
 import isBrowser from 'lib/isBrowser';
 import * as regexp from 'lib/regexp';

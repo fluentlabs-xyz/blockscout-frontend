@@ -2,12 +2,10 @@ import {
   DEVNET_NETWORK_NATIVE_CURRENCY,
   FLUENT_DEVNET_CHAIN_ID,
   DEVNET_RPC_URL,
-} from '@fluent.xyz/sdk-core/dist/config/devnet-config';
-import {
   TESTNET_NETWORK_NATIVE_CURRENCY,
   FLUENT_TESTNET_CHAIN_ID,
   TESTNET_RPC_URL,
-} from '@fluent.xyz/sdk-core/dist/config/testnet-config';
+} from '@fluent.xyz/sdk-core';
 
 import type { RollupType } from 'types/client/rollup';
 import type { NetworkVerificationType, NetworkVerificationTypeEnvs } from 'types/networks';

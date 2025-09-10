@@ -1,6 +1,5 @@
 import path from 'node:path';
-import { DEVNET_EXPLORER_HOST } from '@fluent.xyz/sdk-core/dist/config/devnet-config.js';
-import { TESTNET_EXPLORER_HOST } from '@fluent.xyz/sdk-core/dist/config/testnet-config.js';
+import { DEVNET_EXPLORER_HOST, TESTNET_EXPLORER_HOST } from '@fluent.xyz/sdk-core';
 
 /* eslint-disable no-console */
 const stripTrailingSlash = (str) => str[str.length - 1] === '/' ? str.slice(0, -1) : str;
