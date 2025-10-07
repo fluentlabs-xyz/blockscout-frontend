@@ -340,16 +340,16 @@ const semanticTokens: ThemingConfig['semanticTokens'] = {
     },
     badge: {
       gray: {
-        bg: { value: { _light: '{colors.blackAlpha.50}', _dark: '{colors.whiteAlpha.100}' } },
-        fg: { value: { _light: '{colors.blackAlpha.800}', _dark: '{colors.whiteAlpha.800}' } },
+        bg: { value: { _light: '{colors.blackAlpha.50}', _dark: 'rgba(255, 255, 255, 0.10)' } },
+        fg: { value: { _light: '{colors.blackAlpha.800}', _dark: '{colors.white}' } },
       },
       green: {
-        bg: { value: { _light: '{colors.green.50}', _dark: '{colors.green.800}' } },
-        fg: { value: { _light: '{colors.green.500}', _dark: '{colors.green.200}' } },
+        bg: { value: { _light: '{colors.green.50}', _dark: 'rgba(6, 68, 1, 1)' } },
+        fg: { value: { _light: '{colors.green.500}', _dark: 'rgba(50, 254, 107, 1)' } },
       },
       red: {
-        bg: { value: { _light: '{colors.red.50}', _dark: '{colors.red.800}' } },
-        fg: { value: { _light: '{colors.red.500}', _dark: '{colors.red.200}' } },
+        bg: { value: { _light: '{colors.red.50}', _dark: 'rgba(139, 1, 66, 1)' } },
+        fg: { value: { _light: '{colors.red.500}', _dark: 'rgba(255, 143, 218, 1)' } },
       },
       purple: {
         bg: { value: { _light: '{colors.purple.50}', _dark: '{colors.purple.800}' } },

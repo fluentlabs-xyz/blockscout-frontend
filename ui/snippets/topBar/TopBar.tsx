@@ -16,7 +16,6 @@ const TopBar = () => {
         py={ 2 }
         px={{ base: '34px', lg: '34px' }}
         m="0 auto"
-        mb={ 2 }
         justifyContent="space-between"
         alignItems="center"
         maxW={ `${ CONTENT_MAX_WIDTH }px` }

@@ -4,16 +4,17 @@ export const recipe = defineRecipe({
   base: {
     display: 'inline-flex',
     alignItems: 'center',
-    borderRadius: 'sm',
+    borderRadius: 'lg',
     gap: '1',
-    fontWeight: '500',
+    fontWeight: '400',
+    fontSize: '12px',
     width: 'fit-content',
     maxWidth: '100%',
     whiteSpace: 'nowrap',
     fontVariantNumeric: 'normal',
     userSelect: 'none',
     _loading: {
-      borderRadius: 'sm',
+      borderRadius: 'lg',
     },
   },
   variants: {
@@ -69,7 +70,7 @@ export const recipe = defineRecipe({
     size: {
       sm: {
         textStyle: 'xs',
-        p: '1',
+        p: '2',
         h: '4.5',
         minH: '4.5',
       },
@@ -84,6 +85,6 @@ export const recipe = defineRecipe({
   defaultVariants: {
     variant: 'subtle',
     colorPalette: 'gray',
-    size: 'md',
+    size: 'sm',
   },
 });

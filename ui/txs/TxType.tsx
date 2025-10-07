@@ -59,7 +59,7 @@ const TxType = ({ types, isLoading }: Props) => {
   }
 
   return (
-    <Tag variant="surface" borderColor="transparent" boxShadow="none" background="transparent" p={ 0 } >
+    <Tag variant="surface" fontSize="16px" borderColor="transparent" boxShadow="none" background="transparent" p={ 0 } >
       { !isLoading ? label : '' }
     </Tag>
   );
