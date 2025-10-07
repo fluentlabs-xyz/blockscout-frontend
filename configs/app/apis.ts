@@ -25,7 +25,6 @@ const generalApi = (() => {
     apiSchema || 'https',
     '://',
     apiHost,
-    apiPort && ':' + apiPort,
   ].filter(Boolean).join('');
 
   const socketSchema = getEnvValue('NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL') || 'wss';

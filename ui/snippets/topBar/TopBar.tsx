@@ -11,10 +11,10 @@ import TopBarStats from './TopBarStats';
 const TopBar = () => {
   return (
     // not ideal if scrollbar is visible, but better than having a horizontal scroll
-    <Box bgColor={{ _light: 'theme.topbar.bg._light', _dark: 'theme.topbar.bg._dark' }} position="sticky" left={ 0 } width="100%" maxWidth="100vw">
+    <Box bgColor={{ _light: 'transparent', _dark: 'transparent' }} position="sticky" left={ 0 } width="100%" maxWidth="100vw">
       <Flex
         py={ 2 }
-        px={{ base: 3, lg: 6 }}
+        px={{ base: '34px', lg: '34px' }}
         m="0 auto"
         mb={ 2 }
         justifyContent="space-between"

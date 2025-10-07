@@ -40,11 +40,11 @@ const UI = Object.freeze({
   navigation: {
     logo: {
       'default': '/static/fluentLogo.svg',
-      dark: getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_LOGO_DARK'),
+      dark: '/static/fluentLogo.svg',
     },
     icon: {
-      'default': getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_ICON'),
-      dark: getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_ICON_DARK'),
+      'default': '/static/fluentIcon.svg',
+      dark: '/static/fluentIcon.svg',
     },
     highlightedRoutes,
     otherLinks: parseEnvJson<Array<NavItemExternal>>(getEnvValue('NEXT_PUBLIC_OTHER_LINKS')) || [],

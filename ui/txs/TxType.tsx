@@ -3,8 +3,7 @@ import React from 'react';
 import type { TransactionType } from 'types/api/transaction';
 
 import type { BadgeProps } from 'toolkit/chakra/badge';
-import { Badge } from 'toolkit/chakra/badge';
-
+import { Tag } from 'toolkit/chakra/tag';
 export interface Props extends BadgeProps {
   types: Array<TransactionType>;
   isLoading?: boolean;
@@ -21,48 +20,38 @@ const TYPES_ORDER: Array<TransactionType> = [
   'coin_transfer',
 ];
 
-const TxType = ({ types, isLoading, ...rest }: Props) => {
+const TxType = ({ types, isLoading }: Props) => {
   const typeToShow = types.sort((t1, t2) => TYPES_ORDER.indexOf(t1) - TYPES_ORDER.indexOf(t2))[0];
 
   let label;
-  let colorPalette: BadgeProps['colorPalette'];
 
   switch (typeToShow) {
     case 'contract_call':
       label = 'Contract call';
-      colorPalette = 'blue';
       break;
     case 'blob_transaction':
       label = 'Blob txn';
-      colorPalette = 'yellow';
       break;
     case 'contract_creation':
       label = 'Contract creation';
-      colorPalette = 'blue';
       break;
     case 'token_transfer':
       label = 'Token transfer';
-      colorPalette = 'orange';
       break;
     case 'token_creation':
       label = 'Token creation';
-      colorPalette = 'orange';
       break;
     case 'coin_transfer':
       label = 'Coin transfer';
-      colorPalette = 'orange';
       break;
     case 'rootstock_remasc':
       label = 'REMASC';
-      colorPalette = 'blue';
       break;
     case 'rootstock_bridge':
       label = 'Bridge';
-      colorPalette = 'blue';
       break;
     default:
       label = 'Transaction';
-      colorPalette = 'purple';
   }
 
   if (!label) {
@@ -70,9 +59,9 @@ const TxType = ({ types, isLoading, ...rest }: Props) => {
   }
 
   return (
-    <Badge colorPalette={ colorPalette } loading={ isLoading } { ...rest }>
-      { label }
-    </Badge>
+    <Tag variant="surface" borderColor="transparent" boxShadow="none" background="transparent" p={ 0 } >
+      { !isLoading ? label : '' }
+    </Tag>
   );
 };
 

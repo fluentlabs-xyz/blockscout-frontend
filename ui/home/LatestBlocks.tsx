@@ -115,7 +115,7 @@ const LatestBlocks = () => {
             Network utilization:{ nbsp }
           </Text>
           <Tooltip content={ `${ upperFirst(networkUtilization.load) } load` }>
-            <Text as="span" color={ networkUtilization.color } fontWeight={ 700 }>
+            <Text as="span" color="cyan.200" fontWeight={ 700 }>
               { statsQueryResult.data?.network_utilization_percentage.toFixed(2) }%
             </Text>
           </Tooltip>

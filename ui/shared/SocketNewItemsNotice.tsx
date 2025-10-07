@@ -67,7 +67,7 @@ const SocketNewItemsNotice = chakra(({ children, className, url, num, showErrorA
     return (
       <>
         <Link href={ url } onClick={ !url ? handleLinkClick : undefined }>{ num.toLocaleString() } more { name }{ num > 1 ? 's' : '' }</Link>
-        <Text whiteSpace="pre"> ha{ num > 1 ? 've' : 's' } come in</Text>
+        <Text whiteSpace="pre" color="white"> ha{ num > 1 ? 've' : 's' } come in</Text>
       </>
     );
   })();
@@ -82,7 +82,7 @@ const SocketNewItemsNotice = chakra(({ children, className, url, num, showErrorA
       px={ 4 }
       py="6px"
       fontSize="sm"
-      lineHeight={ 5 }
+      lineHeight={ 1 }
       bg={ bgColor }
       color={ color }
     >

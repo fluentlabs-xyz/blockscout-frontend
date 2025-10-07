@@ -22,7 +22,6 @@ const MainArea = ({ children, className }: Props) => {
         lg: `calc(100vh - ${ TOP_BAR_HEIGHT + HORIZONTAL_NAV_BAR_HEIGHT }px)`,
       }}
       alignItems="stretch"
-      flexDirection="column"
     >
       { children }
     </Flex>

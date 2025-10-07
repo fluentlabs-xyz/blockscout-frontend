@@ -53,7 +53,7 @@ const StatsWidget = ({
   period,
   href,
 }: Props) => {
-  const bgColor = 'grey.10';
+  const bgColor = 'theme.bg.primary._dark';
   const skeletonBgColor = 'blackAlpha.50';
   // const hintColor = 'white';
 
@@ -65,9 +65,8 @@ const StatsWidget = ({
         bgColor={ isLoading ? skeletonBgColor : bgColor }
         border="1px solid transparent"
         backdropFilter="blur(30px)"
-        // bgColor={ isLoading ? { _light: 'blackAlpha.50', _dark: 'whiteAlpha.50' } : { _light: 'theme.stats.bg._light', _dark: 'theme.stats.bg._dark' } }
         p={ 3 }
-        _hover={ href ? { bg: 'grey.20', border: '1px solid rgba(255, 255, 255, 0.3)' } : undefined }
+        _hover={ href ? { bg: '#ffffff3a', border: '1px solid rgba(255, 255, 255, 0.3)' } : undefined }
         borderRadius="12px"
         justifyContent="space-between"
         columnGap={ 2 }

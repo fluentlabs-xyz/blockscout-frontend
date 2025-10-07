@@ -1,4 +1,4 @@
-import { Box, Flex, Grid } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import React from 'react';
 
 import type { Block } from 'types/api/block';
@@ -35,7 +35,7 @@ const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
           isLoading={ isLoading }
           number={ block.height }
           tailLength={ 2 }
-          textStyle="md"
+          textStyle="xl"
           fontWeight={ 500 }
           mr="auto"
         />
@@ -56,23 +56,24 @@ const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
           ml={ 2 }
         />
       </Flex>
-      <Grid gridGap={ 2 } templateColumns="auto minmax(0, 1fr)" textStyle="sm">
-        <Skeleton loading={ isLoading }>Txn</Skeleton>
-        <Skeleton loading={ isLoading } color="text.secondary"><span>{ block.transactions_count }</span></Skeleton>
-
+      <Flex gridGap={ 2 } direction="column" fontSize="sm">
+        <Flex justifyContent="space-between" w="100%">
+          <Skeleton loading={ isLoading }>Txn</Skeleton>
+          <Skeleton loading={ isLoading } color="text.primary"><span>{ block.transactions_count }</span></Skeleton>
+        </Flex>
         { !config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.total_reward && (
-          <>
+          <Flex justifyContent="space-between" w="100%">
             <Skeleton loading={ isLoading }>Reward</Skeleton>
-            <Skeleton loading={ isLoading } color="text.secondary">
+            <Skeleton loading={ isLoading } color="text.primary">
               <span>
                 { totalReward.dp(10).toFixed() } { currencyUnits.ether }
               </span>
             </Skeleton>
-          </>
+          </Flex>
         ) }
 
         { !config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.miner && (
-          <>
+          <Flex justifyContent="space-between" w="100%">
             <Skeleton loading={ isLoading } textTransform="capitalize">{ getNetworkValidatorTitle() }</Skeleton>
             <AddressEntity
               address={ block.miner }
@@ -82,9 +83,9 @@ const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
               noCopy
               truncation="constant"
             />
-          </>
+          </Flex>
         ) }
-      </Grid>
+      </Flex>
     </Box>
   );
 };

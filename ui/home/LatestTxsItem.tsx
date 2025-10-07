@@ -16,7 +16,6 @@ import { Skeleton } from 'toolkit/chakra/skeleton';
 import AddressFromTo from 'ui/shared/address/AddressFromTo';
 import TxEntity from 'ui/shared/entities/tx/TxEntity';
 import TxStatus from 'ui/shared/statusTag/TxStatus';
-import TimeWithTooltip from 'ui/shared/time/TimeWithTooltip';
 import TxFee from 'ui/shared/tx/TxFee';
 import TxWatchListTags from 'ui/shared/tx/TxWatchListTags';
 import TxType from 'ui/txs/TxType';
@@ -60,17 +59,6 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
               isLoading={ isLoading }
               hash={ tx.hash }
             />
-            <TimeWithTooltip
-              timestamp={ tx.timestamp }
-              enableIncrement
-              timeFormat="relative"
-              isLoading={ isLoading }
-              fontWeight="400"
-              fontSize="sm"
-              color="text.secondary"
-              flexShrink={ 0 }
-              ml={ 2 }
-            />
           </Flex>
         </Box>
       </Flex>
@@ -79,6 +67,7 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
         to={ dataTo }
         isLoading={ isLoading }
         mode="compact"
+        noIcon
       />
       <Flex flexDir="column" rowGap={ 3 }>
         { !config.UI.views.tx.hiddenFields?.value && (
