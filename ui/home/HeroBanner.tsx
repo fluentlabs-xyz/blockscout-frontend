@@ -9,7 +9,7 @@ import SearchBar from 'ui/snippets/searchBar/SearchBar';
 import UserProfileDesktop from 'ui/snippets/user/profile/UserProfileDesktop';
 import UserWalletDesktop from 'ui/snippets/user/wallet/UserWalletDesktop';
 
-const BACKGROUND_DEFAULT = 'radial-gradient(402.46% 180.4% at 19.46% -20.31%, #3700FF 0%, #FF8FDA 100%)';
+export const BACKGROUND_DEFAULT = 'radial-gradient(402.46% 180.4% at 19.46% -20.31%, #3700FF 0%, #FF8FDA 100%)';
 const TEXT_COLOR_DEFAULT = 'white';
 const BORDER_DEFAULT = 'none';
 

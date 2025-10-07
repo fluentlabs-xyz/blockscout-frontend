@@ -1,8 +1,9 @@
 import type { HTMLChakraProps } from '@chakra-ui/react';
-import { Box, Flex, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { clamp } from 'es-toolkit';
 import React from 'react';
 
+import { useColorModeValue } from 'toolkit/chakra/color-mode';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 
 interface Props extends Omit<HTMLChakraProps<'div'>, 'direction'> {

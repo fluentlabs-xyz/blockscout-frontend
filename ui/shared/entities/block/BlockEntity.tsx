@@ -48,7 +48,7 @@ const Content = chakra((props: ContentProps) => {
       { ...props }
       text={ String(props.number) }
       tailLength={ props.tailLength ?? 2 }
-      color={ props.color || 'white' }
+      color="white"
     />
   );
 });

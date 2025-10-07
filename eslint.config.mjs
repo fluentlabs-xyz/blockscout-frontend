@@ -67,6 +67,7 @@ export default tseslint.config(
     'public/',
     '.git/',
     'next.config.js',
+    'node_modules',
   ] },
 
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },

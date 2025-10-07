@@ -63,7 +63,7 @@ const ContractDetails = ({ addressData, channel, mainContractQuery }: Props) => 
   });
   const { data, isPlaceholderData, isError } = selectedItem?.address_hash !== addressData.hash ? contractQuery : mainContractQuery;
 
-  const tabs = useContractDetailsTabs({ data, isLoading: isPlaceholderData, addressData, sourceAddress: selectedItem?.address_hash });
+  const tabs = useContractDetailsTabs({ data, isLoading: isPlaceholderData, addressData, sourceAddress: selectedItem?.address_hash ?? addressData.hash });
 
   if (isError) {
     return <DataFetchAlert/>;
