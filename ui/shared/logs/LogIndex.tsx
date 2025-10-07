@@ -15,7 +15,7 @@ const LogIndex = ({ children, isLoading, ...props }: Props) => {
       <Skeleton loading={ isLoading } asChild>
         <Center
           color={ isLoading ? 'transparent' : { _light: 'blue.600', _dark: 'gray.50' } }
-          bgColor={ isLoading ? undefined : { _light: 'blue.50', _dark: 'gray.600' } }
+          bgColor={ isLoading ? undefined : { _light: 'blue.50', _dark: 'grey.30' } }
           borderRadius="base"
           px={ 2 }
           { ...props }

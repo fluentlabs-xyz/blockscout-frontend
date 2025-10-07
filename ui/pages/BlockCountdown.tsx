@@ -115,7 +115,7 @@ const BlockCountdown = ({ hideCapybaraRunner }: Props) => {
               name="block_slim"
               w={{ base: '65px', lg: '125px' }}
               h={{ base: '75px', lg: '140px' }}
-              color={{ _light: 'gray.300', _dark: 'gray.600' }}
+              color={{ _light: 'gray.300', _dark: 'grey.30' }}
               flexShrink={ 0 }
             />
             { multichainContext?.chain && (

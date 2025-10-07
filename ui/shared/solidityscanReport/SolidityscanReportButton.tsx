@@ -17,7 +17,7 @@ interface Props extends ButtonProps {
 
 const SolidityscanReportButton = ({ score, isLoading, ...rest }: Props) => {
   const { scoreColor } = useScoreLevelAndColor(score);
-  const colorLoading = { _light: 'gray.300', _dark: 'gray.600' };
+  const colorLoading = { _light: 'gray.300', _dark: 'grey.10' };
   const onFocusCapture = usePreventFocusAfterModalClosing();
 
   return (

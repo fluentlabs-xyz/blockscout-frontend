@@ -74,7 +74,7 @@ const MarketplaceAppCard = ({
       borderRadius="md"
       padding={{ base: 3, md: '20px' }}
       borderWidth="1px"
-      borderColor={{ _light: 'gray.200', _dark: 'gray.600' }}
+      borderColor={{ _light: 'gray.200', _dark: 'grey.30' }}
     >
       <Flex
         flexDirection="column"

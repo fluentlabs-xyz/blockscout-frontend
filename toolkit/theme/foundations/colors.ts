@@ -51,7 +51,7 @@ const DEFAULT_THEME_COLORS = {
     },
     secondary: {
       _light: { value: '{colors.gray.400}' },
-      _dark: { value: '{colors.gray.500}' },
+      _dark: { value: '{colors.grey.30}' },
     },
   },
   button: {

@@ -97,7 +97,7 @@ const ChartWidget = ({
       padding={{ base: 3, lg: 4 }}
       borderRadius="lg"
       borderWidth="1px"
-      borderColor={{ _light: 'gray.200', _dark: 'gray.600' }}
+      borderColor={{ _light: 'gray.200', _dark: 'grey.30' }}
       className={ className }
     >
       <Flex columnGap={ 6 } mb={ 2 } alignItems="flex-start">

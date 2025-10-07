@@ -30,7 +30,7 @@ const BlockCountdownIndex = () => {
       <Box position="relative">
         <IconSvg
           name="block_countdown"
-          color={{ _light: 'gray.300', _dark: 'gray.600' }}
+          color={{ _light: 'gray.300', _dark: 'grey.30' }}
           w={{ base: '160px', lg: '240px' }}
           h={{ base: '123px', lg: '184px' }}
         />

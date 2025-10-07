@@ -29,7 +29,7 @@ const Burger = ({ isMarketplaceAppPage }: Props) => {
             name="burger"
             boxSize={ 6 }
             display="block"
-            color={{ _light: 'gray.600', _dark: 'white' }}
+            color={{ _light: 'grey.30', _dark: 'white' }}
           />
         </IconButton>
       </DrawerTrigger>

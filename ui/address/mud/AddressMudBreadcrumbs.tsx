@@ -64,7 +64,7 @@ const BreadcrumbItem = ({ text, href, isLast }: BreadcrumbItemProps) => {
       >
         { text }
       </Link>
-      { !isLast && <IconSvg name="arrows/east" boxSize={ 6 } color={{ _light: 'gray.300', _dark: 'gray.600' }}/> }
+      { !isLast && <IconSvg name="arrows/east" boxSize={ 6 } color={{ _light: 'gray.300', _dark: 'grey.30' }}/> }
     </Grid>
   );
 };

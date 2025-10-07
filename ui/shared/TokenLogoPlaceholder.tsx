@@ -7,7 +7,7 @@ const TokenLogoPlaceholder = (props: BoxProps) => {
   return (
     <IconSvg
       fontWeight={ 600 }
-      bgColor={{ _light: 'gray.200', _dark: 'gray.600' }}
+      bgColor={{ _light: 'gray.200', _dark: 'grey.600' }}
       color={{ _light: 'gray.400', _dark: 'gray.200' }}
       borderRadius="base"
       name="token-placeholder"

@@ -179,8 +179,8 @@ const semanticTokens: ThemingConfig['semanticTokens'] = {
         bg: { value: { _light: '{colors.gray.100}', _dark: '{colors.grey.10}' } },
       },
       subtle: {
-        DEFAULT: { value: { _light: '{colors.blackAlpha.800}', _dark: '{colors.gray.400}' } },
-        hover: { value: { _light: '{colors.blackAlpha.800}', _dark: '{colors.gray.400}' } },
+        DEFAULT: { value: { _light: '{colors.blackAlpha.800}', _dark: '{colors.white}' } },
+        hover: { value: { _light: '{colors.blackAlpha.800}', _dark: '{colors.white}' } },
       },
       navigation: {
         fg: {
@@ -232,7 +232,7 @@ const semanticTokens: ThemingConfig['semanticTokens'] = {
           DEFAULT: { value: '{colors.text.primary}' },
         },
         border: {
-          DEFAULT: { value: { _light: '{colors.gray.300}', _dark: '{colors.gray.600}' } },
+          DEFAULT: { value: { _light: '{colors.gray.300}', _dark: '{colors.grey.30}' } },
         },
       },
       segmented: {
@@ -286,7 +286,7 @@ const semanticTokens: ThemingConfig['semanticTokens'] = {
         DEFAULT: { value: { _light: '{colors.gray.100}', _dark: '{colors.grey.30}' } },
         hover: { value: { _light: '{colors.gray.200}', _dark: '{colors.grey.50}' } },
         focus: { value: '{colors.hover}' },
-        filled: { value: { _light: '{colors.gray.100}', _dark: '{colors.gray.700}' } },
+        filled: { value: { _light: '{colors.gray.100}', _dark: '{colors.grey.30}' } },
         readOnly: { value: { _light: '{colors.gray.200}', _dark: '{colors.grey.20}' } },
         error: { value: '{colors.red.500}' },
       },
