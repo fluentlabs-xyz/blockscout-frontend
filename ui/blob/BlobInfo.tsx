@@ -7,7 +7,6 @@ import { Alert } from 'toolkit/chakra/alert';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import CopyToClipboard from 'ui/shared/CopyToClipboard';
 import * as DetailedInfo from 'ui/shared/DetailedInfo/DetailedInfo';
-import DetailedInfoSponsoredItem from 'ui/shared/DetailedInfo/DetailedInfoSponsoredItem';
 import TxEntity from 'ui/shared/entities/tx/TxEntity';
 
 import BlobData from './BlobData';
@@ -93,8 +92,6 @@ const BlobInfo = ({ data, isLoading }: Props) => {
           </DetailedInfo.ItemValue>
         </>
       ) }
-
-      <DetailedInfoSponsoredItem isLoading={ isLoading }/>
 
       { data.blob_data && (
         <BlobData data={ data.blob_data } hash={ data.hash } isLoading={ isLoading }/>

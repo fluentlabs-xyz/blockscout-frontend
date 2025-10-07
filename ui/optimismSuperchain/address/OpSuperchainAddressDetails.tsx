@@ -6,7 +6,6 @@ import multichainConfig from 'configs/multichain';
 import getCurrencySymbol from 'lib/multichain/getCurrencySymbol';
 import { Link } from 'toolkit/chakra/link';
 import * as DetailedInfo from 'ui/shared/DetailedInfo/DetailedInfo';
-import DetailedInfoSponsoredItem from 'ui/shared/DetailedInfo/DetailedInfoSponsoredItem';
 import TextSeparator from 'ui/shared/TextSeparator';
 
 import ChainIcon from '../components/ChainIcon';
@@ -113,8 +112,6 @@ const OpSuperchainAddressDetails = ({ addressHash }: Props) => {
       <DetailedInfo.ItemValue>
         Coming soon 🔜
       </DetailedInfo.ItemValue>
-
-      <DetailedInfoSponsoredItem isLoading={ isLoading }/>
 
     </DetailedInfo.Container>
   );

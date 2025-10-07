@@ -8,7 +8,6 @@ import config from 'configs/app';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import CopyToClipboard from 'ui/shared/CopyToClipboard';
 import * as DetailedInfo from 'ui/shared/DetailedInfo/DetailedInfo';
-import DetailedInfoSponsoredItem from 'ui/shared/DetailedInfo/DetailedInfoSponsoredItem';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import BlockEntity from 'ui/shared/entities/block/BlockEntity';
 import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
@@ -112,7 +111,6 @@ const ValidatorDetails = ({ data, isLoading }: Props) => {
         <BlockEntity number={ data.stake_updated_at_block_number } isLoading={ isLoading }/>
       </DetailedInfo.ItemValue>
 
-      <DetailedInfoSponsoredItem isLoading={ isLoading }/>
     </DetailedInfo.Container>
   );
 };

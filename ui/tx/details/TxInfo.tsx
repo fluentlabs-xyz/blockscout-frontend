@@ -34,7 +34,6 @@ import { WEI, WEI_IN_GWEI } from 'toolkit/utils/consts';
 import CopyToClipboard from 'ui/shared/CopyToClipboard';
 import CurrencyValue from 'ui/shared/CurrencyValue';
 import * as DetailedInfo from 'ui/shared/DetailedInfo/DetailedInfo';
-import DetailedInfoSponsoredItem from 'ui/shared/DetailedInfo/DetailedInfoSponsoredItem';
 import DetailedInfoTimestamp from 'ui/shared/DetailedInfo/DetailedInfoTimestamp';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import AddressEntityInterop from 'ui/shared/entities/address/AddressEntityInterop';
@@ -428,8 +427,6 @@ const TxInfo = ({ data, tacOperations, isLoading, socketStatus }: Props) => {
       { data.allowed_peekers && data.allowed_peekers.length > 0 && (
         <TxAllowedPeekers items={ data.allowed_peekers }/>
       ) }
-
-      <DetailedInfoSponsoredItem isLoading={ isLoading }/>
 
       <DetailedInfo.ItemDivider/>
 

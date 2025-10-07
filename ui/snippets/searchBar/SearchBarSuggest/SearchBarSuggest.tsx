@@ -162,7 +162,7 @@ const SearchBarSuggest = ({ query, zetaChainCCTXQuery, cosmosHashType, searchTer
     return (
       <>
         { resultCategories.length > 1 && (
-          <Box position="sticky" top="0" width="100%" background={{ _light: 'white', _dark: 'gray.900' }} py={ 5 } my={ -5 } ref={ tabsRef } zIndex={ 1 }>
+          <Box position="sticky" top="0" width="100%" background={{ _light: 'white', _dark: 'grey.10' }} py={ 5 } my={ -5 } ref={ tabsRef } zIndex={ 1 }>
             <TabsRoot
               variant="secondary"
               size="sm"

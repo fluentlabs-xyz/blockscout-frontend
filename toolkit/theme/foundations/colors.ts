@@ -47,7 +47,7 @@ const DEFAULT_THEME_COLORS = {
   icon: {
     primary: {
       _light: { value: '{colors.gray.500}' },
-      _dark: { value: '{colors.gray.400}' },
+      _dark: { value: '{colors.grey.30}' },
     },
     secondary: {
       _light: { value: '{colors.gray.400}' },
@@ -86,7 +86,7 @@ const DEFAULT_THEME_COLORS = {
     bg: {
       selected: {
         _light: { value: '{colors.blue.50}' },
-        _dark: { value: '{colors.gray.800}' },
+        _dark: { value: '#ffffff1a' },
       },
     },
     text: {
@@ -210,7 +210,7 @@ const colors = {
     '600': { value: '#6B46C1' },
     '800': { value: '#44337A' },
   },
-  black: { value: '#101112' },
+  black: { value: '#000000' },
   white: { value: '#ffffff' },
   whiteAlpha: {
     '50': { value: 'RGBA(255, 255, 255, 0.04)' },

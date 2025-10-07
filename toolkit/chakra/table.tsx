@@ -103,7 +103,7 @@ export const TableHeaderSticky = (props: TableHeaderProps) => {
       ref={ ref }
       position="sticky"
       top={ top ? `${ top }px` : 0 }
-      backgroundColor={{ _light: 'white', _dark: 'black' }}
+      backgroundColor={{ _light: 'white', _dark: 'transparent' }}
       boxShadow={ isStuck ? 'action_bar' : 'none' }
       zIndex="1"
       { ...rest }
