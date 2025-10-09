@@ -55,7 +55,7 @@ const NavigationDesktop = () => {
       px={{ lg: isExpanded ? 6 : 4, xl: isCollapsed ? 4 : 6 }}
       pt={ 12 }
       pb={ 6 }
-      width={{ lg: isExpanded ? '229px' : '92px', xl: isCollapsed ? '92px' : '229px' }}
+      width={{ lg: isExpanded ? '260px' : '92px', xl: isCollapsed ? '92px' : '260px' }}
       onClick={ handleContainerClick }
       transitionProperty="width, padding"
       transitionDuration="normal"
@@ -110,7 +110,7 @@ const NavigationDesktop = () => {
         transformOrigin="center"
         position="absolute"
         top="104px"
-        left={{ lg: isExpanded ? '216px' : '80px', xl: isCollapsed ? '80px' : '216px' }}
+        left={{ lg: isExpanded ? '246px' : '80px', xl: isCollapsed ? '80px' : '246px' }}
         cursor="pointer"
         onClick={ handleTogglerClick }
         aria-label="Expand/Collapse menu"

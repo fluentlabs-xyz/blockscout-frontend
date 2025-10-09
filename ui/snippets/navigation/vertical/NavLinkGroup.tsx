@@ -1,5 +1,5 @@
 import { Text, HStack, Box, VStack } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import type { NavGroupItem } from 'types/client/navigation';
 
@@ -20,6 +20,7 @@ type Props = {
 };
 
 const NavLinkGroup = ({ item, isCollapsed }: Props) => {
+  const [ showNavs, setShowNavs ] = useState(false);
   const isExpanded = isCollapsed === false;
 
   const styleProps = useNavLinkStyleProps({ isCollapsed, isExpanded, isActive: item.isActive });
@@ -53,6 +54,10 @@ const NavLinkGroup = ({ item, isCollapsed }: Props) => {
     </Box>
   );
 
+  const handleContainerClick = React.useCallback(() => {
+    setShowNavs(!showNavs);
+  }, [ setShowNavs, showNavs ]);
+
   return (
     <Box as="li" listStyleType="none" w="100%">
       <Tooltip
@@ -62,6 +67,7 @@ const NavLinkGroup = ({ item, isCollapsed }: Props) => {
         lazyMount={ false }
         variant="popover"
         interactive
+        disabled={ !isCollapsed }
       >
         <Box
           { ...styleProps.itemProps }
@@ -79,6 +85,10 @@ const NavLinkGroup = ({ item, isCollapsed }: Props) => {
             color: 'link.navigation.fg.hover',
           }}
           cursor="pointer"
+          display="flex"
+          flexDirection="column"
+          gap="16px"
+          onClick={ handleContainerClick }
         >
           <HStack gap={ 0 } overflow="hidden">
             <NavLinkIcon item={ item }/>
@@ -106,6 +116,7 @@ const NavLinkGroup = ({ item, isCollapsed }: Props) => {
               transitionTimingFunction="ease"
             />
           </HStack>
+          { !isCollapsed && showNavs ? content : null }
         </Box>
       </Tooltip>
     </Box>
