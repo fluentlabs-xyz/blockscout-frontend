@@ -45,7 +45,7 @@ const NavLinkGroup = ({ item, isCollapsed }: Props) => {
               borderColor: 'border.divider',
             }}
           >
-            { subItem.map(subSubItem => <NavLink key={ subSubItem.text } item={ subSubItem } isCollapsed={ false }/>) }
+            { subItem.map(subSubItem => <NavLink key={ subSubItem.text } isMainNav={ false } item={ subSubItem } isCollapsed={ false }/>) }
           </Box>
         ) :
           <NavLink key={ subItem.text } item={ subItem } isCollapsed={ false }/>,
@@ -71,16 +71,12 @@ const NavLinkGroup = ({ item, isCollapsed }: Props) => {
       >
         <Box
           { ...styleProps.itemProps }
-          w={{ lg: isExpanded ? '180px' : '60px', xl: isCollapsed ? '60px' : '180px' }}
+          w={{ lg: isExpanded ? '220px' : '60px', xl: isCollapsed ? '60px' : '220px' }}
           pl={{ lg: isExpanded ? 2 : '15px', xl: isCollapsed ? '15px' : 2 }}
           pr={{ lg: isExpanded ? 0 : '15px', xl: isCollapsed ? '15px' : 0 }}
           aria-label={ `${ item.text } link group` }
           position="relative"
-          color={ item.isActive ? 'link.navigation.fg.selected' : 'link.navigation.fg' }
-          bgColor={ item.isActive ? 'link.navigation.bg.selected' : 'link.navigation.bg' }
-          _hover={{
-            color: 'link.navigation.fg.hover',
-          }}
+          color={ item.isActive ? 'pink' : 'link.navigation.fg' }
           _open={{
             color: 'link.navigation.fg.hover',
           }}
@@ -90,7 +86,9 @@ const NavLinkGroup = ({ item, isCollapsed }: Props) => {
           gap="16px"
           onClick={ handleContainerClick }
         >
-          <HStack gap={ 0 } overflow="hidden">
+          <HStack gap={ 0 } overflow="hidden" _hover={{
+            color: 'link.navigation.fg.hover',
+          }}>
             <NavLinkIcon item={ item }/>
             <Text
               { ...styleProps.textProps }
@@ -108,7 +106,7 @@ const NavLinkGroup = ({ item, isCollapsed }: Props) => {
               name="arrows/east-mini"
               position="absolute"
               right="7px"
-              transform="rotate(180deg)"
+              transform={ showNavs ? 'rotate(270deg)' : 'rotate(180deg)' }
               boxSize={ 6 }
               opacity={{ lg: isExpanded ? '1' : '0', xl: isCollapsed ? '0' : '1' }}
               transitionProperty="opacity"

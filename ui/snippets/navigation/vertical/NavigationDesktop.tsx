@@ -56,6 +56,7 @@ const NavigationDesktop = () => {
       pt={ 12 }
       pb={ 6 }
       width={{ lg: isExpanded ? '260px' : '92px', xl: isCollapsed ? '92px' : '260px' }}
+      minWidth={{ lg: isExpanded ? '260px' : '92px', xl: isCollapsed ? '92px' : '260px' }}
       onClick={ handleContainerClick }
       transitionProperty="width, padding"
       transitionDuration="normal"
@@ -83,7 +84,7 @@ const NavigationDesktop = () => {
             if (isGroupItem(item)) {
               return <NavLinkGroup key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
             } else {
-              return <NavLink key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
+              return <NavLink isMainNav key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
             }
           }) }
         </VStack>

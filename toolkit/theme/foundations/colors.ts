@@ -38,6 +38,10 @@ const DEFAULT_THEME_COLORS = {
       },
     },
     option: {
+      text: {
+        _light: { value: '{colors.blue.500}' },
+        _dark: { value: '{colors.blue.500}' },
+      },
       bg: {
         _light: { value: '{colors.blue.500}' },
         _dark: { value: '{colors.blue.500}' },
@@ -86,7 +90,7 @@ const DEFAULT_THEME_COLORS = {
     bg: {
       selected: {
         _light: { value: '{colors.blue.50}' },
-        _dark: { value: '#ffffff1a' },
+        _dark: { value: 'transparent' },
       },
     },
     text: {
@@ -125,8 +129,7 @@ const colors = {
     '100': { value: '#C6F6D5' },
     '200': { value: '#9AE6B4' },
     '400': { value: '#48BB78' },
-    '500': { value: '#38A169' },
-    '600': { value: '#25855A' },
+    '500': { value: '#32fe6b' },
     '800': { value: '#22543D' },
     '900': { value: '#1C4532' },
   },
@@ -144,7 +147,7 @@ const colors = {
   },
   red: {
     '50': { value: '#FFF5F5' },
-    '100': { value: '#FED7D7' },
+    '100': { value: '#ff7b69' },
     '200': { value: '#FEB2B2' },
     '400': { value: '#F56565' },
     '500': { value: '#E53E3E' },
@@ -152,6 +155,7 @@ const colors = {
     '800': { value: '#822727' },
     '900': { value: '#63171B' },
   },
+  pink: { value: '#ff8fda' },
   orange: {
     '50': { value: '#FFFAF0' },
     '100': { value: '#FEEBCB' },
@@ -183,10 +187,10 @@ const colors = {
     '200': { value: '#E2E8F0' },
     '300': { value: '#CBD5E0' },
     '400': { value: '#A0AEC0' },
-    '500': { value: '#718096' },
+    '500': { value: 'rgba(255, 255, 255, 0.50)' },
     '600': { value: '#4A5568' },
     '700': { value: '#2D3748' },
-    '800': { value: '#1A202C' },
+    '800': { value: '#ffffff1a' },
     '900': { value: '#171923' },
   },
   teal: {

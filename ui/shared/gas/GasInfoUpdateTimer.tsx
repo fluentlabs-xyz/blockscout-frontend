@@ -46,7 +46,7 @@ const GasInfoUpdateTimer = ({ startTime, duration, size = 'sm', ...rest }: Props
       size={ size }
       { ...rest }
     >
-      <ProgressCircleRing/>
+      <ProgressCircleRing color="cyan"/>
     </ProgressCircleRoot>
   );
 };

@@ -24,7 +24,7 @@ type Props = {
   onMouseOver?: () => void;
 };
 
-const NavLink = ({ item, onClick, isCollapsed, isDisabled }: Props) => {
+const NavLink = ({ item, onClick, isCollapsed, isDisabled, isMainNav }: Props) => {
   const isMobile = useIsMobile();
 
   const isInternalLink = isInternalItem(item);
@@ -36,53 +36,7 @@ const NavLink = ({ item, onClick, isCollapsed, isDisabled }: Props) => {
 
   const isHighlighted = checkRouteHighlight(item);
 
-  // const content = (
-  //   <Link
-  //     href={ href }
-  //     target={ isInternalLink ? '_self' : '_blank' }
-  //     { ...styleProps.itemProps }
-  //     display="flex"
-  //     position="relative"
-  //     px={ !isMainNav ? "12px" : "24px" }
-  //     py={ !isMainNav ? "12px" : "12px"}
-  //     aria-label={ `${ item.text } link` }
-  //     fontSize="12px"
-  //     whiteSpace="nowrap"
-  //     onClick={ onClick }
-  //     _hover={{
-  //       bg: "grey.20",
-  //       borderRadius: "14px"
-  //     }}
-  //     onMouseOver={onMouseOver}
-  //   >
-  //     <Tooltip
-  //       label={ item.text }
-  //       hasArrow={ false }
-  //       isDisabled={ isMobile || isCollapsed === false || (isCollapsed === undefined && isXLScreen) }
-  //       placement="right"
-  //       variant="nav"
-  //       gutter={ 20 }
-  //       color={ isInternalLink && item.isActive ? colors.text.active : colors.text.hover }
-  //       margin={ 0 }
-  //     >
-  //       <HStack spacing={ 0 } overflow="hidden">
-  //         {/*@ts-ignore*/}
-  //         {!isMainNav && (item.icon || item.iconComponent) &&
-  //           <Box w={{ base: '36px', lg: '36px' }} display="flex" borderRadius="10px" bg="black" p="6px">
-  //             <NavLinkIcon boxSize="24px" item={ item } color="rgba(255, 255, 255, 0.5)"/>
-  //           </Box>
-  //         }
-  //         <Text { ...styleProps.textProps } as="span" ml={ !isMainNav ? 3 : 0 }>
-  //           <span>{ item.text }</span>
-  //           { !isInternalLink && <IconSvg name="link_external" boxSize={ 3 } color="grey.50" verticalAlign="middle"/> }
-  //         </Text>
-  //         { isHighlighted && (
-  //           <LightningLabel iconColor={ styleProps.itemProps.bgColor } isCollapsed={ isCollapsed }/>
-  //         ) }
-  //       </HStack>
-  //     </Tooltip>
-  //   </Link>
-  // );
+  const color = isMainNav ? 'pink' : 'red.100';
 
   return (
     <Box as="li" listStyleType="none" w="100%">
@@ -110,11 +64,11 @@ const NavLink = ({ item, onClick, isCollapsed, isDisabled }: Props) => {
           positioning={{ placement: 'right', offset: { crossAxis: 0, mainAxis: 20 } }}
           variant="popover"
           contentProps={{
-            color: isInternalLink && item.isActive ? 'link.navigation.fg.selected' : 'link.navigation.fg.hover',
+            color: isInternalLink && item.isActive ? color : 'link.navigation.fg.hover',
           }}
           interactive
         >
-          <HStack gap={ 0 } overflow="hidden">
+          <HStack gap={ 0 } overflow="hidden" color={ isInternalLink && item.isActive ? color : 'inherit' }>
             <NavLinkIcon item={ item }/>
             <chakra.span
               { ...styleProps.textProps }
@@ -125,7 +79,7 @@ const NavLink = ({ item, onClick, isCollapsed, isDisabled }: Props) => {
             </chakra.span>
             { isHighlighted && (
               <LightningLabel
-                iconColor={ isInternalLink && item.isActive ? 'link.navigation.bg.selected' : 'link.navigation.bg.group' }
+                iconColor={ isInternalLink && item.isActive ? color : 'link.navigation.bg.group' }
                 isCollapsed={ isCollapsed }
               />
             ) }

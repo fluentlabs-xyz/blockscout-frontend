@@ -11,7 +11,6 @@ import { Button } from 'toolkit/chakra/button';
 // eslint-disable-next-line import-helpers/order-imports
 import CodeViewSnippet from 'ui/shared/CodeViewSnippet';
 
-//import ContractDetailsByteCode from './ContractDetailsByteCode';
 import RawDataSnippet from 'ui/shared/RawDataSnippet';
 
 import ContractDetailsConstructorArgs from './ContractDetailsConstructorArgs';
@@ -118,7 +117,7 @@ export default function useContractDetailsTabs({ data, isLoading, addressData, s
       <ContractDetailsVerificationButton
         isLoading={ isLoading }
         addressHash={ addressData.hash }
-        // isPartiallyVerified={ Boolean(data?.is_partially_verified) }
+      // isPartiallyVerified={ Boolean(data?.is_partially_verified) }
       />
     );
 
@@ -135,7 +134,12 @@ export default function useContractDetailsTabs({ data, isLoading, addressData, s
         mb={ 2 }
         ml="auto"
         flexShrink={ 0 }
+        width="fit-content"
         as="a"
+        bg="grey.10"
+        _hover={{
+          color: 'cyan',
+        }}
         // eslint-disable-next-line react/jsx-no-bind
         onClick={ toggleButton }
       >

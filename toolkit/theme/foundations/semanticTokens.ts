@@ -17,6 +17,7 @@ const semanticTokens: ThemingConfig['semanticTokens'] = {
       },
       option: {
         bg: { value: { _light: '{colors.theme.selected.option.bg._light}', _dark: '{colors.theme.selected.option.bg._dark}' } },
+        text: { value: { _light: '{colors.theme.selected.option.bg._light}', _dark: '{colors.theme.selected.option.bg._dark}' } },
       },
     },
 
