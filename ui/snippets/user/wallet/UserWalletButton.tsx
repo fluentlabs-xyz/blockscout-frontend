@@ -54,6 +54,10 @@ const UserWalletButton = ({ size, variant, isPending, isAutoConnectDisabled, add
           px={{ base: 2.5, lg: 3 }}
           fontWeight={ address ? 700 : 600 }
           loading={ isPending }
+          background="grey.10"
+          _hover={{
+            color: 'cyan.200',
+          }}
           loadingText={ isMobile ? undefined : 'Connecting' }
           { ...rest }
         >

@@ -18,14 +18,38 @@ export function walletConnect(): CspDev.DirectiveDescriptor {
       'wss://relay.walletconnect.com',
       'wss://relay.walletconnect.org',
       'wss://www.walletlink.org',
+      // Coinbase Wallet domains
+      '*.coinbase.com',
+      '*.wallet.coinbase.com',
+      '*.app.coinbase.com',
+    ],
+    'script-src': [
+      '*.web3modal.com',
+      '*.web3modal.org',
+      '*.walletconnect.com',
+      '*.walletconnect.org',
+      // Coinbase Wallet domains
+      '*.coinbase.com',
+      '*.wallet.coinbase.com',
+      '*.app.coinbase.com',
     ],
     'frame-ancestors': [
       '*.walletconnect.org',
       '*.walletconnect.com',
+      // Coinbase Wallet domains
+      '*.coinbase.com',
+      '*.wallet.coinbase.com',
+      '*.app.coinbase.com',
     ],
     'img-src': [
       KEY_WORDS.BLOB,
       '*.walletconnect.com',
+      '*.web3modal.com',
+      '*.web3modal.org',
+      // Coinbase Wallet domains
+      '*.coinbase.com',
+      '*.wallet.coinbase.com',
+      '*.app.coinbase.com',
     ],
   };
 }
