@@ -1,4 +1,4 @@
-import { chakra } from '@chakra-ui/react';
+import { Box, chakra } from '@chakra-ui/react';
 import React from 'react';
 
 import type { NavItem } from 'types/client/navigation';
@@ -15,10 +15,12 @@ import { checkRouteHighlight } from '../utils';
 interface Props {
   className?: string;
   item: NavItem;
+  isMainNav?: boolean;
   noIcon?: boolean;
+  onMouseOver?: () => void;
 }
 
-const NavLink = ({ className, item, noIcon }: Props) => {
+const NavLink = ({ className, item, noIcon, onMouseOver, isMainNav }: Props) => {
   const isInternalLink = isInternalItem(item);
 
   const isActive = 'isActive' in item && item.isActive;
@@ -28,6 +30,8 @@ const NavLink = ({ className, item, noIcon }: Props) => {
   return (
     <chakra.li
       listStyleType="none"
+      onMouseOver={ onMouseOver }
+      w={ !isMainNav ? '100%' : '' }
     >
       <Link
         className={ className }
@@ -37,14 +41,23 @@ const NavLink = ({ className, item, noIcon }: Props) => {
         alignItems="center"
         variant="navigation"
         { ...(isActive ? { 'data-selected': true } : {}) }
-        w="224px"
-        px={ 2 }
-        py="9px"
+        px={ !isMainNav ? '12px' : '24px' }
+        py={ !isMainNav ? '12px' : '12px' }
+        w={ !isMainNav ? '100%' : '' }
         textStyle="sm"
         fontWeight={ 500 }
         borderRadius="base"
+        _hover={{
+          bg: 'grey.20',
+          borderRadius: '14px',
+          color: 'white',
+        }}
       >
-        { !noIcon && <NavLinkIcon item={ item } mr={ 3 }/> }
+        { !noIcon && (
+          <Box w={{ base: '36px', lg: '36px' }} display="flex" borderRadius="10px" bg="black" p="6px">
+            <NavLinkIcon boxSize="24px" item={ item } color="rgba(255, 255, 255, 0.5)"/>
+          </Box>
+        ) }
         <chakra.span>{ item.text }</chakra.span>
         { isHighlighted && (
           <LightningLabel

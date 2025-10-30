@@ -14,11 +14,12 @@ const TopBar = () => {
     <Box bgColor={{ _light: 'transparent', _dark: 'transparent' }} position="sticky" left={ 0 } width="100%" maxWidth="100vw">
       <Flex
         py={ 2 }
-        px={{ base: '34px', lg: '34px' }}
-        m="0 auto"
+        px={{ base: '34px', lg: 12 }}
         justifyContent="space-between"
         alignItems="center"
+        width="100%"
         maxW={ `${ CONTENT_MAX_WIDTH }px` }
+        m="0 auto"
       >
         { !config.features.opSuperchain.isEnabled ? <TopBarStats/> : <div/> }
         <Flex alignItems="center">

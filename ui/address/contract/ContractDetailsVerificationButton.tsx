@@ -29,6 +29,10 @@ const ContractDetailsVerificationButton = ({ isLoading, addressHash, ...rest }: 
     >
       <Button
         size="sm"
+        bg="grey.10"
+        _hover={{
+          color: 'cyan',
+        }}
         loadingSkeleton={ isLoading }
       >
         Verify & publish
