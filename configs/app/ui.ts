@@ -48,7 +48,7 @@ const UI = Object.freeze({
     },
     highlightedRoutes,
     otherLinks: parseEnvJson<Array<NavItemExternal>>(getEnvValue('NEXT_PUBLIC_OTHER_LINKS')) || [],
-    layout: (getEnvValue('NEXT_PUBLIC_NAVIGATION_LAYOUT') || 'vertical') as NavigationLayout,
+    layout: 'horizontal' as NavigationLayout,
     promoBanner: undefined,
   },
   featuredNetworks: {
