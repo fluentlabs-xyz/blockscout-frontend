@@ -30,16 +30,21 @@ const verificationType: NetworkVerificationType = (() => {
 
 const rpcUrls = (() => {
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
-  const value = env === 'devnet' ? DEVNET_RPC_URL : TESTNET_RPC_URL;
-  const isUrl = urlValidator(value);
+  const customRpc = getEnvValue('NEXT_PUBLIC_NETWORK_RPC_URL');
 
-  if (value && isUrl === true) {
-    return [ value ];
+  const value =
+    customRpc || (env === 'devnet' ? DEVNET_RPC_URL : TESTNET_RPC_URL);
+
+  if (!value) {
+    return [];
   }
 
-  const parsedValue = parseEnvJson<Array<string>>(value);
+  const parsed = parseEnvJson<Array<string>>(value);
+  if (Array.isArray(parsed)) {
+    return parsed.filter((url) => urlValidator(url));
+  }
 
-  return Array.isArray(parsedValue) ? parsedValue : [];
+  return urlValidator(value) ? [ value ] : [];
 })();
 
 const getChain = () => {
