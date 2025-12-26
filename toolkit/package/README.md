@@ -34,7 +34,7 @@ Ensure you have the following peer dependencies installed:
     "@blockscout/ui-toolkit": "latest",
     "@chakra-ui/react": ">=3.15.0",
     "@emotion/react": ">=11.14.0",
-    "next": ">=15.2.3",
+    "next": ">=15.5.9",
     "next-themes": ">=0.4.4",
     "react": ">=18.3.1",
     "react-dom": ">=18.3.1",
