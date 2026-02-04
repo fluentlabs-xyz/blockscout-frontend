@@ -190,7 +190,7 @@ export default function useNavItems(): ReturnType {
           internalTxs,
           rollupDeposits,
           rollupWithdrawals,
-        ],
+        ].filter(Boolean) as Array<NavItem>,
         [
           blocks,
           userOps,
@@ -242,7 +242,7 @@ export default function useNavItems(): ReturnType {
             isActive: pathname === '/withdrawals',
           },
         ] : []),
-      ].filter(Boolean);
+      ].filter(Boolean) as Array<NavItem>;
     }
 
     const tokensNavItems = [
