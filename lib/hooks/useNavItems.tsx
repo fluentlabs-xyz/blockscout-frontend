@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { NavItemInternal, NavItem, type NavItem, NavGroupItem } from 'types/client/navigation';
+import type { NavItemInternal, NavItem, NavGroupItem } from 'types/client/navigation';
 
 import config from 'configs/app';
 import { rightLineArrow } from 'toolkit/utils/htmlEntities';
