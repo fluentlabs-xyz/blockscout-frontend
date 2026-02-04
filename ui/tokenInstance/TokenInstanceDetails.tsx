@@ -10,7 +10,6 @@ import AppActionButton from 'ui/shared/AppActionButton/AppActionButton';
 import useAppActionData from 'ui/shared/AppActionButton/useAppActionData';
 import CopyToClipboard from 'ui/shared/CopyToClipboard';
 import * as DetailedInfo from 'ui/shared/DetailedInfo/DetailedInfo';
-import DetailedInfoSponsoredItem from 'ui/shared/DetailedInfo/DetailedInfoSponsoredItem';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
 import NftMedia from 'ui/shared/nft/NftMedia';
@@ -122,7 +121,6 @@ const TokenInstanceDetails = ({ data, token, scrollRef, isLoading }: Props) => {
       >
         <TokenInstanceMetadataInfo data={ data } isLoading={ isLoading }/>
         <DetailedInfo.ItemDivider/>
-        <DetailedInfoSponsoredItem isLoading={ isLoading }/>
       </DetailedInfo.Container>
     </>
   );

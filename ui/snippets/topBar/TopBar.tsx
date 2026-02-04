@@ -11,7 +11,6 @@ import NetworkAddToWallet from 'ui/shared/NetworkAddToWallet';
 
 import DeFiDropdown from './DeFiDropdown';
 import NetworkMenu from './NetworkMenu';
-import Settings from './settings/Settings';
 import TopBarStats from './TopBarStats';
 
 const TopBar = () => {
@@ -39,10 +38,10 @@ const TopBar = () => {
 
   return (
     // not ideal if scrollbar is visible, but better than having a horizontal scroll
-    <Box bgColor={{ _light: 'theme.topbar.bg._light', _dark: 'theme.topbar.bg._dark' }} position="sticky" left={ 0 } width="100%" maxWidth="100vw">
+    <Box bgColor={{ _light: 'transparent', _dark: 'black' }} position="sticky" left={ 0 } width="100%" maxWidth="100vw">
       <Flex
         py={ 2 }
-        px={{ base: 3, lg: 6 }}
+        px={{ base: '34px', lg: 12 }}
         m="0 auto"
         justifyContent="space-between"
         alignItems="center"
@@ -62,7 +61,6 @@ const TopBar = () => {
               { hasDeFiDropdown && <DeFiDropdown/> }
             </HStack>
           ) }
-          <Settings/>
         </HStack>
       </Flex>
     </Box>

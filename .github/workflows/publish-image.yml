@@ -68,12 +68,7 @@ jobs:
                 id: meta
                 uses: docker/metadata-action@v5
                 with:
-                    images: ${{ steps.image-name.outputs.image-name }}
-                    flavor: |
-                        latest=false
-                    tags: |
-                        type=ref,event=tag
-                        ${{ inputs.tags }}
+                    images: ghcr.io/fluentlabs-xyz/blockscout-frontend
 
             -   name: Add SHORT_SHA env property with commit short sha
                 run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV

@@ -98,7 +98,7 @@ const LatestBlocks = () => {
           ))) }
         </VStack>
         <Flex justifyContent="center">
-          <Link textStyle="sm" href={ route({ pathname: '/blocks' }) }>View all blocks</Link>
+          <Link textStyle="sm" href={ route({ pathname: '/blocks' }) } color="white">View all blocks</Link>
         </Flex>
       </>
     );
@@ -108,14 +108,14 @@ const LatestBlocks = () => {
 
   return (
     <Box width={{ base: '100%', lg: '280px' }} flexShrink={ 0 }>
-      <Heading level="3">Latest blocks</Heading>
+      <Heading level="3" color="white">Latest blocks</Heading>
       { statsQueryResult.data?.network_utilization_percentage !== undefined && (
         <Skeleton loading={ statsQueryResult.isPlaceholderData } mt={ 2 } display="inline-block" textStyle="sm">
-          <Text as="span">
+          <Text as="span" color="white">
             Network utilization:{ nbsp }
           </Text>
           <Tooltip content={ `${ upperFirst(networkUtilization.load) } load` }>
-            <Text as="span" color={ networkUtilization.color } fontWeight={ 700 }>
+            <Text as="span" color="cyan.200" fontWeight={ 700 }>
               { statsQueryResult.data?.network_utilization_percentage.toFixed(2) }%
             </Text>
           </Tooltip>

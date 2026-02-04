@@ -53,36 +53,39 @@ const StatsWidget = ({
   period,
   href,
 }: Props) => {
+  const bgColor = 'theme.bg.primary._dark';
+  const skeletonBgColor = 'blackAlpha.50';
+
   return (
     <Container href={ !isLoading ? href : undefined } className={ href ? className : undefined }>
       <Flex
         className={ href ? undefined : className }
         alignItems="center"
-        bgColor={ isLoading ? { _light: 'blackAlpha.50', _dark: 'whiteAlpha.50' } : { _light: 'theme.stats.bg._light', _dark: 'theme.stats.bg._dark' } }
+        bgColor={ isLoading ? skeletonBgColor : bgColor }
+        border="1px solid transparent"
+        backdropFilter="blur(30px)"
         p={ 3 }
-        borderRadius="base"
+        _hover={ href ? { bg: '#ffffff3a', border: '1px solid rgba(255, 255, 255, 0.3)' } : undefined }
+        borderRadius="12px"
         justifyContent="space-between"
         columnGap={ 2 }
         w="100%"
         h="100%"
       >
         { icon && (
-          <IconSvg
-            name={ icon }
-            p={ 2 }
-            boxSize="40px"
-            isLoading={ isLoading }
-            borderRadius="base"
-            display={{ base: 'none', lg: 'block' }}
-            flexShrink={ 0 }
-          />
+          <Box w={{ base: '36px', lg: '36px' }} borderRadius="10px" bg="black" p="6px">
+            <IconSvg
+              name={ icon }
+              boxSize="24px"
+              isLoading={ isLoading }
+              borderRadius="base"
+              color="rgba(255, 255, 255, 0.5)"
+              display={{ base: 'none', lg: 'block' }}
+              flexShrink={ 0 }
+            />
+          </Box>
         ) }
-        <Box
-          w={{
-            base: `calc(100% - ${ hint ? '24px' : '0px' })`,
-            lg: `calc(100% - ${ icon ? '48px' : '0px' } - ${ hint ? '24px' : '0px' })`,
-          }}
-        >
+        <Box w={{ base: '100%', lg: icon ? 'calc(100% - 48px)' : '100%' }}>
           <Skeleton
             loading={ isLoading }
             color="text.secondary"

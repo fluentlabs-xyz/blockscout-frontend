@@ -15,7 +15,6 @@ import AddressFromTo from 'ui/shared/address/AddressFromTo';
 import TxEntity from 'ui/shared/entities/tx/TxEntity';
 import EntityTag from 'ui/shared/EntityTags/EntityTag';
 import TxStatus from 'ui/shared/statusTag/TxStatus';
-import TimeWithTooltip from 'ui/shared/time/TimeWithTooltip';
 import TxFee from 'ui/shared/tx/TxFee';
 import TxWatchListTags from 'ui/shared/tx/TxWatchListTags';
 import NativeCoinValue from 'ui/shared/value/NativeCoinValue';
@@ -74,15 +73,6 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
               hash={ tx.hash }
               fontWeight="700"
             />
-            <TimeWithTooltip
-              timestamp={ tx.timestamp }
-              enableIncrement
-              timeFormat="relative"
-              isLoading={ isLoading }
-              color="text.secondary"
-              flexShrink={ 0 }
-              ml={ 2 }
-            />
           </Flex>
         </Box>
       </Flex>
@@ -91,6 +81,7 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
         to={ dataTo }
         isLoading={ isLoading }
         mode="compact"
+        noIcon
       />
       { !(config.UI.views.tx.hiddenFields?.value && config.UI.views.tx.hiddenFields?.tx_fee) ? (
         <Flex flexDir="column" rowGap={ 3 }>

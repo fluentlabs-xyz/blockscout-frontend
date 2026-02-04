@@ -1,8 +1,7 @@
 import type { ContractCodeIde } from 'types/client/contract';
-import { type NavItemExternal, type NavigationLayout, type NavigationPromoBannerConfig } from 'types/client/navigation';
+import { type NavItemExternal, type NavigationLayout } from 'types/client/navigation';
 import { HOME_STATS_WIDGET_IDS, type ChainIndicatorId, type HeroBannerConfig, type HomeStatsWidgetId } from 'types/homepage';
 import type { NetworkExplorer } from 'types/networks';
-import type { ColorThemeId } from 'types/settings';
 import type { FontFamily } from 'types/ui';
 
 import { COLOR_THEMES, type ColorTheme } from 'lib/settings/colorTheme';
@@ -33,29 +32,24 @@ const highlightedRoutes = (() => {
 })();
 
 const defaultColorTheme = (() => {
-  const envValue = getEnvValue('NEXT_PUBLIC_COLOR_THEME_DEFAULT') as ColorThemeId | undefined;
+  const envValue = 'dark';
   return COLOR_THEMES.find((theme) => theme.id === envValue) as ColorTheme | undefined;
-})();
-
-const navigationPromoBanner = (() => {
-  const envValue = parseEnvJson<NavigationPromoBannerConfig>(getEnvValue('NEXT_PUBLIC_NAVIGATION_PROMO_BANNER_CONFIG'));
-  return envValue || undefined;
 })();
 
 const UI = Object.freeze({
   navigation: {
     logo: {
-      'default': getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_LOGO'),
-      dark: getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_LOGO_DARK'),
+      'default': '/static/fluentLogo.svg',
+      dark: '/static/fluentLogo.svg',
     },
     icon: {
-      'default': getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_ICON'),
-      dark: getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_ICON_DARK'),
+      'default': '/static/fluentIcon.svg',
+      dark: '/static/fluentIcon.svg',
     },
     highlightedRoutes,
     otherLinks: parseEnvJson<Array<NavItemExternal>>(getEnvValue('NEXT_PUBLIC_OTHER_LINKS')) || [],
     layout: (getEnvValue('NEXT_PUBLIC_NAVIGATION_LAYOUT') || 'vertical') as NavigationLayout,
-    promoBanner: navigationPromoBanner,
+    promoBanner: undefined,
   },
   featuredNetworks: {
     items: getExternalAssetFilePath('NEXT_PUBLIC_FEATURED_NETWORKS'),
@@ -97,7 +91,7 @@ const UI = Object.freeze({
     overrides: parseEnvJson<Record<string, unknown>>(getEnvValue('NEXT_PUBLIC_COLOR_THEME_OVERRIDES')) || {},
   },
   fonts: {
-    heading: parseEnvJson<FontFamily>(getEnvValue('NEXT_PUBLIC_FONT_FAMILY_HEADING')),
+    eading: '\'Bossa\', sans-serif',
     body: parseEnvJson<FontFamily>(getEnvValue('NEXT_PUBLIC_FONT_FAMILY_BODY')),
   },
   maxContentWidth: getEnvValue('NEXT_PUBLIC_MAX_CONTENT_WIDTH_ENABLED') === 'false' ? false : true,

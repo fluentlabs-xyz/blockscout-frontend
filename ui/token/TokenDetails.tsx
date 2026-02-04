@@ -20,7 +20,6 @@ import type { TokenTabs } from 'ui/pages/Token';
 import AppActionButton from 'ui/shared/AppActionButton/AppActionButton';
 import useAppActionData from 'ui/shared/AppActionButton/useAppActionData';
 import * as DetailedInfo from 'ui/shared/DetailedInfo/DetailedInfo';
-import DetailedInfoSponsoredItem from 'ui/shared/DetailedInfo/DetailedInfoSponsoredItem';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import AssetValue from 'ui/shared/value/AssetValue';
 
@@ -230,7 +229,6 @@ const TokenDetails = ({ tokenQuery }: Props) => {
         </>
       ) }
 
-      <DetailedInfoSponsoredItem isLoading={ tokenQuery.isPlaceholderData }/>
     </DetailedInfo.Container>
   );
 };

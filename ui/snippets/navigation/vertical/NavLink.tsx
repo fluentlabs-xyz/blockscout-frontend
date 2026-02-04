@@ -20,9 +20,11 @@ type Props = {
   onClick?: (e: React.MouseEvent) => void;
   isCollapsed?: boolean;
   isDisabled?: boolean;
+  isMainNav?: boolean;
+  onMouseOver?: () => void;
 };
 
-const NavLink = ({ item, onClick, isCollapsed, isDisabled }: Props) => {
+const NavLink = ({ item, onClick, isCollapsed, isDisabled, isMainNav }: Props) => {
   const isMobile = useIsMobile();
 
   const isInternalLink = isInternalItem(item);
@@ -33,6 +35,8 @@ const NavLink = ({ item, onClick, isCollapsed, isDisabled }: Props) => {
   const isXLScreen = useBreakpointValue({ base: false, xl: true });
 
   const isHighlighted = checkRouteHighlight(item);
+
+  const color = isMainNav ? 'pink' : 'red.100';
 
   return (
     <Box as="li" listStyleType="none" w="100%">
@@ -60,11 +64,11 @@ const NavLink = ({ item, onClick, isCollapsed, isDisabled }: Props) => {
           positioning={{ placement: 'right', offset: { crossAxis: 0, mainAxis: 20 } }}
           variant="popover"
           contentProps={{
-            color: isInternalLink && item.isActive ? 'link.navigation.fg.selected' : 'link.navigation.fg.hover',
+            color: isInternalLink && item.isActive ? color : 'link.navigation.fg.hover',
           }}
           interactive
         >
-          <HStack gap={ 0 } overflow="hidden">
+          <HStack gap={ 0 } overflow="hidden" color={ isInternalLink && item.isActive ? color : 'inherit' }>
             <NavLinkIcon item={ item }/>
             <chakra.span
               { ...styleProps.textProps }
@@ -75,7 +79,7 @@ const NavLink = ({ item, onClick, isCollapsed, isDisabled }: Props) => {
             </chakra.span>
             { isHighlighted && (
               <LightningLabel
-                iconColor={ isInternalLink && item.isActive ? 'link.navigation.bg.selected' : 'link.navigation.bg.group' }
+                iconColor={ isInternalLink && item.isActive ? color : 'link.navigation.bg.group' }
                 isCollapsed={ isCollapsed }
               />
             ) }

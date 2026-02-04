@@ -49,7 +49,7 @@ const FooterLinkItem = ({ icon, iconSize, iconUrl, text, url, isLoading }: Props
     if (icon) {
       return (
         <Center minW={ 6 }>
-          <IconSvg boxSize={ iconSize || 5 } name={ icon }/>
+          <IconSvg boxSize={ iconSize || 5 } name={ icon } color="white"/>
         </Center>
       );
     }
@@ -58,7 +58,7 @@ const FooterLinkItem = ({ icon, iconSize, iconUrl, text, url, isLoading }: Props
   })();
 
   return (
-    <Link href={ url } display="flex" alignItems="center" h="30px" variant="subtle" external noIcon textStyle="xs" columnGap={ 2 }>
+    <Link href={ url } display="flex" color="white" alignItems="center" h="30px" variant="subtle" external noIcon textStyle="xs" columnGap={ 2 }>
       { iconElement }
       { text }
     </Link>

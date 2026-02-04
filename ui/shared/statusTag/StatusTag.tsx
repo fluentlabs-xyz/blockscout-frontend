@@ -48,7 +48,7 @@ const StatusTag = ({ type, text, errorText, ...rest }: Props) => {
 
   return (
     <Tooltip content={ errorText } disabled={ !errorText }>
-      <Badge colorPalette={ colorPalette } startElement={ iconElement } { ...rest }>
+      <Badge colorPalette={ colorPalette } { ...rest }>
         { capitalizedText }
       </Badge>
     </Tooltip>

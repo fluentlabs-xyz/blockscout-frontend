@@ -5,7 +5,7 @@ import type { ExcludeUndefined } from 'types/utils';
 import config from 'configs/app';
 
 export const BODY_TYPEFACE = config.UI.fonts.body?.name ?? 'Inter, InterFallback';
-export const HEADING_TYPEFACE = config.UI.fonts.heading?.name ?? 'Poppins';
+export const HEADING_TYPEFACE = 'Bossa';
 
 export const fonts: ExcludeUndefined<ThemingConfig['tokens']>['fonts'] = {
   heading: { value: `${ HEADING_TYPEFACE }, sans-serif` },
@@ -88,6 +88,26 @@ export const textStyles: ThemingConfig['textStyles'] = {
         fontWeight: '400',
         fontFamily: 'body',
       },
+    },
+  },
+  textStyles: {
+    h2: {
+      fontSize: [ '32px' ],
+      fontWeight: '500',
+      lineHeight: '40px',
+      fontFamily: 'heading',
+    },
+    h3: {
+      fontSize: '24px',
+      fontWeight: '500',
+      lineHeight: '32px',
+      fontFamily: 'heading',
+    },
+    h4: {
+      fontSize: 'md',
+      fontWeight: '500',
+      lineHeight: '24px',
+      fontFamily: 'heading',
     },
   },
 };

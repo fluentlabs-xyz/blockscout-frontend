@@ -89,7 +89,7 @@ const BlockEntity = (props: EntityProps) => {
   const multichainContext = useMultichainContext();
   const partsProps = distributeEntityProps(props, multichainContext);
 
-  const content = <Content { ...partsProps.content }/>;
+  const content = <Content color="cyan.200" { ...partsProps.content }/>;
 
   return (
     <Container { ...partsProps.container }>

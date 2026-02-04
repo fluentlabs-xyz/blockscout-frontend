@@ -6,8 +6,6 @@ import { getFeaturePayload } from 'configs/app/features/types';
 
 import config from 'configs/app';
 import essentialDappsChainsConfig from 'configs/essential-dapps-chains';
-import useIsMobile from 'lib/hooks/useIsMobile';
-import AdBanner from 'ui/shared/ad/AdBanner';
 
 const feature = getFeaturePayload(config.features.marketplace);
 const dappConfig = feature?.essentialDapps?.multisend;
@@ -515,33 +513,19 @@ const widgetConfig = Object.fromEntries(dappConfig?.chains.map((chainId) => {
 }) || []);
 
 const Multisend = () => {
-  const isMobile = useIsMobile();
-
   return (
-    <>
-      <Container>
-        <MultisenderWidget
-          config={ widgetConfig }
-          logoType="minified"
-          posthogKey={ dappConfig?.posthogKey }
-          posthogHost={ dappConfig?.posthogHost }
-          classNames={{
-            theme: 'multisenderTheme',
-            mantineProvider: 'multisenderMantineProvider',
-          }}
-        />
-      </Container>
-      { (feature?.essentialDappsAdEnabled && !isMobile) && (
-        <AdBanner
-          format="desktop"
-          w="fit-content"
-          borderRadius="md"
-          overflow="hidden"
-          mx="auto"
-          mt={ 10 }
-        />
-      ) }
-    </>
+    <Container>
+      <MultisenderWidget
+        config={ widgetConfig }
+        logoType="minified"
+        posthogKey={ dappConfig?.posthogKey }
+        posthogHost={ dappConfig?.posthogHost }
+        classNames={{
+          theme: 'multisenderTheme',
+          mantineProvider: 'multisenderMantineProvider',
+        }}
+      />
+    </Container>
   );
 };
 

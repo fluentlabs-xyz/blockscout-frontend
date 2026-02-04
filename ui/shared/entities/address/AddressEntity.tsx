@@ -208,7 +208,7 @@ const AddressEntity = (props: EntityProps) => {
   // inside highlight context all tooltips should be interactive
   // because non-interactive ones will not pass 'onMouseLeave' event to the parent component
   // see issue - https://github.com/chakra-ui/chakra-ui/issues/9939#issuecomment-2810567024
-  const content = <Content { ...partsProps.content } altHash={ altHash } tooltipInteractive={ Boolean(highlightContext) }/>;
+  const content = <Content { ...partsProps.content } altHash={ altHash } color="cyan.200" tooltipInteractive={ Boolean(highlightContext) }/>;
 
   return (
     <Container
@@ -219,6 +219,7 @@ const AddressEntity = (props: EntityProps) => {
       onMouseEnter={ highlightContext?.onMouseEnter }
       onMouseLeave={ highlightContext?.onMouseLeave }
       position="relative"
+      fontSize="14px"
       zIndex={ 0 }
     >
       <Icon { ...partsProps.icon } tooltipInteractive={ Boolean(highlightContext) }/>

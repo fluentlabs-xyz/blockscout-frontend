@@ -87,10 +87,10 @@ const TopBarStats = () => {
         { hasGasInfo && (
           <>
             <Skeleton loading={ isPlaceholderData } whiteSpace="pre-wrap">
-              <chakra.span color="text.secondary">Gas </chakra.span>
+              <chakra.span color="white" mr={ 2 }>Gas </chakra.span>
               <GasInfoTooltip data={ data } dataUpdatedAt={ dataUpdatedAt } placement={ !data?.coin_price ? 'bottom-start' : undefined }>
                 <Link>
-                  <GasPrice data={ data.gas_prices?.average ?? null }/>
+                  <GasPrice color="grey50" data={ data.gas_prices?.average ?? null }/>
                 </Link>
               </GasInfoTooltip>
             </Skeleton>

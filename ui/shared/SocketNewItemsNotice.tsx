@@ -73,10 +73,13 @@ const SocketNewItemsNotice = chakra(({ children, className, url, num, showErrorA
     return (
       <>
         <Link href={ url } onClick={ !url ? handleLinkClick : undefined }>{ num.toLocaleString() } more { name }{ num > 1 ? 's' : '' }</Link>
-        <Text whiteSpace="pre"> ha{ num > 1 ? 've' : 's' } come in</Text>
+        <Text whiteSpace="pre" color="white"> ha{ num > 1 ? 've' : 's' } come in</Text>
       </>
     );
   })();
+
+  const color = 'black';
+  const bgColor = 'linear-gradient(90deg, #FE6901 -7.32%, #FF7FFE 81.62%)';
 
   const content = !isLoading ? (
     <Alert
@@ -85,6 +88,9 @@ const SocketNewItemsNotice = chakra(({ children, className, url, num, showErrorA
       px={ 4 }
       py="6px"
       textStyle="sm"
+      lineHeight={ 1 }
+      bg={ bgColor }
+      color={ color }
     >
       { alertContent }
     </Alert>

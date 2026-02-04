@@ -1,8 +1,10 @@
 import type { HTMLChakraProps } from '@chakra-ui/react';
+import { Global } from '@emotion/react';
 import { GrowthBookProvider } from '@growthbook/growthbook-react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { AppProps } from 'next/app';
+import localFont from 'next/font/local';
 import React from 'react';
 
 import type { NextPageWithLayout } from 'nextjs/types';
@@ -28,9 +30,17 @@ import GoogleAnalytics from 'ui/shared/GoogleAnalytics';
 import Layout from 'ui/shared/layout/Layout';
 import Web3ModalProvider from 'ui/shared/Web3ModalProvider';
 
+import './global.css';
 import 'lib/setLocale';
 // import 'focus-visible/dist/focus-visible';
 import 'nextjs/global.css';
+
+const Bossa = localFont({
+  src: '../public/fonts/Bossa-Regular.woff2',
+  weight: 'normal',
+  style: 'normal',
+  variable: '--font-Bossa',
+});
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -53,7 +63,33 @@ Anyone asking you to run code here might be trying to scam you and steal your da
 If you don't understand what this console is for, close it now and stay safe.`;
 
 const CONSOLE_SCAM_WARNING_DELAY_MS = 500;
+const Fonts = () => (
+  <Global
+    styles={ `
+      /* latin */
+      @font-face {
+        font-family: 'Bossa';
+        src: url('./fonts/Bossa-Regular.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+      }
 
+      @font-face {
+        font-family: 'Bossa';
+        src: url('./fonts/Bossa-Bold.woff2') format('woff2');
+        font-weight: bold;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'Bossa';
+        src: url('./fonts/Bossa-Medium.woff2') format('woff2');
+        font-weight: 600;
+        font-style: normal;
+      }
+      ` }
+  />
+);
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   const growthBook = initGrowthBook(pageProps.uuid);
@@ -91,34 +127,37 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const socketUrl = !config.features.opSuperchain.isEnabled ? getSocketUrl() : undefined;
 
   return (
-    <ChakraProvider>
-      <RollbarProvider config={ rollbarConfig }>
-        <AppErrorBoundary
-          { ...ERROR_SCREEN_STYLES }
-          Container={ AppErrorGlobalContainer }
-        >
-          <Web3ModalProvider>
-            <AppContextProvider pageProps={ pageProps }>
-              <QueryClientProvider client={ queryClient }>
-                <GrowthBookProvider growthbook={ growthBook }>
-                  <SocketProvider url={ socketUrl }>
-                    <RewardsContextProvider>
-                      <MarketplaceContextProvider>
-                        <SettingsContextProvider>
-                          { content }
-                        </SettingsContextProvider>
-                      </MarketplaceContextProvider>
-                    </RewardsContextProvider>
-                  </SocketProvider>
-                </GrowthBookProvider>
-                <ReactQueryDevtools buttonPosition="bottom-left" position="left"/>
-                <GoogleAnalytics/>
-              </QueryClientProvider>
-            </AppContextProvider>
-          </Web3ModalProvider>
-        </AppErrorBoundary>
-      </RollbarProvider>
-    </ChakraProvider>
+    <div className={ `${ Bossa.className } ${ Bossa.variable }` }>
+      <ChakraProvider>
+        <Fonts/>
+        <RollbarProvider config={ rollbarConfig }>
+          <AppErrorBoundary
+            { ...ERROR_SCREEN_STYLES }
+            Container={ AppErrorGlobalContainer }
+          >
+            <Web3ModalProvider>
+              <AppContextProvider pageProps={ pageProps }>
+                <QueryClientProvider client={ queryClient }>
+                  <GrowthBookProvider growthbook={ growthBook }>
+                    <SocketProvider url={ socketUrl }>
+                      <RewardsContextProvider>
+                        <MarketplaceContextProvider>
+                          <SettingsContextProvider>
+                            { content }
+                          </SettingsContextProvider>
+                        </MarketplaceContextProvider>
+                      </RewardsContextProvider>
+                    </SocketProvider>
+                  </GrowthBookProvider>
+                  <ReactQueryDevtools buttonPosition="bottom-left" position="left"/>
+                  <GoogleAnalytics/>
+                </QueryClientProvider>
+              </AppContextProvider>
+            </Web3ModalProvider>
+          </AppErrorBoundary>
+        </RollbarProvider>
+      </ChakraProvider>
+    </div>
   );
 }
 

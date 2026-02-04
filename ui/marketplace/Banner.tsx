@@ -5,9 +5,7 @@ import React from 'react';
 import type { MarketplaceApp } from 'types/client/marketplace';
 
 import config from 'configs/app';
-import useIsMobile from 'lib/hooks/useIsMobile';
 import { apps as appsMock } from 'mocks/apps/apps';
-import AdBanner from 'ui/shared/ad/AdBanner';
 
 import FeaturedApp from './Banner/FeaturedApp';
 import IframeBanner from './Banner/IframeBanner';
@@ -24,8 +22,6 @@ type BannerProps = {
 };
 
 const Banner = ({ apps = [], favoriteApps, isLoading, onInfoClick, onFavoriteClick, onAppClick }: BannerProps) => {
-  const isMobile = useIsMobile();
-
   if (!feature.isEnabled) {
     return null;
   }
@@ -59,15 +55,6 @@ const Banner = ({ apps = [], favoriteApps, isLoading, onInfoClick, onFavoriteCli
   return (
     <Flex gap={ 6 }>
       { content }
-      { !isMobile && (
-        <AdBanner
-          format="mobile"
-          w="fit-content"
-          flexShrink={ 0 }
-          borderRadius="md"
-          overflow="hidden"
-        />
-      ) }
     </Flex>
   );
 };
