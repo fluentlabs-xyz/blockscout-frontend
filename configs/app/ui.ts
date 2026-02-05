@@ -4,7 +4,7 @@ import { HOME_STATS_WIDGET_IDS, type ChainIndicatorId, type HeroBannerConfig, ty
 import type { NetworkExplorer } from 'types/networks';
 import type { FontFamily } from 'types/ui';
 
-import { COLOR_THEMES, type ColorTheme } from 'lib/settings/colorTheme';
+import { COLOR_THEMES } from 'lib/settings/colorTheme';
 
 import * as features from './features';
 import * as views from './ui/views';
@@ -33,7 +33,7 @@ const highlightedRoutes = (() => {
 
 const defaultColorTheme = (() => {
   const envValue = 'dark';
-  return COLOR_THEMES.find((theme) => theme.id === envValue) as ColorTheme | undefined;
+  return COLOR_THEMES.find((theme) => theme.id === envValue);
 })();
 
 const UI = Object.freeze({
@@ -48,13 +48,12 @@ const UI = Object.freeze({
     },
     highlightedRoutes,
     otherLinks: parseEnvJson<Array<NavItemExternal>>(getEnvValue('NEXT_PUBLIC_OTHER_LINKS')) || [],
-    layout: (getEnvValue('NEXT_PUBLIC_NAVIGATION_LAYOUT') || 'vertical') as NavigationLayout,
+    layout: 'horizontal' as NavigationLayout,
     promoBanner: undefined,
   },
   featuredNetworks: {
     items: getExternalAssetFilePath('NEXT_PUBLIC_FEATURED_NETWORKS'),
     allLink: getEnvValue('NEXT_PUBLIC_FEATURED_NETWORKS_ALL_LINK'),
-    mode: (getEnvValue('NEXT_PUBLIC_FEATURED_NETWORKS_MODE') || 'list') as 'tabs' | 'list',
   },
   footer: {
     links: getExternalAssetFilePath('NEXT_PUBLIC_FOOTER_LINKS'),
@@ -65,7 +64,6 @@ const UI = Object.freeze({
     charts: parseEnvJson<Array<ChainIndicatorId>>(getEnvValue('NEXT_PUBLIC_HOMEPAGE_CHARTS')) || [],
     stats: homePageStats,
     heroBanner: parseEnvJson<HeroBannerConfig>(getEnvValue('NEXT_PUBLIC_HOMEPAGE_HERO_BANNER_CONFIG')),
-    highlights: getExternalAssetFilePath('NEXT_PUBLIC_HOMEPAGE_HIGHLIGHTS_CONFIG'),
   },
   views,
   indexingAlert: {
@@ -91,13 +89,10 @@ const UI = Object.freeze({
     overrides: parseEnvJson<Record<string, unknown>>(getEnvValue('NEXT_PUBLIC_COLOR_THEME_OVERRIDES')) || {},
   },
   fonts: {
-    eading: '\'Bossa\', sans-serif',
+    heading: '\'Bossa\', sans-serif',
     body: parseEnvJson<FontFamily>(getEnvValue('NEXT_PUBLIC_FONT_FAMILY_BODY')),
   },
   maxContentWidth: getEnvValue('NEXT_PUBLIC_MAX_CONTENT_WIDTH_ENABLED') === 'false' ? false : true,
-  nativeCoinPrice: {
-    isHidden: getEnvValue('NEXT_PUBLIC_HIDE_NATIVE_COIN_PRICE') === 'true' ? true : false,
-  },
 });
 
 export default UI;
