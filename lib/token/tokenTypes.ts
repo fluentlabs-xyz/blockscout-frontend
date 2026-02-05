@@ -3,7 +3,6 @@ import type { NFTTokenType, TokenType } from 'types/api/token';
 import config from 'configs/app';
 
 const tokenStandardName = config.chain.tokenStandard;
-const additionalTokenTypes = config.chain.additionalTokenTypes;
 
 export const NFT_TOKEN_TYPES: Record<NFTTokenType, string> = {
   'ERC-721': `${ tokenStandardName }-721`,
@@ -13,10 +12,6 @@ export const NFT_TOKEN_TYPES: Record<NFTTokenType, string> = {
 
 export const TOKEN_TYPES: Record<string, string> = {
   'ERC-20': `${ tokenStandardName }-20`,
-  ...additionalTokenTypes.reduce((result, item) => {
-    result[item.id] = item.name;
-    return result;
-  }, {} as Record<string, string>),
   ...NFT_TOKEN_TYPES,
 };
 
@@ -28,14 +23,14 @@ export function getTokenTypeName(typeId: string) {
 }
 
 export function isFungibleTokenType(typeId: TokenType): boolean {
-  return typeId === 'ERC-20' || additionalTokenTypes.some((item) => item.id === typeId);
+  return typeId === 'ERC-20';
 }
 
 export function hasTokenTransferValue(typeId: TokenType) {
   if (typeId === 'ERC-20' || typeId === 'ERC-1155' || typeId === 'ERC-404') {
     return true;
   }
-  return additionalTokenTypes.some((item) => item.id === typeId);
+  return false;
 }
 
 export function hasTokenIds(typeId: TokenType) {

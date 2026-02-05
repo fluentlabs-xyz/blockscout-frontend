@@ -1,4 +1,5 @@
 import React from 'react';
+import type { SimulateContractReturnType } from 'viem';
 import { encodeFunctionData, getAddress } from 'viem';
 import { usePublicClient } from 'wagmi';
 
@@ -97,7 +98,7 @@ export default function useCallMethodPublicClient(): (params: Params) => Promise
 
     return {
       source: 'public_client' as const,
-      data: strategy === 'read' ? result : result.result,
+      data: strategy === 'read' ? result : (result as unknown as SimulateContractReturnType).result,
       estimatedGas,
     };
 

@@ -45,11 +45,20 @@ const reduceExternalChainsToTransportConfig = (readOnly: boolean): Record<string
     }, {} as Record<string, Transport>);
 };
 
+const ensureNonEmptyChains = (value: Array<Chain>): [Chain, ...Array<Chain>] => {
+  if (!value.length) {
+    throw new Error('No chains configured for wagmi');
+  }
+  return value as [Chain, ...Array<Chain>];
+};
+
 const wagmi = (() => {
+  type WagmiChains = Parameters<typeof createConfig>[0]['chains'];
+  const wagmiChains = ensureNonEmptyChains(chains) as unknown as WagmiChains;
 
   if (!feature.isEnabled) {
     const wagmiConfig = createConfig({
-      chains: chains as [Chain, ...Array<Chain>],
+      chains: wagmiChains,
       transports: {
         ...getChainTransportFromConfig(appConfig, true),
         ...(parentChain ? { [parentChain.id]: http(parentChain.rpcUrls.default.http[0]) } : {}),

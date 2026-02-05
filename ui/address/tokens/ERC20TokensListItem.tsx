@@ -6,9 +6,7 @@ import type { AddressTokensErc20Item } from './types';
 
 import config from 'configs/app';
 import multichainConfig from 'configs/multichain';
-import { getTokenTypeName } from 'lib/token/tokenTypes';
 import { Skeleton } from 'toolkit/chakra/skeleton';
-import { Tag } from 'toolkit/chakra/tag';
 import AddressAddToWallet from 'ui/shared/address/AddressAddToWallet';
 import NativeTokenTag from 'ui/shared/celo/NativeTokenTag';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
@@ -18,14 +16,13 @@ import calculateUsdValue from 'ui/shared/value/calculateUsdValue';
 import SimpleValue from 'ui/shared/value/SimpleValue';
 import { DEFAULT_ACCURACY_USD } from 'ui/shared/value/utils';
 
-type Props = AddressTokensErc20Item & { isLoading: boolean; hasAdditionalTokenTypes?: boolean };
+type Props = AddressTokensErc20Item & { isLoading: boolean };
 
 const ERC20TokensListItem = ({
   token,
   value,
   isLoading,
   chain_values: chainValues,
-  hasAdditionalTokenTypes,
 }: Props) => {
   const {
     valueBn: tokenQuantity,
@@ -58,7 +55,6 @@ const ERC20TokensListItem = ({
           width="auto"
         />
         { isNativeToken && <NativeTokenTag/> }
-        { hasAdditionalTokenTypes && <Tag loading={ isLoading }>{ getTokenTypeName(token.type) }</Tag> }
       </Flex>
       <Flex alignItems="center" pl={ 8 }>
         <AddressEntity

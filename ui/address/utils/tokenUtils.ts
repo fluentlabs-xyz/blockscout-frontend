@@ -31,11 +31,8 @@ type TokenGroup = [string, TokenSelectDataItem];
 const NFT_TOKEN_GROUPS_ORDER = [ 'ERC-721', 'ERC-1155', 'ERC-404' ] as const;
 
 export const sortTokenGroups = (groupA: TokenGroup, groupB: TokenGroup) => {
-  const additionalTypeIds = config.chain.additionalTokenTypes.map((item) => item.id);
-
   const tokenGroupsOrder = [
     'ERC-20',
-    ...additionalTypeIds,
     ...NFT_TOKEN_GROUPS_ORDER,
   ] as const;
 
