@@ -1,7 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import * as csp from 'nextjs/csp/index';
 import * as middlewares from 'nextjs/middlewares/index';
 
 export async function middleware(req: NextRequest) {
@@ -26,9 +25,7 @@ export async function middleware(req: NextRequest) {
 
   const end = Date.now();
 
-  const cspHeader = await csp.get(req);
-
-  res.headers.append('Content-Security-Policy', cspHeader);
+  // CSP policy applied at page level instead of middleware
   res.headers.append('Server-Timing', `middleware;dur=${ end - start }`);
   res.headers.append('Docker-ID', process.env.HOSTNAME || '');
 
