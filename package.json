@@ -50,6 +50,7 @@
     "@blockscout/zetachain-cctx-types": "^1.0.0-rc.6",
     "@chakra-ui/react": "3.15.0",
     "@emotion/react": "11.14.0",
+    "@fluent.xyz/sdk-core": "0.2.91",
     "@growthbook/growthbook-react": "0.21.0",
     "@helia/verified-fetch": "2.6.12",
     "@metamask/post-message-stream": "^7.0.0",

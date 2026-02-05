@@ -2,7 +2,7 @@ import type { ApiName } from 'lib/api/types';
 
 import { stripTrailingSlash } from 'toolkit/utils/url';
 
-import { getEnvValue } from './utils';
+import { getApiHost, getEnvValue, getStatsApiHost, getVisualizeApiHost } from './utils';
 
 export interface ApiPropsBase {
   endpoint: string;
@@ -18,18 +18,13 @@ export interface ApiPropsFull extends ApiPropsBase {
 }
 
 const generalApi = (() => {
-  const apiHost = getEnvValue('NEXT_PUBLIC_API_HOST');
-  if (!apiHost) {
-    return;
-  }
-
+  const apiHost = getApiHost();
   const apiSchema = getEnvValue('NEXT_PUBLIC_API_PROTOCOL') || 'https';
   const apiPort = getEnvValue('NEXT_PUBLIC_API_PORT');
   const apiEndpoint = [
     apiSchema || 'https',
     '://',
     apiHost,
-    apiPort && ':' + apiPort,
   ].filter(Boolean).join('');
 
   const socketSchema = getEnvValue('NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL') || 'wss';
@@ -105,10 +100,9 @@ const rewardsApi = (() => {
   });
 })();
 
-const multichainAggregatorApi = (() => {
+const multichainApi = (() => {
   const apiHost = getEnvValue('NEXT_PUBLIC_MULTICHAIN_AGGREGATOR_API_HOST');
-  const cluster = getEnvValue('NEXT_PUBLIC_MULTICHAIN_CLUSTER');
-  if (!apiHost || !cluster) {
+  if (!apiHost) {
     return;
   }
 
@@ -118,26 +112,16 @@ const multichainAggregatorApi = (() => {
     return Object.freeze({
       endpoint: apiHost,
       socketEndpoint: `wss://${ url.host }`,
-      basePath: `/api/v1/clusters/${ cluster }`,
+      basePath: stripTrailingSlash(getEnvValue('NEXT_PUBLIC_MULTICHAIN_AGGREGATOR_BASE_PATH') || ''),
     });
   } catch (error) {
     return;
   }
-})();
 
-const multichainStatsApi = (() => {
-  const apiHost = getEnvValue('NEXT_PUBLIC_MULTICHAIN_STATS_API_HOST');
-  if (!apiHost) {
-    return;
-  }
-
-  return Object.freeze({
-    endpoint: apiHost,
-  });
 })();
 
 const statsApi = (() => {
-  const apiHost = getEnvValue('NEXT_PUBLIC_STATS_API_HOST');
+  const apiHost = getStatsApiHost();
   if (!apiHost) {
     return;
   }
@@ -171,7 +155,7 @@ const userOpsApi = (() => {
 })();
 
 const visualizeApi = (() => {
-  const apiHost = getEnvValue('NEXT_PUBLIC_VISUALIZE_API_HOST');
+  const apiHost = getVisualizeApiHost();
   if (!apiHost) {
     return;
   }
@@ -212,7 +196,7 @@ const zetachainApi = (() => {
 })();
 
 export type Apis = {
-  general: ApiPropsFull | undefined;
+  general: ApiPropsFull;
 } & Partial<Record<Exclude<ApiName, 'general'>, ApiPropsBase>>;
 
 const apis: Apis = Object.freeze({
@@ -222,8 +206,7 @@ const apis: Apis = Object.freeze({
   clusters: clustersApi,
   contractInfo: contractInfoApi,
   metadata: metadataApi,
-  multichainAggregator: multichainAggregatorApi,
-  multichainStats: multichainStatsApi,
+  multichain: multichainApi,
   rewards: rewardsApi,
   stats: statsApi,
   tac: tacApi,
