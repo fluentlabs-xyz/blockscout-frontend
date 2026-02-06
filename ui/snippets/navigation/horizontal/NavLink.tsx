@@ -54,7 +54,7 @@ const NavLink = ({ className, item, noIcon, onMouseOver, isMainNav }: Props) => 
         }}
       >
         { !noIcon && (
-          <Box w={{ base: '36px', lg: '36px' }} display="flex" borderRadius="10px" bg="black" p="6px">
+          <Box w={{ base: '36px', lg: '36px' }} display="flex" borderRadius="10px" bg="black" p="6px" mr="12px">
             <NavLinkIcon boxSize="24px" item={ item } color="rgba(255, 255, 255, 0.5)"/>
           </Box>
         ) }
