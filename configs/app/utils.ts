@@ -1,4 +1,3 @@
-import { DEVNET_EXPLORER_HOST } from '@fluent.xyz/sdk-core/dist/config/devnet-config';
 import { TESTNET_EXPLORER_HOST, TESTNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/dist/config/testnet-config';
 
 import { isBrowser } from 'toolkit/utils/isBrowser';
@@ -30,21 +29,21 @@ export const getEnvValue = (envName: string) => {
 
 export const getApiHost = () => {
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
-  const value = env === 'devnet' ? DEVNET_EXPLORER_HOST : TESTNET_EXPLORER_HOST;
+  const value = env === 'devnet' ? 'api-devnet.fluentscan.xyz' : TESTNET_EXPLORER_HOST;
 
   return value;
 };
 
 export const getStatsApiHost = () => {
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
-  const value = env === 'devnet' ? 'https://api-devnet.fluentscan.xyz/' : TESTNET_EXPLORER_URL;
+  const value = env === 'devnet' ? 'https://api-devnet.fluentscan.xyz' : TESTNET_EXPLORER_URL;
 
   return value;
 };
 
 export const getVisualizeApiHost = () => {
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
-  const value = env === 'devnet' ? 'https://api-devnet.fluentscan.xyz/' : TESTNET_EXPLORER_URL;
+  const value = env === 'devnet' ? 'https://api-devnet.fluentscan.xyz' : TESTNET_EXPLORER_URL;
 
   return value + ':8081';
 };
