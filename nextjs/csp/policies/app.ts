@@ -44,6 +44,7 @@ export function app(isPrivateMode = false): CspDev.DirectiveDescriptor {
       // Ensure fluent explorer origins are always allowed (prevents env mismatch between CSP and client envs).
       DEVNET_EXPLORER_URL,
       TESTNET_EXPLORER_URL,
+      'https://api-devnet.fluentscan.xyz/',
 
       // chain RPC server
       ...config.chain.rpcUrls,
