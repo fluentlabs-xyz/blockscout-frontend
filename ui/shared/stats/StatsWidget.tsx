@@ -73,14 +73,19 @@ const StatsWidget = ({
         h="100%"
       >
         { icon && (
-          <Box w={{ base: '36px', lg: '36px' }} borderRadius="10px" bg="black" p="6px">
+          <Box
+            w={{ base: '36px', lg: '36px' }}
+            borderRadius="10px"
+            bg="black"
+            p="6px"
+            display={{ base: 'none', lg: 'block' }}
+          >
             <IconSvg
               name={ icon }
               boxSize="24px"
               isLoading={ isLoading }
               borderRadius="base"
               color="rgba(255, 255, 255, 0.5)"
-              display={{ base: 'none', lg: 'block' }}
               flexShrink={ 0 }
             />
           </Box>
