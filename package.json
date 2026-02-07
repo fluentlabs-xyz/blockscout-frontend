@@ -4,15 +4,15 @@
   "private": false,
   "homepage": "https://github.com/blockscout/frontend#readme",
   "engines": {
-    "node": "22.x",
-    "npm": "10.9.0"
+    "node": ">=22.14.0",
+    "npm": ">=10.9.0"
   },
   "scripts": {
     "dev": "./tools/scripts/dev.sh",
     "dev:preset": "./tools/scripts/dev.preset.sh",
     "dev:preset:sync": "tsc -p ./tools/preset-sync/tsconfig.json && node ./tools/preset-sync/index.js",
     "build": "next build",
-    "build:next": "node -e \"console.log('node',process.version); console.log('next',require('next/package.json').version); console.log('react',require('react/package.json').version); console.log('react-dom',require('react-dom/package.json').version)\" && ./deploy/scripts/download_assets.sh ./public/assets/configs && yarn svg:build-sprite && ./deploy/scripts/make_envs_script.sh && next build",
+    "build:next": "./deploy/scripts/download_assets.sh ./public/assets/configs && yarn svg:build-sprite && ./deploy/scripts/make_envs_script.sh && next build",
     "build:docker": "./tools/scripts/build.docker.sh",
     "start": "next start",
     "start:docker:local": "docker run -p 3000:3000 --env-file .env.local blockscout-frontend:local",
@@ -76,8 +76,6 @@
     "@scure/base": "1.1.9",
     "@slise/embed-react": "^2.2.0",
     "@specify-sh/sdk": "0.4.2",
-    "@stablelib/ed25519": "^2.0.2",
-    "@stablelib/random": "^2.0.1",
     "@tanstack/react-query": "5.55.4",
     "@tanstack/react-query-devtools": "5.55.4",
     "@types/papaparse": "^5.3.5",
