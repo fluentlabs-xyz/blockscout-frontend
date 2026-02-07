@@ -1,23 +1,22 @@
-/* eslint-disable consistent-default-export-name/default-export-match-filename */
 import type { AppKitNetwork } from '@reown/appkit/networks';
 import { createAppKit, useAppKitTheme } from '@reown/appkit/react';
 import React from 'react';
 import { WagmiProvider } from 'wagmi';
 
 import config from 'configs/app';
+import useIsMounted from 'lib/hooks/useIsMounted';
 import { chains } from 'lib/web3/chains';
 import wagmiConfig from 'lib/web3/wagmiConfig';
 import { useColorMode } from 'toolkit/chakra/color-mode';
 import colors from 'toolkit/theme/foundations/colors';
 import { BODY_TYPEFACE } from 'toolkit/theme/foundations/typography';
 import zIndex from 'toolkit/theme/foundations/zIndex';
-import { isBrowser } from 'toolkit/utils/isBrowser';
 
 const feature = config.features.blockchainInteraction;
 
 const init = () => {
   try {
-    if (!feature.isEnabled || !wagmiConfig.adapter || !isBrowser()) {
+    if (!feature.isEnabled || !wagmiConfig.adapter) {
       return;
     }
 
@@ -50,10 +49,6 @@ const init = () => {
   } catch (error) {}
 };
 
-if (isBrowser()) {
-  init();
-}
-
 interface Props {
   children: React.ReactNode;
 }
@@ -66,13 +61,17 @@ const DefaultProvider = ({ children }: Props) => {
   );
 };
 
-const Web3ModalProvider = ({ children }: Props) => {
+const Web3ModalProviderClient = ({ children }: Props) => {
   const { colorMode } = useColorMode();
   const { setThemeMode } = useAppKitTheme();
 
   React.useEffect(() => {
     setThemeMode(colorMode ?? 'light');
   }, [ colorMode, setThemeMode ]);
+
+  React.useEffect(() => {
+    init();
+  }, [ ]);
 
   return (
     <DefaultProvider>
@@ -81,6 +80,22 @@ const Web3ModalProvider = ({ children }: Props) => {
   );
 };
 
-const Provider = feature.isEnabled ? Web3ModalProvider : DefaultProvider;
+const Web3ModalProvider = ({ children }: Props) => {
+  const isMounted = useIsMounted();
 
-export default Provider;
+  if (!feature.isEnabled || !isMounted) {
+    return (
+      <DefaultProvider>
+        { children }
+      </DefaultProvider>
+    );
+  }
+
+  return (
+    <Web3ModalProviderClient>
+      { children }
+    </Web3ModalProviderClient>
+  );
+};
+
+export default Web3ModalProvider;
