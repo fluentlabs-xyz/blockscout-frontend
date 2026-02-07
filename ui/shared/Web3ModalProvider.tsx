@@ -11,12 +11,13 @@ import { useColorMode } from 'toolkit/chakra/color-mode';
 import colors from 'toolkit/theme/foundations/colors';
 import { BODY_TYPEFACE } from 'toolkit/theme/foundations/typography';
 import zIndex from 'toolkit/theme/foundations/zIndex';
+import { isBrowser } from 'toolkit/utils/isBrowser';
 
 const feature = config.features.blockchainInteraction;
 
 const init = () => {
   try {
-    if (!feature.isEnabled || !wagmiConfig.adapter) {
+    if (!feature.isEnabled || !wagmiConfig.adapter || !isBrowser()) {
       return;
     }
 
@@ -49,7 +50,9 @@ const init = () => {
   } catch (error) {}
 };
 
-init();
+if (isBrowser()) {
+  init();
+}
 
 interface Props {
   children: React.ReactNode;
