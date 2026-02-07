@@ -1,4 +1,3 @@
-import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -7,7 +6,7 @@ import getQueryParamString from 'lib/router/getQueryParamString';
 
 export default function useNotifyOnNavigation() {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = router.asPath;
   const tab = getQueryParamString(router.query.tab);
 
   React.useEffect(() => {

@@ -1,5 +1,5 @@
 import { Flex, chakra } from '@chakra-ui/react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import Script from 'next/script';
 import React from 'react';
 
@@ -55,7 +55,7 @@ const AdbutlerBanner = ({ className, format = 'responsive' }: BannerProps) => {
         );
       }, opt: { place: plc++, keywords: abkw, domain: 'servedbyadbutler.com', click: 'CLICK_MACRO_PLACEHOLDER' } });
     }
-  }, [ router, isMobile ]);
+  }, [ router.asPath, isMobile ]);
 
   if (!('adButler' in feature)) {
     return null;
