@@ -20,16 +20,21 @@ interface Props<Pathname extends Route['pathname']> {
 const PageNextJs = <Pathname extends Route['pathname']>(props: Props<Pathname>) => {
   const isMounted = useIsMounted();
 
-  useGetCsrfToken();
-  useAdblockDetect();
-  useNotifyOnNavigation();
+  const ClientSideEffects = () => {
+    useGetCsrfToken();
+    useAdblockDetect();
+    useNotifyOnNavigation();
 
-  const isMixpanelInited = mixpanel.useInit();
-  mixpanel.useLogPageView(isMixpanelInited);
+    const isMixpanelInited = mixpanel.useInit();
+    mixpanel.useLogPageView(isMixpanelInited);
+
+    return null;
+  };
 
   return (
     <>
       <PageMetadata pathname={ props.pathname } query={ props.query } apiData={ props.apiData }/>
+      { isMounted ? <ClientSideEffects/> : null }
       { isMounted ? props.children : null }
     </>
   );
