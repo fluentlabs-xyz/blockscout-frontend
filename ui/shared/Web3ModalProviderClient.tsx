@@ -1,0 +1,70 @@
+import type { AppKitNetwork } from '@reown/appkit/networks';
+import { createAppKit, useAppKitTheme } from '@reown/appkit/react';
+import React from 'react';
+
+import config from 'configs/app';
+import { chains } from 'lib/web3/chains';
+import wagmiConfig from 'lib/web3/wagmiConfig';
+import { useColorMode } from 'toolkit/chakra/color-mode';
+import colors from 'toolkit/theme/foundations/colors';
+import { BODY_TYPEFACE } from 'toolkit/theme/foundations/typography';
+import zIndex from 'toolkit/theme/foundations/zIndex';
+
+const feature = config.features.blockchainInteraction;
+
+const init = () => {
+  try {
+    if (!feature.isEnabled || !wagmiConfig.adapter) {
+      return;
+    }
+
+    createAppKit({
+      adapters: [ wagmiConfig.adapter ],
+      networks: chains as [AppKitNetwork, ...Array<AppKitNetwork>],
+      metadata: {
+        name: `${ config.chain.name } explorer`,
+        description: `${ config.chain.name } explorer`,
+        url: config.app.baseUrl,
+        icons: [ config.UI.navigation.icon.default ].filter(Boolean),
+      },
+      projectId: feature.walletConnect.projectId,
+      features: {
+        analytics: false,
+        email: false,
+        socials: [],
+        onramp: false,
+        swaps: false,
+      },
+      themeVariables: {
+        '--w3m-font-family': `${ BODY_TYPEFACE }, sans-serif`,
+        '--w3m-accent': colors.blue[600].value,
+        '--w3m-border-radius-master': '2px',
+        '--w3m-z-index': zIndex?.modal2?.value,
+      },
+      featuredWalletIds: feature.walletConnect.featuredWalletIds,
+      allowUnsupportedChain: true,
+    });
+  } catch (error) {}
+};
+
+interface Props {
+  children: React.ReactNode;
+}
+
+const Web3ModalProviderClient = ({ children }: Props) => {
+  const { colorMode } = useColorMode();
+  const { setThemeMode } = useAppKitTheme();
+
+  React.useEffect(() => {
+    setThemeMode(colorMode ?? 'light');
+  }, [ colorMode, setThemeMode ]);
+
+  React.useEffect(() => {
+    init();
+  }, [ ]);
+
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <>{ children }</>;
+};
+
+export default Web3ModalProviderClient;

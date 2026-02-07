@@ -8,6 +8,7 @@ import appConfig from 'configs/app';
 import essentialDappsChainsConfig from 'configs/essential-dapps-chains';
 import multichainConfig from 'configs/multichain';
 import { chains, parentChain } from 'lib/web3/chains';
+import { isBrowser } from 'toolkit/utils/isBrowser';
 
 const feature = appConfig.features.blockchainInteraction;
 
@@ -56,7 +57,7 @@ const wagmi = (() => {
   type WagmiChains = Parameters<typeof createConfig>[0]['chains'];
   const wagmiChains = ensureNonEmptyChains(chains) as unknown as WagmiChains;
 
-  if (!feature.isEnabled) {
+  if (!feature.isEnabled || !isBrowser()) {
     const wagmiConfig = createConfig({
       chains: wagmiChains,
       transports: {
