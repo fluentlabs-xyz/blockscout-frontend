@@ -108,14 +108,6 @@ type Props = {
 };
 
 export function RewardsContextProvider({ children }: Props) {
-  if (!feature.isEnabled || typeof window === 'undefined') {
-    return <RewardsContext.Provider value={ initialState }>{ children }</RewardsContext.Provider>;
-  }
-
-  return <RewardsContextProviderClient>{ children }</RewardsContextProviderClient>;
-}
-
-function RewardsContextProviderClient({ children }: Props) {
   const router = useRouter();
   const apiFetch = useApiFetch();
   const queryClient = useQueryClient();

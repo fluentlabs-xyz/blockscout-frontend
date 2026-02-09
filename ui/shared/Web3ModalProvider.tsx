@@ -1,10 +1,10 @@
+/* eslint-disable consistent-default-export-name/default-export-match-filename */
 import type { AppKitNetwork } from '@reown/appkit/networks';
 import { createAppKit, useAppKitTheme } from '@reown/appkit/react';
 import React from 'react';
 import { WagmiProvider } from 'wagmi';
 
 import config from 'configs/app';
-import useIsMounted from 'lib/hooks/useIsMounted';
 import { chains } from 'lib/web3/chains';
 import wagmiConfig from 'lib/web3/wagmiConfig';
 import { useColorMode } from 'toolkit/chakra/color-mode';
@@ -49,6 +49,8 @@ const init = () => {
   } catch (error) {}
 };
 
+init();
+
 interface Props {
   children: React.ReactNode;
 }
@@ -61,17 +63,13 @@ const DefaultProvider = ({ children }: Props) => {
   );
 };
 
-const Web3ModalProviderClient = ({ children }: Props) => {
+const Web3ModalProvider = ({ children }: Props) => {
   const { colorMode } = useColorMode();
   const { setThemeMode } = useAppKitTheme();
 
   React.useEffect(() => {
     setThemeMode(colorMode ?? 'light');
   }, [ colorMode, setThemeMode ]);
-
-  React.useEffect(() => {
-    init();
-  }, [ ]);
 
   return (
     <DefaultProvider>
@@ -80,22 +78,6 @@ const Web3ModalProviderClient = ({ children }: Props) => {
   );
 };
 
-const Web3ModalProvider = ({ children }: Props) => {
-  const isMounted = useIsMounted();
+const Provider = feature.isEnabled ? Web3ModalProvider : DefaultProvider;
 
-  if (!feature.isEnabled || !isMounted) {
-    return (
-      <DefaultProvider>
-        { children }
-      </DefaultProvider>
-    );
-  }
-
-  return (
-    <Web3ModalProviderClient>
-      { children }
-    </Web3ModalProviderClient>
-  );
-};
-
-export default Web3ModalProvider;
+export default Provider;
