@@ -55,20 +55,21 @@ const ensureNonEmptyChains = (value: Array<Chain>): [Chain, ...Array<Chain>] => 
 const wagmi = (() => {
   type WagmiChains = Parameters<typeof createConfig>[0]['chains'];
   const wagmiChains = ensureNonEmptyChains(chains) as unknown as WagmiChains;
+  const isServer = typeof window === 'undefined';
 
-  if (!feature.isEnabled) {
-    const wagmiConfig = createConfig({
-      chains: wagmiChains,
-      transports: {
-        ...getChainTransportFromConfig(appConfig, true),
-        ...(parentChain ? { [parentChain.id]: http(parentChain.rpcUrls.default.http[0]) } : {}),
-        ...reduceExternalChainsToTransportConfig(true),
-      },
-      ssr: true,
-      batch: { multicall: { wait: 100, batchSize: 5 } },
-    });
+  const baseConfig = createConfig({
+    chains: wagmiChains,
+    transports: {
+      ...getChainTransportFromConfig(appConfig, !feature.isEnabled),
+      ...(parentChain ? { [parentChain.id]: feature.isEnabled ? http() : http(parentChain.rpcUrls.default.http[0]) } : {}),
+      ...reduceExternalChainsToTransportConfig(!feature.isEnabled),
+    },
+    ssr: true,
+    batch: { multicall: { wait: 100, batchSize: 5 } },
+  });
 
-    return { config: wagmiConfig, adapter: null };
+  if (!feature.isEnabled || isServer) {
+    return { config: baseConfig, adapter: null };
   }
 
   const wagmiAdapter = new WagmiAdapter({
