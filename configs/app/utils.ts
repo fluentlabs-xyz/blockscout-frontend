@@ -27,23 +27,42 @@ export const getEnvValue = (envName: string) => {
   return replaceQuotes(envs[envName]);
 };
 
-export const getApiHost = () => {
+const getFluentApiConfig = () => {
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
-  const value = env === 'devnet' ? 'api-devnet.fluentscan.xyz' : TESTNET_EXPLORER_HOST;
+
+  switch (env) {
+    case 'devnet':
+      return {
+        host: 'api-devnet.fluentscan.xyz',
+        url: 'https://api-devnet.fluentscan.xyz',
+      };
+    case 'mainnet':
+      return {
+        host: 'api.fluentscan.xyz',
+        url: 'https://api.fluentscan.xyz',
+      };
+    default:
+      return {
+        host: TESTNET_EXPLORER_HOST,
+        url: TESTNET_EXPLORER_URL,
+      };
+  }
+};
+
+export const getApiHost = () => {
+  const value = getFluentApiConfig().host;
 
   return value;
 };
 
 export const getStatsApiHost = () => {
-  const env = getEnvValue('NEXT_PUBLIC_CHAIN');
-  const value = env === 'devnet' ? 'https://api-devnet.fluentscan.xyz' : TESTNET_EXPLORER_URL;
+  const value = getFluentApiConfig().url;
 
   return value;
 };
 
 export const getVisualizeApiHost = () => {
-  const env = getEnvValue('NEXT_PUBLIC_CHAIN');
-  const value = env === 'devnet' ? 'https://api-devnet.fluentscan.xyz' : TESTNET_EXPLORER_URL;
+  const value = getFluentApiConfig().url;
 
   return value + ':8081';
 };
