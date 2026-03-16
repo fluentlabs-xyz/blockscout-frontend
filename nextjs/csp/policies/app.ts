@@ -45,6 +45,7 @@ export function app(isPrivateMode = false): CspDev.DirectiveDescriptor {
       DEVNET_EXPLORER_URL,
       TESTNET_EXPLORER_URL,
       'https://api-devnet.fluentscan.xyz/',
+      'https://api.fluentscan.xyz/',
 
       // chain RPC server
       ...config.chain.rpcUrls,

@@ -53,7 +53,7 @@ const StatsWidget = ({
   period,
   href,
 }: Props) => {
-  const bgColor = 'theme.bg.primary._dark';
+  const bgColor = 'gray.800';
   const skeletonBgColor = 'blackAlpha.50';
 
   return (
