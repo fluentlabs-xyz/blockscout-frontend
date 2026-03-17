@@ -8,10 +8,10 @@ import dynamic from 'next/dynamic';
 import localFont from 'next/font/local';
 import React from 'react';
 
-import PageMetadata from 'nextjs/PageMetadata';
 import type { NextPageWithLayout } from 'nextjs/types';
 
 import type { Route } from 'nextjs-routes';
+import PageMetadata from 'nextjs/PageMetadata';
 
 import config from 'configs/app';
 import getSocketUrl from 'lib/api/getSocketUrl';

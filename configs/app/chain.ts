@@ -74,7 +74,7 @@ const getChain = () => {
   switch (env) {
     case 'mainnet':
       return {
-        id: String(parseInt(String(FLUENT_MAINNET_CHAIN_ID), 16)),
+        id: String(FLUENT_MAINNET_CHAIN_ID),
         name: 'Fluent',
         shortName: 'Fluent',
         currency: {
@@ -95,9 +95,9 @@ const getChain = () => {
       };
     case 'devnet':
       return {
-        id: String(parseInt(String(FLUENT_DEVNET_CHAIN_ID), 16)),
-        name: 'Fluent',
-        shortName: 'Fluent',
+        id: String(FLUENT_DEVNET_CHAIN_ID),
+        name: 'Fluent Devnet',
+        shortName: 'Fluent Devnet',
         currency: {
           name: DEVNET_NETWORK_NATIVE_CURRENCY.name,
           weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
@@ -116,9 +116,9 @@ const getChain = () => {
       };
     case 'testnet':
       return {
-        id: String(parseInt(String(FLUENT_TESTNET_CHAIN_ID), 16)),
-        name: 'Fluent',
-        shortName: 'Fluent',
+        id: String(FLUENT_TESTNET_CHAIN_ID),
+        name: 'Fluent Testnet',
+        shortName: 'Fluent Testnet',
         currency: {
           name: TESTNET_NETWORK_NATIVE_CURRENCY.name,
           weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
@@ -137,9 +137,9 @@ const getChain = () => {
       };
     default:
       return {
-        id: String(parseInt(String(FLUENT_DEVNET_CHAIN_ID), 16)),
-        name: 'Fluent',
-        shortName: 'Fluent',
+        id: String(FLUENT_DEVNET_CHAIN_ID),
+        name: 'Fluent Devnet',
+        shortName: 'Fluent Devnet',
         currency: {
           name: DEVNET_NETWORK_NATIVE_CURRENCY.name,
           weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),

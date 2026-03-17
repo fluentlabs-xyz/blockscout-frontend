@@ -7,6 +7,8 @@ import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import AddressEntityWithTokenFilter from 'ui/shared/entities/address/AddressEntityWithTokenFilter';
 
 import AddressEntityZetaChain from '../entities/address/AddressEntityZetaChain';
+import AddressFromToIcon from './AddressFromToIcon';
+import { getTxCourseType } from './utils';
 
 type Mode = 'compact' | 'long';
 
@@ -67,6 +69,11 @@ const AddressFromTo = ({
     return (
       <Flex className={ className } flexDir="column" rowGap={ 3 }>
         <Flex alignItems="center" columnGap={ 2 }>
+          <AddressFromToIcon
+            isLoading={ isLoading }
+            type={ getTxCourseType(from.hash, to?.hash, current) }
+            transform="rotate(90deg)"
+          />
           <EntityFrom
             address={ from }
             isLoading={ isLoading }
@@ -93,6 +100,7 @@ const AddressFromTo = ({
             truncation="constant"
             maxW="calc(100% - 28px)"
             w="min-content"
+            ml="28px"
             chainId={ toChainId }
           />
         ) }
@@ -116,6 +124,10 @@ const AddressFromTo = ({
         mr={ isOutgoing ? 4 : 2 }
         chainId={ fromChainId }
         w="auto"
+      />
+      <AddressFromToIcon
+        isLoading={ isLoading }
+        type={ getTxCourseType(from.hash, to?.hash, current) }
       />
       { to && (
         <EntityTo

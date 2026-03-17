@@ -1,8 +1,8 @@
-import { verifiedFetch } from '@helia/verified-fetch';
 import React from 'react';
 
 export default function useLoadImageViaIpfs() {
   return React.useCallback(async(url: string) => {
+    const { verifiedFetch } = await import('@helia/verified-fetch');
     const response = await verifiedFetch(url);
 
     if (response.status !== 200) {
