@@ -1,4 +1,15 @@
-import { TESTNET_EXPLORER_HOST, TESTNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/dist/config/testnet-config';
+import {
+  DEVNET_EXPLORER_API_HOST,
+  DEVNET_EXPLORER_API_URL,
+} from '@fluent.xyz/sdk-core/config/devnet-config';
+import {
+  MAINNET_EXPLORER_API_HOST,
+  MAINNET_EXPLORER_API_URL,
+} from '@fluent.xyz/sdk-core/config/mainnet-config';
+import {
+  TESTNET_EXPLORER_API_HOST,
+  TESTNET_EXPLORER_API_URL,
+} from '@fluent.xyz/sdk-core/config/testnet-config';
 
 import { isBrowser } from 'toolkit/utils/isBrowser';
 import * as regexp from 'toolkit/utils/regexp';
@@ -33,18 +44,18 @@ const getFluentApiConfig = () => {
   switch (env) {
     case 'devnet':
       return {
-        host: 'api-devnet.fluentscan.xyz',
-        url: 'https://api-devnet.fluentscan.xyz',
+        host: DEVNET_EXPLORER_API_HOST,
+        url: DEVNET_EXPLORER_API_URL,
       };
     case 'mainnet':
       return {
-        host: 'api.fluentscan.xyz',
-        url: 'https://api.fluentscan.xyz',
+        host: MAINNET_EXPLORER_API_HOST,
+        url: MAINNET_EXPLORER_API_URL,
       };
     default:
       return {
-        host: TESTNET_EXPLORER_HOST,
-        url: TESTNET_EXPLORER_URL,
+        host: TESTNET_EXPLORER_API_HOST,
+        url: TESTNET_EXPLORER_API_URL,
       };
   }
 };
