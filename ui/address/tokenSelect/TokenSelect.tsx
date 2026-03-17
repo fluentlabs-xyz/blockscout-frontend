@@ -1,6 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { useQueryClient, useIsFetching } from '@tanstack/react-query';
-import { sumBy } from 'es-toolkit';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -56,7 +55,7 @@ const TokenSelect = () => {
     );
   }
 
-  const hasTokens = sumBy(Object.values(data), ({ items }) => items.length) > 0;
+  const hasTokens = Object.values(data).reduce((sum, item) => sum + item.items.length, 0) > 0;
   if (isError || !hasTokens) {
     return <Box py="6px">0</Box>;
   }

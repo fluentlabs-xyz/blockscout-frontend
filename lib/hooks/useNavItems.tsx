@@ -4,6 +4,7 @@ import React from 'react';
 import type { NavItemInternal, NavItem, NavGroupItem } from 'types/client/navigation';
 
 import config from 'configs/app';
+import { layerLabels } from 'lib/rollups/utils';
 import { rightLineArrow } from 'toolkit/utils/htmlEntities';
 
 interface ReturnType {
@@ -103,13 +104,13 @@ export default function useNavItems(): ReturnType {
       isActive: pathname === '/validators' || pathname === '/validators/[id]',
     } : null;
     const rollupDeposits = {
-      text: `Deposits (L1${ rightLineArrow }L2)`,
+      text: `Deposits (${ layerLabels.parent }${ rightLineArrow }${ layerLabels.current })`,
       nextRoute: { pathname: '/deposits' as const },
       icon: 'arrows/south-east',
       isActive: pathname === '/deposits',
     };
     const rollupWithdrawals = {
-      text: `Withdrawals (L2${ rightLineArrow }L1)`,
+      text: `Withdrawals (${ layerLabels.current }${ rightLineArrow }${ layerLabels.parent })`,
       nextRoute: { pathname: '/withdrawals' as const },
       icon: 'arrows/north-east',
       isActive: pathname === '/withdrawals',
@@ -274,7 +275,7 @@ export default function useNavItems(): ReturnType {
     } : null;
 
     const otherNavItems: Array<NavItem> | Array<Array<NavItem>> = [
-      config.features.opSuperchain.isEnabled ? {
+      config.features.multichain.isEnabled ? {
         text: 'Verify contract',
         // TODO @tom2drum adjust URL to Vera
         url: 'https://vera.blockscout.com',

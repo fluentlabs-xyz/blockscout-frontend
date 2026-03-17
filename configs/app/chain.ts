@@ -15,6 +15,7 @@ import {
 } from '@fluent.xyz/sdk-core/config/testnet-config';
 
 import type { RollupType } from 'types/client/rollup';
+import type { AdditionalTokenType } from 'types/client/token';
 import type { NetworkVerificationType, NetworkVerificationTypeEnvs } from 'types/networks';
 
 import { urlValidator } from 'toolkit/components/forms/validators/url';
@@ -32,6 +33,8 @@ const verificationType: NetworkVerificationType = (() => {
   }
   return getEnvValue('NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE') as NetworkVerificationTypeEnvs || 'mining';
 })();
+
+const additionalTokenTypes = parseEnvJson<Array<AdditionalTokenType>>(getEnvValue('NEXT_PUBLIC_NETWORK_ADDITIONAL_TOKEN_TYPES')) || [];
 
 const rpcUrls = (() => {
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
@@ -71,7 +74,7 @@ const getChain = () => {
   switch (env) {
     case 'mainnet':
       return {
-        id: String(parseInt(String(FLUENT_MAINNET_CHAIN_ID), 16)),
+        id: String(FLUENT_MAINNET_CHAIN_ID),
         name: 'Fluent',
         shortName: 'Fluent',
         currency: {
@@ -85,15 +88,16 @@ const getChain = () => {
         },
         hasMultipleGasCurrencies: false,
         tokenStandard: 'ERC',
+        additionalTokenTypes,
         rpcUrls,
         isTestnet: false,
         verificationType,
       };
     case 'devnet':
       return {
-        id: String(parseInt(String(FLUENT_DEVNET_CHAIN_ID), 16)),
-        name: 'Fluent',
-        shortName: 'Fluent',
+        id: String(FLUENT_DEVNET_CHAIN_ID),
+        name: 'Fluent Devnet',
+        shortName: 'Fluent Devnet',
         currency: {
           name: DEVNET_NETWORK_NATIVE_CURRENCY.name,
           weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
@@ -105,15 +109,16 @@ const getChain = () => {
         },
         hasMultipleGasCurrencies: false,
         tokenStandard: 'ERC',
+        additionalTokenTypes,
         rpcUrls,
         isTestnet: true,
         verificationType,
       };
     case 'testnet':
       return {
-        id: String(parseInt(String(FLUENT_TESTNET_CHAIN_ID), 16)),
-        name: 'Fluent',
-        shortName: 'Fluent',
+        id: String(FLUENT_TESTNET_CHAIN_ID),
+        name: 'Fluent Testnet',
+        shortName: 'Fluent Testnet',
         currency: {
           name: TESTNET_NETWORK_NATIVE_CURRENCY.name,
           weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
@@ -125,15 +130,16 @@ const getChain = () => {
         },
         hasMultipleGasCurrencies: false,
         tokenStandard: 'ERC',
+        additionalTokenTypes,
         rpcUrls,
         isTestnet: true,
         verificationType,
       };
     default:
       return {
-        id: String(parseInt(String(FLUENT_DEVNET_CHAIN_ID), 16)),
-        name: 'Fluent',
-        shortName: 'Fluent',
+        id: String(FLUENT_DEVNET_CHAIN_ID),
+        name: 'Fluent Devnet',
+        shortName: 'Fluent Devnet',
         currency: {
           name: DEVNET_NETWORK_NATIVE_CURRENCY.name,
           weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
@@ -145,6 +151,7 @@ const getChain = () => {
         },
         hasMultipleGasCurrencies: false,
         tokenStandard: 'ERC',
+        additionalTokenTypes,
         rpcUrls,
         isTestnet: true,
         verificationType,
