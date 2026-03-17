@@ -9,7 +9,7 @@ const DEFAULT_THEME_COLORS = {
       // so we use hex values instead
       // but it is not the case for other colors
       _light: { value: '#FFFFFF' }, // colors.white
-      _dark: { value: '#ffffff1a' }, // colors.black
+      _dark: { value: '#000000' }, // colors.black
     },
   },
   text: {
@@ -34,7 +34,7 @@ const DEFAULT_THEME_COLORS = {
       },
       bg: {
         _light: { value: '{colors.blue.50}' },
-        _dark: { value: '{colors.whiteAlpha.100}' },
+        _dark: { value: '{colors.whiteAlpha.400}' },
       },
     },
     option: {
@@ -61,7 +61,11 @@ const DEFAULT_THEME_COLORS = {
   button: {
     primary: {
       _light: { value: '{colors.blue.600}' },
-      _dark: { value: '{colors.white}' },
+      _dark: { value: '#1a1b1b' },
+      text: {
+        _light: { value: '{colors.white}' },
+        _dark: { value: '{colors.white}' },
+      },
     },
   },
   link: {
@@ -103,7 +107,7 @@ const DEFAULT_THEME_COLORS = {
   stats: {
     bg: {
       _light: { value: '{colors.gray.50}' },
-      _dark: { value: '{colors.whiteAlpha.900}' },
+      _dark: { value: '{colors.whiteAlpha.300}' },
     },
   },
   topbar: {

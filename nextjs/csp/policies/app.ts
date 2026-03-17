@@ -1,5 +1,6 @@
-import { DEVNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/dist/config/devnet-config';
-import { TESTNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/dist/config/testnet-config';
+import { DEVNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/config/devnet-config';
+import { MAINNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/config/mainnet-config';
+import { TESTNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/config/testnet-config';
 import type CspDev from 'csp-dev';
 
 import config from 'configs/app';
@@ -44,7 +45,9 @@ export function app(isPrivateMode = false): CspDev.DirectiveDescriptor {
       // Ensure fluent explorer origins are always allowed (prevents env mismatch between CSP and client envs).
       DEVNET_EXPLORER_URL,
       TESTNET_EXPLORER_URL,
+      MAINNET_EXPLORER_URL,
       'https://api-devnet.fluentscan.xyz/',
+      'https://api.fluentscan.xyz/',
       'https://api-testnet.fluentscan.xyz/',
 
       // chain RPC server

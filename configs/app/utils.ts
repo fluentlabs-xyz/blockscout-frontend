@@ -1,5 +1,15 @@
-import { DEVNET_EXPLORER_HOST } from '@fluent.xyz/sdk-core/dist/config/devnet-config';
-import { TESTNET_EXPLORER_HOST } from '@fluent.xyz/sdk-core/dist/config/testnet-config';
+import {
+  DEVNET_EXPLORER_API_HOST,
+  DEVNET_EXPLORER_API_URL,
+} from '@fluent.xyz/sdk-core/config/devnet-config';
+import {
+  MAINNET_EXPLORER_API_HOST,
+  MAINNET_EXPLORER_API_URL,
+} from '@fluent.xyz/sdk-core/config/mainnet-config';
+import {
+  TESTNET_EXPLORER_API_HOST,
+  TESTNET_EXPLORER_API_URL,
+} from '@fluent.xyz/sdk-core/config/testnet-config';
 
 import { isBrowser } from 'toolkit/utils/isBrowser';
 import * as regexp from 'toolkit/utils/regexp';
@@ -28,27 +38,42 @@ export const getEnvValue = (envName: string) => {
   return replaceQuotes(envs[envName]);
 };
 
-export const getApiHost = () => {
+const getFluentApiConfig = () => {
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
-  const value = env === 'devnet' ? DEVNET_EXPLORER_HOST : TESTNET_EXPLORER_HOST;
+
+  switch (env) {
+    case 'devnet':
+      return {
+        host: DEVNET_EXPLORER_API_HOST,
+        url: DEVNET_EXPLORER_API_URL,
+      };
+    case 'mainnet':
+      return {
+        host: MAINNET_EXPLORER_API_HOST,
+        url: MAINNET_EXPLORER_API_URL,
+      };
+    default:
+      return {
+        host: TESTNET_EXPLORER_API_HOST,
+        url: TESTNET_EXPLORER_API_URL,
+      };
+  }
+};
+
+export const getApiHost = () => {
+  const value = getFluentApiConfig().host;
 
   return value;
 };
 
 export const getStatsApiHost = () => {
-  const env = getEnvValue('NEXT_PUBLIC_CHAIN');
-  const value = env === 'devnet' ?
-    'https://api-devnet.fluentscan.xyz/' :
-    'https://api-testnet.fluentscan.xyz/';
+  const value = getFluentApiConfig().url;
 
   return value;
 };
 
 export const getVisualizeApiHost = () => {
-  const env = getEnvValue('NEXT_PUBLIC_CHAIN');
-  const value = env === 'devnet' ?
-    'https://api-devnet.fluentscan.xyz/' :
-    'https://api-testnet.fluentscan.xyz/';
+  const value = getFluentApiConfig().url;
 
   return value + ':8081';
 };

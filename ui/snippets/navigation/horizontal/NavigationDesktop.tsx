@@ -12,7 +12,7 @@ import RewardsButton from 'ui/rewards/RewardsButton';
 import { CONTENT_MAX_WIDTH } from 'ui/shared/layout/utils';
 // import NetworkLogo from 'ui/snippets/networkMenu/NetworkLogo';
 import NetworkLogo from 'ui/snippets/networkLogo/NetworkLogo';
-import UserProfileDesktop from 'ui/snippets/user/profile/UserProfileDesktop';
+import UserProfileDesktop from 'ui/snippets/user/UserProfileDesktop';
 import UserWalletDesktop from 'ui/snippets/user/wallet/UserWalletDesktop';
 
 import RollupStageBadge from '../RollupStageBadge';

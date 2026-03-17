@@ -10,6 +10,7 @@ import IconSvg from 'ui/shared/IconSvg';
 import SettingsAddressFormat from './SettingsAddressFormat';
 import SettingsIdentIcon from './SettingsIdentIcon';
 import SettingsLocalTime from './SettingsLocalTime';
+import SettingsPoorReputationTokens from './SettingsPoorReputationTokens';
 import SettingsScamTokens from './SettingsScamTokens';
 
 const Settings = () => {
@@ -57,6 +58,7 @@ const Settings = () => {
           <Separator my={ 3 }/>
           <VStack gap={ 1 }>
             <SettingsScamTokens/>
+            <SettingsPoorReputationTokens/>
             <SettingsLocalTime/>
           </VStack>
         </PopoverBody>
