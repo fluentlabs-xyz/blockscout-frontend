@@ -1,14 +1,18 @@
 import {
   DEVNET_RPC_URL,
-  MAINNET_RPC_URL,
-  TESTNET_RPC_URL,
   FLUENT_DEVNET_CHAIN_ID,
-  FLUENT_TESTNET_CHAIN_ID,
-  FLUENT_MAINNET_CHAIN_ID,
-  TESTNET_NETWORK_NATIVE_CURRENCY,
   DEVNET_NETWORK_NATIVE_CURRENCY,
+} from '@fluent.xyz/sdk-core/config/devnet-config';
+import {
+  MAINNET_RPC_URL,
+  FLUENT_MAINNET_CHAIN_ID,
   MAINNET_NETWORK_NATIVE_CURRENCY,
-} from '@fluent.xyz/sdk-core';
+} from '@fluent.xyz/sdk-core/config/mainnet-config';
+import {
+  TESTNET_RPC_URL,
+  FLUENT_TESTNET_CHAIN_ID,
+  TESTNET_NETWORK_NATIVE_CURRENCY,
+} from '@fluent.xyz/sdk-core/config/testnet-config';
 
 import type { RollupType } from 'types/client/rollup';
 import type { NetworkVerificationType, NetworkVerificationTypeEnvs } from 'types/networks';

@@ -1,4 +1,6 @@
-import { DEVNET_EXPLORER_URL, MAINNET_EXPLORER_URL, TESTNET_EXPLORER_URL } from '@fluent.xyz/sdk-core';
+import { DEVNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/config/devnet-config';
+import { MAINNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/config/mainnet-config';
+import { TESTNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/config/testnet-config';
 import type CspDev from 'csp-dev';
 
 import config from 'configs/app';

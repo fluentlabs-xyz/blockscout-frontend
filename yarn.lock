@@ -2688,10 +2688,10 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.9.tgz#50dea3616bc8191fb8e112283b49eaff03e78429"
   integrity sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==
 
-"@fluent.xyz/sdk-core@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@fluent.xyz/sdk-core/-/sdk-core-0.3.0.tgz#b04df7374cf3ebc067de3a2a23e818a1fd66ad18"
-  integrity sha512-pJJaQefnZH6I1J4fPYRmk0ax3jexOzpNSfOHNpfc2JO0ayXFFkazC1VS5W4LdvESxGdt9h0xe9fypcbsrtQoDA==
+"@fluent.xyz/sdk-core@0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@fluent.xyz/sdk-core/-/sdk-core-0.3.1.tgz#3fb66b03f8e2639a40cc50871352694c60bb5e35"
+  integrity sha512-chEhGQG3o5R7RiwMR/S2DVWSHuCatdTgbANtpp1LxJ1+TTnWIbT6/13BM8zKey/0inZgh05cWd4aSEVKXbbxIw==
   dependencies:
     "@ethereumjs/rlp" "^5.0.2"
     "@tanstack/react-query" "5.45.1"
