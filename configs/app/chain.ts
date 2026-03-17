@@ -1,13 +1,14 @@
 import {
-  DEVNET_NETWORK_NATIVE_CURRENCY,
-  FLUENT_DEVNET_CHAIN_ID,
   DEVNET_RPC_URL,
-} from '@fluent.xyz/sdk-core/dist/config/devnet-config';
-import {
-  TESTNET_NETWORK_NATIVE_CURRENCY,
-  FLUENT_TESTNET_CHAIN_ID,
+  MAINNET_RPC_URL,
   TESTNET_RPC_URL,
-} from '@fluent.xyz/sdk-core/dist/config/testnet-config';
+  FLUENT_DEVNET_CHAIN_ID,
+  FLUENT_TESTNET_CHAIN_ID,
+  FLUENT_MAINNET_CHAIN_ID,
+  TESTNET_NETWORK_NATIVE_CURRENCY,
+  DEVNET_NETWORK_NATIVE_CURRENCY,
+  MAINNET_NETWORK_NATIVE_CURRENCY,
+} from '@fluent.xyz/sdk-core';
 
 import type { RollupType } from 'types/client/rollup';
 import type { NetworkVerificationType, NetworkVerificationTypeEnvs } from 'types/networks';
@@ -31,9 +32,22 @@ const verificationType: NetworkVerificationType = (() => {
 const rpcUrls = (() => {
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
   const customRpc = getEnvValue('NEXT_PUBLIC_NETWORK_RPC_URL');
+  let defaultRpcUrl;
+
+  switch (env) {
+    case 'devnet':
+      defaultRpcUrl = DEVNET_RPC_URL;
+      break;
+    case 'mainnet':
+      defaultRpcUrl = MAINNET_RPC_URL;
+      break;
+    default:
+      defaultRpcUrl = TESTNET_RPC_URL;
+      break;
+  }
 
   const value =
-    customRpc || (env === 'devnet' ? DEVNET_RPC_URL : TESTNET_RPC_URL);
+    customRpc || defaultRpcUrl;
 
   if (!value) {
     return [];
@@ -51,6 +65,26 @@ const getChain = () => {
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
 
   switch (env) {
+    case 'mainnet':
+      return {
+        id: String(parseInt(String(FLUENT_MAINNET_CHAIN_ID), 16)),
+        name: 'Fluent',
+        shortName: 'Fluent',
+        currency: {
+          name: MAINNET_NETWORK_NATIVE_CURRENCY.name,
+          weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
+          symbol: MAINNET_NETWORK_NATIVE_CURRENCY.symbol,
+          decimals: MAINNET_NETWORK_NATIVE_CURRENCY.decimals,
+        },
+        secondaryCoin: {
+          symbol: getEnvValue('NEXT_PUBLIC_NETWORK_SECONDARY_COIN_SYMBOL'),
+        },
+        hasMultipleGasCurrencies: false,
+        tokenStandard: 'ERC',
+        rpcUrls,
+        isTestnet: false,
+        verificationType,
+      };
     case 'devnet':
       return {
         id: String(parseInt(String(FLUENT_DEVNET_CHAIN_ID), 16)),
