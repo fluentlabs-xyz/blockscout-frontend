@@ -33,6 +33,9 @@ const semanticTokens: ThemingConfig['semanticTokens'] = {
       scrollbar: {
         thumb: { value: { _light: '{colors.blackAlpha.300}', _dark: '{colors.whiteAlpha.300}' } },
       },
+      selection: {
+        bg: { value: { _light: '#E3CFE7', _dark: '#754B7D' } },
+      },
     },
 
     // FOUNDATIONS
@@ -70,6 +73,9 @@ const semanticTokens: ThemingConfig['semanticTokens'] = {
       solid: {
         bg: {
           DEFAULT: { value: { _light: '{colors.theme.button.primary._light}', _dark: '{colors.theme.button.primary._dark}' } },
+        },
+        text: {
+          DEFAULT: { value: { _light: '{colors.theme.button.primary.text._light}', _dark: '{colors.theme.button.primary.text._dark}' } },
         },
       },
       outline: {
@@ -280,7 +286,7 @@ const semanticTokens: ThemingConfig['semanticTokens'] = {
         error: { value: '{colors.text.error}' },
       },
       bg: {
-        DEFAULT: { value: { _light: '{colors.white}', _dark: '{colors.black}' } },
+        DEFAULT: { value: '{colors.bg.primary}' },
         readOnly: { value: { _light: '{colors.gray.200}', _dark: '{colors.grey.10}' } },
       },
       border: {

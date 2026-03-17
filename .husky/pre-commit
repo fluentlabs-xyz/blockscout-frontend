@@ -5,6 +5,9 @@
 echo 🧿 Running file linter...
 npx lint-staged
 
+echo 🧿 Running spelling checker...
+git diff --diff-filter=ACMRT --cached --name-only | npx cspell --config cspell.jsonc --file-list stdin --no-must-find-files
+
 # format svg
 echo 🧿 Running svg formatter...
 git diff --diff-filter=ACMRT --cached --name-only -z | grep -z -E "\.svg$" | while IFS= read -r -d '' file

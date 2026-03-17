@@ -15,6 +15,7 @@ import {
 } from '@fluent.xyz/sdk-core/config/testnet-config';
 
 import type { RollupType } from 'types/client/rollup';
+import type { AdditionalTokenType } from 'types/client/token';
 import type { NetworkVerificationType, NetworkVerificationTypeEnvs } from 'types/networks';
 
 import { urlValidator } from 'toolkit/components/forms/validators/url';
@@ -32,6 +33,8 @@ const verificationType: NetworkVerificationType = (() => {
   }
   return getEnvValue('NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE') as NetworkVerificationTypeEnvs || 'mining';
 })();
+
+const additionalTokenTypes = parseEnvJson<Array<AdditionalTokenType>>(getEnvValue('NEXT_PUBLIC_NETWORK_ADDITIONAL_TOKEN_TYPES')) || [];
 
 const rpcUrls = (() => {
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
@@ -85,6 +88,7 @@ const getChain = () => {
         },
         hasMultipleGasCurrencies: false,
         tokenStandard: 'ERC',
+        additionalTokenTypes,
         rpcUrls,
         isTestnet: false,
         verificationType,
@@ -105,6 +109,7 @@ const getChain = () => {
         },
         hasMultipleGasCurrencies: false,
         tokenStandard: 'ERC',
+        additionalTokenTypes,
         rpcUrls,
         isTestnet: true,
         verificationType,
@@ -125,6 +130,7 @@ const getChain = () => {
         },
         hasMultipleGasCurrencies: false,
         tokenStandard: 'ERC',
+        additionalTokenTypes,
         rpcUrls,
         isTestnet: true,
         verificationType,
@@ -145,6 +151,7 @@ const getChain = () => {
         },
         hasMultipleGasCurrencies: false,
         tokenStandard: 'ERC',
+        additionalTokenTypes,
         rpcUrls,
         isTestnet: true,
         verificationType,
