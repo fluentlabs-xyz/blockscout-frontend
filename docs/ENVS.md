@@ -1103,3 +1103,11 @@ To obtain the variable values, please refer to the [reCAPTCHA documentation](htt
 | Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_RE_CAPTCHA_APP_SITE_KEY | `string` | Google reCAPTCHA v2 site key | - | - | `<your-site-key>` | v1.0.x+ |
+
+## Fluent custom envs
+
+| Variable                 | Type     | Description        | Compulsoriness | Default value | Example value     | Version |
+|--------------------------|----------|--------------------|----------------|---------------|-------------------|---------|
+| NEXT_PUBLIC_CHAIN        | `string` | Fluent chain ID    | -              | -             | `<your-site-key>` | v1.0.x+ |
+| NEXT_PUBLIC_API_SPEC_URL | `string` | A link to API spec | -              | -             | `<your-site-key>` | v1.0.x+ |
+
