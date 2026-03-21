@@ -106,6 +106,7 @@ Also, be aware that if you customize the name of the currency or any of its deno
 | Variable | Type| Description | Compulsoriness | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_NETWORK_NAME | `string` | Displayed name of the network | Required | - | `Gnosis Chain` | v1.0.x+ |
+| NEXT_PUBLIC_CHAIN | `mainnet \| testnet \| devnet` | Fluent-specific chain preset selector used by custom Fluent frontend logic. | - | `testnet` | `mainnet` | fluent-fork |
 | NEXT_PUBLIC_NETWORK_SHORT_NAME | `string` | Used for SEO attributes (e.g, page description) | - | -  | `OoG` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_ID | `number` | Chain id, see [https://chainlist.org](https://chainlist.org) for the reference | Required (except for multichain) | -  | `99` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_RPC_URL | `string \| Array<string>` | Chain public RPC server url, see [https://chainlist.org](https://chainlist.org) for the reference. Can contain a single string value, or an array of urls. | - | - | `https://core.poa.network` | v1.0.x+ |
@@ -595,6 +596,7 @@ Ads are enabled by default on all self-hosted instances. If you would like to di
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_API_DOCS_TABS | `Array<TabId>` | Controls which tabs appear on the API documentation page. Possible values for `TabId` are `rest_api`, `eth_rpc_api`, `rpc_api`, and `graphql_api`. **Note** that this variable has a default value, so the feature is enabled by default. Pass an empty array to disable it. | - | `['rest_api','eth_rpc_api','rpc_api','graphql_api']` | `[]` | v2.3.x+ |
 | NEXT_PUBLIC_API_DOCS_ALERT_MESSAGE | `string` | Used for displaying custom alerts on the API documentation page. Could be a regular string or a HTML code. | - | - | `Hello world! 🤪` | v2.7.0+ |
+| NEXT_PUBLIC_API_SPEC_URL | `string` | Deprecated compatibility variable. Accepted by runtime validator but ignored by current API docs implementation (spec URL is resolved from backend configuration). | - | - | `https://raw.githubusercontent.com/blockscout/blockscout-api-v2-swagger/main/swagger.yaml` | fluent-fork |
 
 &nbsp;
 
