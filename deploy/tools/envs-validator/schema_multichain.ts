@@ -33,6 +33,8 @@ const schema = yup
     NEXT_PUBLIC_APP_PORT: yup.number().positive().integer(),
     NEXT_PUBLIC_APP_ENV: yup.string(),
     NEXT_PUBLIC_APP_INSTANCE: yup.string(),
+    // Fluent-specific chain selector (ignored in multichain mode but accepted for compatibility)
+    NEXT_PUBLIC_CHAIN: yup.string().oneOf([ 'mainnet', 'testnet', 'devnet' ]),
 
     // 2. Blockchain parameters
     NEXT_PUBLIC_NETWORK_NAME: yup.string().required(),
@@ -62,6 +64,8 @@ const schema = yup
 
     // Misc
     NEXT_PUBLIC_USE_NEXT_JS_PROXY: yup.boolean(),
+    // deprecated, accepted for compatibility
+    NEXT_PUBLIC_API_SPEC_URL: yup.string().test(urlTest),
   })
   .concat(uiSchemas.homepageSchema)
   .concat(uiSchemas.navigationSchema)
