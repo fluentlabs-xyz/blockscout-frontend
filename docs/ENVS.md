@@ -1102,14 +1102,7 @@ This feature enables cross-chain transaction tracking and visualization, allowin
 
 To obtain the variable values, please refer to the [reCAPTCHA documentation](https://developers.google.com/recaptcha) and check the [Blockscout reCAPTCHA config docs](https://docs.blockscout.com/setup/configuration-options/recaptcha). Please note that we currently support only **reCAPTCHA v2 in invisible mode**, read more [here](https://developers.google.com/recaptcha/docs/versions#recaptcha_v2_invisible_recaptcha_badge).
 
-| Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
-| --- | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_RE_CAPTCHA_APP_SITE_KEY | `string` | Google reCAPTCHA v2 site key | - | - | `<your-site-key>` | v1.0.x+ |
-
-## Fluent custom envs
-
-| Variable                 | Type     | Description        | Compulsoriness | Default value | Example value     | Version |
-|--------------------------|----------|--------------------|----------------|---------------|-------------------|---------|
-| NEXT_PUBLIC_CHAIN        | `string` | Fluent chain ID    | -              | -             | `<your-site-key>` | v1.0.x+ |
-| NEXT_PUBLIC_API_SPEC_URL | `string` | A link to API spec | -              | -             | `<your-site-key>` | v1.0.x+ |
+| Variable                            | Type     | Description                  | Compulsoriness | Default value | Example value     | Version |
+|:------------------------------------|----------|------------------------------|----------------|---------------|-------------------|---------|
+| NEXT_PUBLIC_RE_CAPTCHA_APP_SITE_KEY | `string` | Google reCAPTCHA v2 site key | -              | -             | `<your-site-key>` | v1.0.x+ |
 
