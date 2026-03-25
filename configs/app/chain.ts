@@ -1,25 +1,20 @@
-import {
-  DEVNET_RPC_URL,
-  FLUENT_DEVNET_CHAIN_ID,
-  DEVNET_NETWORK_NATIVE_CURRENCY,
-} from '@fluent.xyz/sdk-core/config/devnet-config';
-import {
-  MAINNET_RPC_URL,
-  FLUENT_MAINNET_CHAIN_ID,
-  MAINNET_NETWORK_NATIVE_CURRENCY,
-} from '@fluent.xyz/sdk-core/config/mainnet-config';
-import {
-  TESTNET_RPC_URL,
-  FLUENT_TESTNET_CHAIN_ID,
-  TESTNET_NETWORK_NATIVE_CURRENCY,
-} from '@fluent.xyz/sdk-core/config/testnet-config';
-
 import type { RollupType } from 'types/client/rollup';
 import type { AdditionalTokenType } from 'types/client/token';
 import type { NetworkVerificationType, NetworkVerificationTypeEnvs } from 'types/networks';
 
 import { urlValidator } from 'toolkit/components/forms/validators/url';
 
+import {
+  DEVNET_RPC_URL,
+  FLUENT_DEVNET_CHAIN_ID,
+  DEVNET_NETWORK_NATIVE_CURRENCY,
+  MAINNET_RPC_URL,
+  FLUENT_MAINNET_CHAIN_ID,
+  MAINNET_NETWORK_NATIVE_CURRENCY,
+  TESTNET_RPC_URL,
+  FLUENT_TESTNET_CHAIN_ID,
+  TESTNET_NETWORK_NATIVE_CURRENCY,
+} from './fluent';
 import { getEnvValue, parseEnvJson } from './utils';
 
 const rollupType = getEnvValue('NEXT_PUBLIC_ROLLUP_TYPE') as RollupType;
