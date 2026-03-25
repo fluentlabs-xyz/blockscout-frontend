@@ -18,13 +18,7 @@ const NetworkMenuLink = ({ title, icon, isActive: isActiveProp, isMobile, url, i
 
   const iconEl = icon ? (
     <Image w="20px" h="20px" src={ icon } alt={ `${ title } network icon` } style={ style }/>
-  ) : (
-    <IconSvg
-      name="networks/icon-placeholder"
-      boxSize="20px"
-      color={{ base: 'blackAlpha.100', _dark: 'whiteAlpha.300' }}
-    />
-  );
+  ) : null;
 
   const isActive = (() => {
     if (isActiveProp !== undefined) {
