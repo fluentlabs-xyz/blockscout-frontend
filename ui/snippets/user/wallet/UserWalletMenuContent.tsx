@@ -50,7 +50,19 @@ const UserWalletMenuContent = ({ isAutoConnectDisabled, address, domain, isRecon
           </IconButton>
         ) }
       </Flex>
-      <Button size="sm" width="full" variant="outline" onClick={ onDisconnect } mt={ 6 }>
+      <Button
+        size="sm"
+        width="full"
+        color="white"
+        borderColor="white"
+        _hover={{
+          color: 'cyan.200',
+          borderColor: 'cyan.200',
+        }}
+        variant="outline"
+        onClick={ onDisconnect }
+        mt={ 6 }
+      >
         Disconnect
       </Button>
     </Box>

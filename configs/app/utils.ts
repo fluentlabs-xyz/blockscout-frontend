@@ -1,18 +1,14 @@
+import { isBrowser } from 'toolkit/utils/isBrowser';
+import * as regexp from 'toolkit/utils/regexp';
+
 import {
   DEVNET_EXPLORER_API_HOST,
   DEVNET_EXPLORER_API_URL,
-} from '@fluent.xyz/sdk-core/config/devnet-config';
-import {
   MAINNET_EXPLORER_API_HOST,
   MAINNET_EXPLORER_API_URL,
-} from '@fluent.xyz/sdk-core/config/mainnet-config';
-import {
   TESTNET_EXPLORER_API_HOST,
   TESTNET_EXPLORER_API_URL,
-} from '@fluent.xyz/sdk-core/config/testnet-config';
-
-import { isBrowser } from 'toolkit/utils/isBrowser';
-import * as regexp from 'toolkit/utils/regexp';
+} from './fluent';
 
 export const replaceQuotes = (value: string | undefined) => value?.replaceAll('\'', '"');
 

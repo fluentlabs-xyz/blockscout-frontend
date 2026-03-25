@@ -1,9 +1,7 @@
-import { DEVNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/config/devnet-config';
-import { MAINNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/config/mainnet-config';
-import { TESTNET_EXPLORER_URL } from '@fluent.xyz/sdk-core/config/testnet-config';
 import type CspDev from 'csp-dev';
 
 import config from 'configs/app';
+import { DEVNET_EXPLORER_URL, MAINNET_EXPLORER_URL, TESTNET_EXPLORER_URL } from 'configs/app/fluent';
 
 import { KEY_WORDS } from '../utils';
 
@@ -48,6 +46,7 @@ export function app(isPrivateMode = false): CspDev.DirectiveDescriptor {
       MAINNET_EXPLORER_URL,
       'https://api-devnet.fluentscan.xyz/',
       'https://api.fluentscan.xyz/',
+      'https://api-testnet.fluentscan.xyz/',
 
       // chain RPC server
       ...config.chain.rpcUrls,

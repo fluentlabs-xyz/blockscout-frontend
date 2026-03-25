@@ -136,6 +136,8 @@ const schema = yup
     NEXT_PUBLIC_USE_NEXT_JS_PROXY: yup.boolean(),
     NEXT_PUBLIC_API_KEYS_ALERT_MESSAGE: yup.string(),
     NEXT_PUBLIC_API_DOCS_ALERT_MESSAGE: yup.string(),
+    // deprecated, kept for backward compatibility to avoid runtime validation failures
+    NEXT_PUBLIC_API_SPEC_URL: yup.string().test(urlTest),
   })
   .concat(apisSchema)
   .concat(chainSchema)

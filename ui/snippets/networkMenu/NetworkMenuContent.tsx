@@ -1,4 +1,4 @@
-import { VStack, Flex, Box, Text } from '@chakra-ui/react';
+import { VStack, Flex, Box } from '@chakra-ui/react';
 import React from 'react';
 
 import type { FeaturedNetwork, NetworkGroup } from 'types/networks';
@@ -91,7 +91,6 @@ const NetworkMenuContent = ({ items, tabs }: Props) => {
           { tabs.map((tab, index) => {
             return (
               <Box key={ tab }>
-                <Text fontSize="sm" fontWeight={ 600 } mb={ 2 }>{ tab }</Text>
                 <VStack key={ tab } as="ul" gap={ 1 } alignItems="stretch">
                   { items
                     .filter((network) => network.group === tab)
@@ -155,7 +154,7 @@ const NetworkMenuContent = ({ items, tabs }: Props) => {
   })();
 
   return (
-    <PopoverContent w="290px" maxH="unset">
+    <PopoverContent w="150px" maxH="unset">
       <PopoverBody>
         { content }
       </PopoverBody>
