@@ -29,29 +29,17 @@ const NetworkMenuContent = ({ items, tabs }: Props) => {
   const content = (() => {
     if (!items || items.length === 0) {
       return (
-        <>
-          <Flex alignItems="center">
-            <Flex h="32px" w="105px" bgColor={{ base: 'blackAlpha.50', _dark: 'whiteAlpha.50' }} borderRadius="base" px={ 4 } py={ 2 }>
-              <Skeleton loading h="16px" w="100%"/>
-            </Flex>
-            <Skeleton loading h="16px" w="68px" mx={ 4 }/>
-            <Skeleton loading h="16px" w="45px" mx={ 4 }/>
+        <Flex flexDir="column" rowGap={ 2 }>
+          <Flex my={ 2 } alignItems="center">
+            <Skeleton loading h="16px" w="100px"/>
           </Flex>
-          <Flex mt={ 3 } flexDir="column" rowGap={ 2 }>
-            <Flex mx={ 3 } my={ 2 } alignItems="center">
-              <Skeleton loading h="30px" w="30px" borderRadius="full"/>
-              <Skeleton loading h="16px" w="120px" ml={ 3 }/>
-            </Flex>
-            <Flex mx={ 3 } my={ 2 } alignItems="center">
-              <Skeleton loading h="30px" w="30px" borderRadius="full"/>
-              <Skeleton loading h="16px" w="180px" ml={ 3 }/>
-            </Flex>
-            <Flex mx={ 3 } my={ 2 } alignItems="center">
-              <Skeleton loading h="30px" w="30px" borderRadius="full"/>
-              <Skeleton loading h="16px" w="150px" ml={ 3 }/>
-            </Flex>
+          <Flex my={ 2 } alignItems="center">
+            <Skeleton loading h="16px" w="100px"/>
           </Flex>
-        </>
+          <Flex my={ 2 } alignItems="center">
+            <Skeleton loading h="16px" w="100px"/>
+          </Flex>
+        </Flex>
       );
     }
 
