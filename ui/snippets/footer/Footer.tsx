@@ -8,10 +8,13 @@ import type { CustomLinksGroup } from 'types/footerLinks';
 import config from 'configs/app';
 import type { ResourceError } from 'lib/api/resources';
 import useFetch from 'lib/hooks/useFetch';
+import useIsMobile from 'lib/hooks/useIsMobile';
+import useProvider from 'lib/web3/useProvider';
 import { useColorModeValue } from 'toolkit/chakra/color-mode';
 import { Link } from 'toolkit/chakra/link';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import IconSvg from 'ui/shared/IconSvg';
+import NetworkAddToWallet from 'ui/shared/NetworkAddToWallet';
 
 import NetworkLogo from '../networkLogo/NetworkLogo';
 import FooterLinkItem from './FooterLinkItem';
@@ -42,6 +45,17 @@ const BLOCKSCOUT_LINKS = [
 const Footer = () => {
   const logoColor = useColorModeValue('blue.600', 'white');
 
+  const web3 = useProvider();
+  const isMobile = useIsMobile();
+
+  const hasAddChainButton = Boolean(
+    web3.data?.provider &&
+    web3.data?.wallet &&
+    config.chain.rpcUrls.length &&
+    config.features.web3Wallet.isEnabled &&
+    !config.features.multichain.isEnabled &&
+    !isMobile,
+  );
   const fetch = useFetch();
 
   const { isPlaceholderData, data: linksData } = useQuery<unknown, ResourceError<unknown>, Array<CustomLinksGroup>>({
@@ -112,6 +126,7 @@ const Footer = () => {
     return (
       <Box { ...containerProps }>
         <Grid { ...contentProps }>
+          { hasAddChainButton && <NetworkAddToWallet source="Footer"/> }
           <div>
             { renderBlockscoutInfo() }
           </div>
@@ -174,6 +189,7 @@ const Footer = () => {
           </Grid>
         </Box>
       </Box>
+      { hasAddChainButton && <NetworkAddToWallet source="Footer"/> }
       { renderBlockscoutInfo() }
     </Box>
   );
