@@ -8,6 +8,7 @@ import { generateListStub } from 'stubs/utils';
 import { Badge } from 'toolkit/chakra/badge';
 import { Link } from 'toolkit/chakra/link';
 import { TableBody, TableCell, TableColumnHeader, TableHeaderSticky, TableRoot, TableRow } from 'toolkit/chakra/table';
+import { decodeRuntimeUpgradedLog, getRuntimeUpgradeLogsApiUrl, RUNTIME_UPGRADED_TOPIC, RUNTIME_UPGRADE_ADDRESS } from 'ui/runtimeUpgrades/utils';
 import ActionBar, { ACTION_BAR_HEIGHT_DESKTOP } from 'ui/shared/ActionBar';
 import CopyToClipboard from 'ui/shared/CopyToClipboard';
 import DataListDisplay from 'ui/shared/DataListDisplay';
@@ -19,7 +20,6 @@ import PageTitle from 'ui/shared/Page/PageTitle';
 import Pagination from 'ui/shared/pagination/Pagination';
 import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
 import Time from 'ui/shared/time/Time';
-import { decodeRuntimeUpgradedLog, getRuntimeUpgradeLogsApiUrl, RUNTIME_UPGRADED_TOPIC, RUNTIME_UPGRADE_ADDRESS } from 'ui/runtimeUpgrades/utils';
 
 const RuntimeUpgrades = () => {
   const { data, isPlaceholderData, isError, pagination } = useQueryWithPages({
@@ -96,7 +96,12 @@ const RuntimeUpgrades = () => {
           </TableHeaderSticky>
           <TableBody>
             { rows.map(({ item, decoded }) => (
-              <RuntimeUpgradeTableRow key={ `${ item.transaction_hash || 'tx' }-${ item.index }` } item={ item } decoded={ decoded } isLoading={ isPlaceholderData }/>
+              <RuntimeUpgradeTableRow
+                key={ `${ item.transaction_hash || 'tx' }-${ item.index }` }
+                item={ item }
+                decoded={ decoded }
+                isLoading={ isPlaceholderData }
+              />
             )) }
           </TableBody>
         </TableRoot>
@@ -104,7 +109,12 @@ const RuntimeUpgrades = () => {
 
       <VStack hideFrom="lg" gap={ 3 } alignItems="stretch">
         { rows.map(({ item, decoded }) => (
-          <RuntimeUpgradeCard key={ `${ item.transaction_hash || 'tx' }-${ item.index }` } item={ item } decoded={ decoded } isLoading={ isPlaceholderData }/>
+          <RuntimeUpgradeCard
+            key={ `${ item.transaction_hash || 'tx' }-${ item.index }` }
+            item={ item }
+            decoded={ decoded }
+            isLoading={ isPlaceholderData }
+          />
         )) }
       </VStack>
     </>
@@ -175,7 +185,11 @@ const RuntimeUpgradeTableRow = ({ item, decoded, isLoading }: RuntimeUpgradeRowP
         <HashCell value={ decoded.codeHash } isLoading={ isLoading }/>
       </TableCell>
       <TableCell>
-        { item.block_timestamp ? <Time timestamp={ item.block_timestamp } format="DD MMM YYYY, HH:mm:ss"/> : <Text color="text.secondary">—</Text> }
+        { item.block_timestamp ? (
+          <Time timestamp={ item.block_timestamp } format="DD MMM YYYY, HH:mm:ss"/>
+        ) : (
+          <Text color="text.secondary">—</Text>
+        ) }
       </TableCell>
     </TableRow>
   );
@@ -191,15 +205,39 @@ const RuntimeUpgradeCard = ({ item, decoded, isLoading }: RuntimeUpgradeRowProps
         </HStack>
 
         <RowLabel label="Block">
-          { typeof item.block_number === 'number' ? <BlockEntity number={ item.block_number } noIcon isLoading={ isLoading }/> : <Text color="text.secondary">—</Text> }
+          { typeof item.block_number === 'number' ? (
+            <BlockEntity number={ item.block_number } noIcon isLoading={ isLoading }/>
+          ) : (
+            <Text color="text.secondary">—</Text>
+          ) }
         </RowLabel>
 
         <RowLabel label="Transaction">
-          { item.transaction_hash ? <TxEntity hash={ item.transaction_hash } noIcon isLoading={ isLoading } truncation="constant" maxW="100%"/> : <Text color="text.secondary">—</Text> }
+          { item.transaction_hash ? (
+            <TxEntity
+              hash={ item.transaction_hash }
+              noIcon
+              isLoading={ isLoading }
+              truncation="constant"
+              maxW="100%"
+            />
+          ) : (
+            <Text color="text.secondary">—</Text>
+          ) }
         </RowLabel>
 
         <RowLabel label="Target address">
-          { decoded.targetAddress ? <AddressEntity address={{ hash: decoded.targetAddress }} noIcon isLoading={ isLoading } truncation="constant" maxW="100%"/> : <Text color="text.secondary">Unable to decode</Text> }
+          { decoded.targetAddress ? (
+            <AddressEntity
+              address={{ hash: decoded.targetAddress }}
+              noIcon
+              isLoading={ isLoading }
+              truncation="constant"
+              maxW="100%"
+            />
+          ) : (
+            <Text color="text.secondary">Unable to decode</Text>
+          ) }
         </RowLabel>
 
         <RowLabel label="Genesis version">
@@ -215,7 +253,11 @@ const RuntimeUpgradeCard = ({ item, decoded, isLoading }: RuntimeUpgradeRowProps
         </RowLabel>
 
         <RowLabel label="Timestamp">
-          { item.block_timestamp ? <Time timestamp={ item.block_timestamp } format="DD MMM YYYY, HH:mm:ss"/> : <Text color="text.secondary">—</Text> }
+          { item.block_timestamp ? (
+            <Time timestamp={ item.block_timestamp } format="DD MMM YYYY, HH:mm:ss"/>
+          ) : (
+            <Text color="text.secondary">—</Text>
+          ) }
         </RowLabel>
       </VStack>
     </Box>
