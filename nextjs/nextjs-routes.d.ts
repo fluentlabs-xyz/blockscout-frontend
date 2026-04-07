@@ -46,6 +46,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/chain/[chain_slug]/block/countdown", { "chain_slug": string }>
     | DynamicRoute<"/chain/[chain_slug]/csv-export", { "chain_slug": string }>
     | DynamicRoute<"/chain/[chain_slug]/op/[hash]", { "chain_slug": string; "hash": string }>
+    | DynamicRoute<"/chain/[chain_slug]/runtime-upgrades", { "chain_slug": string }>
     | DynamicRoute<"/chain/[chain_slug]/token/[hash]", { "chain_slug": string; "hash": string }>
     | DynamicRoute<"/chain/[chain_slug]/token/[hash]/instance/[id]", { "chain_slug": string; "hash": string; "id": string }>
     | DynamicRoute<"/chain/[chain_slug]/tx/[hash]", { "chain_slug": string; "hash": string }>
