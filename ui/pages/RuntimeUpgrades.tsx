@@ -6,8 +6,6 @@ import type { Block } from 'types/api/block';
 import type { Log } from 'types/api/log';
 
 import useApiFetch from 'lib/api/useApiFetch';
-import { LOG } from 'stubs/log';
-import { generateListStub } from 'stubs/utils';
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from 'toolkit/chakra/accordion';
 import { Badge } from 'toolkit/chakra/badge';
 import { Link } from 'toolkit/chakra/link';
@@ -31,18 +29,10 @@ import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
 import Time from 'ui/shared/time/Time';
 
 const RuntimeUpgrades = () => {
-  const { data, isPlaceholderData, isError, pagination } = useQueryWithPages({
+  const { data, isPlaceholderData, isPending, isError, pagination } = useQueryWithPages({
     resourceName: 'general:address_logs',
     pathParams: { hash: RUNTIME_UPGRADE_ADDRESS },
     queryParams: { topic: RUNTIME_UPGRADED_TOPIC },
-    options: {
-      placeholderData: generateListStub<'general:address_logs'>(LOG, 3, { next_page_params: {
-        block_number: 9005750,
-        index: 42,
-        items_count: 50,
-        transaction_index: 23,
-      } }),
-    },
   });
 
   const apiFetch = useApiFetch();
@@ -214,7 +204,7 @@ const RuntimeUpgrades = () => {
       <DataListDisplay
         isError={ isError }
         itemsNum={ rows.length }
-        emptyText="There are no runtime upgrade events yet."
+        emptyText={ isPending ? 'Loading runtime upgrades…' : 'There are no runtime upgrade events yet.' }
         actionBar={ actionBar }
       >
         { content }
