@@ -21,7 +21,31 @@ export interface ButtonProps extends ChakraButtonProps, ButtonLoadingProps {
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(props, ref) {
-    const { loading, disabled, children, expanded, selected, highlighted, loadingSkeleton = false, ...rest } = props;
+    const { loading, disabled, children, expanded, selected, highlighted, loadingSkeleton = false, colorPalette, variant, ...rest } = props;
+
+    const paletteProps = (() => {
+      if (variant === 'outline' && colorPalette === 'cyan') {
+        return {
+          color: 'cyan.200',
+          borderColor: 'cyan.200',
+          _hover: {
+            bg: 'transparent',
+            color: 'cyan.100',
+            borderColor: 'cyan.100',
+          },
+          _loading: {
+            opacity: 1,
+            '& .chakra-spinner': {
+              borderColor: 'cyan.200',
+              borderBottomColor: 'spinner.track',
+              borderInlineStartColor: 'spinner.track',
+            },
+          },
+        };
+      }
+
+      return undefined;
+    })();
 
     return (
       <Skeleton loading={ loadingSkeleton } asChild ref={ ref as React.ForwardedRef<HTMLDivElement> }>
@@ -32,6 +56,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           { ...(loadingSkeleton ? { 'data-loading-skeleton': true } : {}) }
           disabled={ !loadingSkeleton && (loading || disabled) }
           loading={ loading }
+          variant={ variant }
+          colorPalette={ colorPalette }
+          { ...paletteProps }
           { ...rest }
         >
           { children }

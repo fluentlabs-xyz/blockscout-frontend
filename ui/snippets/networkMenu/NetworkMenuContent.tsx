@@ -75,11 +75,11 @@ const NetworkMenuContent = ({ items, tabs }: Props) => {
 
     if (config.UI.featuredNetworks.mode === 'list') {
       return (
-        <VStack overflowY="scroll" maxH="516px" alignItems="stretch" gap={ 3 }>
+        <VStack overflowY="scroll" maxH="516px" alignItems="stretch">
           { tabs.map((tab, index) => {
             return (
               <Box key={ tab }>
-                <VStack key={ tab } as="ul" gap={ 1 } alignItems="stretch">
+                <VStack key={ tab } as="ul" alignItems="stretch">
                   { items
                     .filter((network) => network.group === tab)
                     .map((network) => (

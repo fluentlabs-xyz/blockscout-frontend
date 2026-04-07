@@ -6,6 +6,8 @@ import { Skeleton } from 'toolkit/chakra/skeleton';
 
 import CopyToClipboard from './CopyToClipboard';
 
+const TEXT_CHUNK_SIZE = 2_000;
+
 interface Props {
   data: React.ReactNode;
   title?: string;
@@ -37,6 +39,15 @@ const RawDataSnippet = ({
   // and whiteAlpha.50 is replaced with #1a1b1b
   // const bgColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
   const bgColor = { _light: '#f5f5f6', _dark: '#1a1b1b' };
+  const content = typeof data === 'string' && data.length > TEXT_CHUNK_SIZE ? (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    <>
+      { data.match(new RegExp(`.{1,${ TEXT_CHUNK_SIZE }}`, 'gs'))?.map((chunk, index) => (
+        <React.Fragment key={ index }>{ chunk }</React.Fragment>
+      )) }
+    </>
+  ) : data;
+
   return (
     <Box className={ className } as="section" title={ title }>
       { (title || rightSlot || showCopy) && (
@@ -61,7 +72,7 @@ const RawDataSnippet = ({
         loading={ isLoading }
         { ...contentProps }
       >
-        { data }
+        { content }
       </Skeleton>
     </Box>
   );
