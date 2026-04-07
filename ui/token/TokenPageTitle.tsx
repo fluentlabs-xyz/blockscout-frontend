@@ -3,6 +3,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
 import React from 'react';
 
 import type { Address } from 'types/api/address';
+import type { SmartContract } from 'types/api/contract';
 import type { TokenInfo, TokenVerifiedInfo as TTokenVerifiedInfo } from 'types/api/token';
 import type { EntityTag } from 'ui/shared/EntityTags/types';
 
@@ -19,6 +20,7 @@ import AddressAddToWallet from 'ui/shared/address/AddressAddToWallet';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import * as TokenEntity from 'ui/shared/entities/token/TokenEntity';
 import EntityTags from 'ui/shared/EntityTags/EntityTags';
+import formatPublicTags from 'ui/shared/EntityTags/formatPublicTags';
 import formatUserTags from 'ui/shared/EntityTags/formatUserTags';
 import sortEntityTags from 'ui/shared/EntityTags/sortEntityTags';
 import IconSvg from 'ui/shared/IconSvg';
@@ -32,11 +34,12 @@ const PREDEFINED_TAG_PRIORITY = 100;
 interface Props {
   tokenQuery: UseQueryResult<TokenInfo, ResourceError<unknown>>;
   addressQuery: UseQueryResult<Address, ResourceError<unknown>>;
+  contractQuery?: UseQueryResult<SmartContract, ResourceError<unknown>>;
   verifiedInfoQuery: UseQueryResult<TTokenVerifiedInfo, ResourceError<unknown>>;
   hash: string;
 }
 
-const TokenPageTitle = ({ tokenQuery, addressQuery, verifiedInfoQuery, hash }: Props) => {
+const TokenPageTitle = ({ tokenQuery, addressQuery, contractQuery, verifiedInfoQuery, hash }: Props) => {
   const multichainContext = useMultichainContext();
   const addressHash = !tokenQuery.isPlaceholderData ? (tokenQuery.data?.address_hash || '') : '';
 
@@ -51,6 +54,9 @@ const TokenPageTitle = ({ tokenQuery, addressQuery, verifiedInfoQuery, hash }: P
 
   const [ bridgedTokenTagBgColor ] = useToken('colors', 'blue.500');
   const [ bridgedTokenTagTextColor ] = useToken('colors', 'white');
+
+  const isUST20Token = contractQuery?.data?.deployed_bytecode?.startsWith('0xef44000000000000000000000000000000000000520008');
+  const isWASM = contractQuery?.data?.deployed_bytecode?.startsWith('0xef52');
 
   const tags: Array<EntityTag> = React.useMemo(() => {
     return [
@@ -69,11 +75,36 @@ const TokenPageTitle = ({ tokenQuery, addressQuery, verifiedInfoQuery, hash }: P
           meta: { bgColor: bridgedTokenTagBgColor, textColor: bridgedTokenTagTextColor },
         } :
         undefined,
+      ...formatPublicTags(addressQuery.data?.public_tags),
       ...formatUserTags(addressQuery.data),
       verifiedInfoQuery.data?.projectSector ?
         { slug: verifiedInfoQuery.data.projectSector, name: verifiedInfoQuery.data.projectSector, tagType: 'custom' as const, ordinal: -30 } :
         undefined,
       ...(addressMetadataQuery.data?.addresses?.[hash.toLowerCase()]?.tags.filter(tag => tag.tagType !== 'note') || []),
+      isUST20Token ?
+        {
+          slug: 'UST-20',
+          name: 'UST-20',
+          tagType: 'custom' as const,
+          ordinal: PREDEFINED_TAG_PRIORITY,
+          meta: {
+            tooltipDescription: 'UST20 is Fluentbase’s shared token runtime',
+            tooltipUrl: 'https://github.com/fluentlabs-xyz/fluentbase/blob/devel/docs/08-universal-token.md',
+            bgColor: 'linear-gradient(90deg, #FE6901 -7.32%, #FF7FFE 81.62%)',
+            textColor: 'black',
+          },
+        } : undefined,
+      isWASM ? {
+        slug: 'wasm',
+        name: 'WASM',
+        tagType: 'custom' as const,
+        ordinal: PREDEFINED_TAG_PRIORITY,
+        meta: {
+          tooltipDescription: 'WASM is WebAssembly',
+          bgColor: 'linear-gradient(90deg, #FE6901 -7.32%, #FF7FFE 81.62%)',
+          textColor: 'black',
+        },
+      } : undefined,
     ].filter(Boolean).sort(sortEntityTags);
   }, [
     addressMetadataQuery.data?.addresses,
@@ -84,6 +115,8 @@ const TokenPageTitle = ({ tokenQuery, addressQuery, verifiedInfoQuery, hash }: P
     verifiedInfoQuery.data?.projectSector,
     hash,
     multichainContext?.chain?.app_config,
+    isUST20Token,
+    isWASM,
   ]);
 
   const contentAfter = (

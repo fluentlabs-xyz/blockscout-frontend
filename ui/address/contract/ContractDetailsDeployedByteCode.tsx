@@ -1,17 +1,23 @@
-import { Flex, createListCollection } from '@chakra-ui/react';
+import { Box, Flex, createListCollection } from '@chakra-ui/react';
 import React from 'react';
 
 import type { Address } from 'types/api/address';
 
+import { route } from 'nextjs-routes';
+
 import config from 'configs/app';
 import hexToUtf8 from 'lib/hexToUtf8';
+import { Button } from 'toolkit/chakra/button';
+import { Link } from 'toolkit/chakra/link';
 import type { SelectOption } from 'toolkit/chakra/select';
 import { Select } from 'toolkit/chakra/select';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import CopyToClipboard from 'ui/shared/CopyToClipboard';
+import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import RawDataSnippet from 'ui/shared/RawDataSnippet';
 
 import ContractDetailsVerificationButton from './ContractDetailsVerificationButton';
+import parseFluentRuntimeOwnedBytecode from './parseFluentRuntimeOwnedBytecode';
 
 const OPTIONS = [
   { label: 'Hex', value: 'Hex' as const },
@@ -35,6 +41,7 @@ const ContractDetailsDeployedByteCode = ({ bytecode, isLoading: isLoadingProp, a
   const [ isLoading, setIsLoading ] = React.useState(isLoadingProp);
   const [ showSelect, setShowSelect ] = React.useState(false);
   const [ selectedDataType, setSelectedDataType ] = React.useState<Array<DataType>>([ 'Hex' ]);
+  const [ isRawWrapperVisible, setIsRawWrapperVisible ] = React.useState(false);
 
   React.useEffect(() => {
     if (!isLoadingProp) {
@@ -56,11 +63,59 @@ const ContractDetailsDeployedByteCode = ({ bytecode, isLoading: isLoadingProp, a
     setIsLoading(isLoadingProp);
   }, [ isLoadingProp, bytecode, addressData.is_verified ]);
 
+  React.useEffect(() => {
+    setIsRawWrapperVisible(false);
+  }, [ bytecode ]);
+
   const handleSelectValueChange = React.useCallback(({ value }: { value: Array<string> }) => {
     setSelectedDataType(value as Array<DataType>);
   }, []);
 
+  const toggleRawWrapperVisibility = React.useCallback(() => {
+    setIsRawWrapperVisible((flag) => !flag);
+  }, []);
+
   const content = selectedDataType[0] === 'UTF-8' ? hexToUtf8(bytecode) : bytecode;
+  const parsedRuntimeOwnedBytecode = React.useMemo(() => parseFluentRuntimeOwnedBytecode(bytecode), [ bytecode ]);
+
+  const runtimeOwnedContent = parsedRuntimeOwnedBytecode ? (
+    <Flex flexDir="column" rowGap={ 4 }>
+      <Box>
+        <Box fontWeight={ 600 } mb={ 2 }>Runtime-owned contract</Box>
+        <Box>This account uses Fluent runtime-owned bytecode (OwnableAccount wrapper).</Box>
+        <Box>The executable EVM bytecode is provided by its runtime owner, not stored here as plain bytecode.</Box>
+      </Box>
+      <Flex flexDir="column" rowGap={ 3 }>
+        <Box>
+          <Box as="span" fontWeight={ 500 } mr={ 2 }>Runtime owner:</Box>
+          <AddressEntity
+            address={{ hash: parsedRuntimeOwnedBytecode.runtimeOwner }}
+            noIcon
+            display="inline-flex"
+            verticalAlign="top"
+            truncation="dynamic"
+          />
+        </Box>
+        <Box>
+          <Box as="span" fontWeight={ 500 } mr={ 2 }>Executable bytecode source:</Box>
+          <Link href={ route({ pathname: '/address/[hash]', query: { hash: parsedRuntimeOwnedBytecode.runtimeOwner, tab: 'contract_bytecode' } }) }>
+            Open owner bytecode page
+          </Link>
+        </Box>
+        <Flex alignItems="center" flexWrap="wrap" columnGap={ 3 } rowGap={ 2 }>
+          <Box as="span" fontWeight={ 500 }>Raw stored code:</Box>
+          <Button
+            size="sm"
+            variant="outline"
+            colorPalette="cyan"
+            onClick={ toggleRawWrapperVisibility }
+          >
+            { isRawWrapperVisible ? 'Hide raw wrapper bytes' : 'View raw wrapper bytes' }
+          </Button>
+        </Flex>
+      </Flex>
+    </Flex>
+  ) : null;
 
   const beforeSlot = (
     <Flex alignItems="center" flexWrap="wrap" mb={ 3 } columnGap={ 3 } rowGap={ 1 }>
@@ -92,7 +147,7 @@ const ContractDetailsDeployedByteCode = ({ bytecode, isLoading: isLoadingProp, a
 
   return (
     <RawDataSnippet
-      data={ content }
+      data={ runtimeOwnedContent ?? content }
       beforeSlot={ beforeSlot }
       textareaMaxHeight="300px"
       isLoading={ isLoading }
