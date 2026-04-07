@@ -8,11 +8,17 @@ import type { Log } from 'types/api/log';
 import useApiFetch from 'lib/api/useApiFetch';
 import { LOG } from 'stubs/log';
 import { generateListStub } from 'stubs/utils';
+import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from 'toolkit/chakra/accordion';
 import { Badge } from 'toolkit/chakra/badge';
 import { Link } from 'toolkit/chakra/link';
-import { TableBody, TableCell, TableColumnHeader, TableHeaderSticky, TableRoot, TableRow } from 'toolkit/chakra/table';
-import { decodeRuntimeUpgradedLog, getRuntimeUpgradeLogsApiUrl, RUNTIME_UPGRADED_TOPIC, RUNTIME_UPGRADE_ADDRESS } from 'ui/runtimeUpgrades/utils';
-import ActionBar, { ACTION_BAR_HEIGHT_DESKTOP } from 'ui/shared/ActionBar';
+import {
+  decodeRuntimeUpgradedLog,
+  getRuntimeUpgradeLogsApiUrl,
+  getSystemContractTag,
+  RUNTIME_UPGRADED_TOPIC,
+  RUNTIME_UPGRADE_ADDRESS,
+} from 'ui/runtimeUpgrades/utils';
+import ActionBar from 'ui/shared/ActionBar';
 import CopyToClipboard from 'ui/shared/CopyToClipboard';
 import DataListDisplay from 'ui/shared/DataListDisplay';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
@@ -72,12 +78,51 @@ const RuntimeUpgrades = () => {
   }, [ blockNumbers, blockQueries ]);
 
   const rows = React.useMemo(() => {
-    return (data?.items || []).map((item) => ({
-      item,
-      decoded: decodeRuntimeUpgradedLog(item),
-      timestamp: item.block_timestamp || (typeof item.block_number === 'number' ? blockTimestamps[item.block_number] : null),
-    }));
+    return (data?.items || []).map((item) => {
+      const decoded = decodeRuntimeUpgradedLog(item);
+
+      return {
+        item,
+        decoded,
+        timestamp: item.block_timestamp || (typeof item.block_number === 'number' ? blockTimestamps[item.block_number] : null),
+        systemTag: getSystemContractTag(decoded.targetAddress),
+      };
+    });
   }, [ blockTimestamps, data?.items ]);
+
+  const groupedRows = React.useMemo(() => {
+    const groupsMap = new Map<string, Array<(typeof rows)[number]>>();
+
+    rows.forEach((row) => {
+      const key = row.decoded.genesisHash || '__unknown__';
+      const current = groupsMap.get(key);
+
+      if (current) {
+        current.push(row);
+      } else {
+        groupsMap.set(key, [ row ]);
+      }
+    });
+
+    return Array.from(groupsMap.entries())
+      .map(([ key, entries ]) => {
+        const versionSet = new Set(entries.map((entry) => entry.decoded.genesisVersion).filter(Boolean));
+        const codeHashSet = new Set(entries.map((entry) => entry.decoded.codeHash).filter(Boolean));
+        const latestBlockNumber = entries.reduce((max, entry) => {
+          return typeof entry.item.block_number === 'number' ? Math.max(max, entry.item.block_number) : max;
+        }, 0);
+
+        return {
+          key,
+          genesisHash: key === '__unknown__' ? null : key,
+          entries,
+          latestBlockNumber,
+          version: versionSet.size === 1 ? [ ...versionSet ][0] : null,
+          codeHash: codeHashSet.size === 1 ? [ ...codeHashSet ][0] : null,
+        };
+      })
+      .sort((a, b) => b.latestBlockNumber - a.latestBlockNumber);
+  }, [ rows ]);
 
   const actionBar = (
     <ActionBar mt={ -6 } showShadow justifyContent={{ base: 'space-between', lg: 'end' }}>
@@ -113,47 +158,50 @@ const RuntimeUpgrades = () => {
     </Flex>
   );
 
-  const content = rows.length ? (
-    <>
-      <Box hideBelow="lg" overflowX="auto">
-        <TableRoot minW="1240px">
-          <TableHeaderSticky top={ ACTION_BAR_HEIGHT_DESKTOP }>
-            <TableRow>
-              <TableColumnHeader w="150px">Block</TableColumnHeader>
-              <TableColumnHeader w="280px">Transaction</TableColumnHeader>
-              <TableColumnHeader w="280px">Target address</TableColumnHeader>
-              <TableColumnHeader w="220px">Genesis version</TableColumnHeader>
-              <TableColumnHeader w="250px">Genesis hash</TableColumnHeader>
-              <TableColumnHeader w="250px">Code hash</TableColumnHeader>
-              <TableColumnHeader w="170px">Timestamp</TableColumnHeader>
-            </TableRow>
-          </TableHeaderSticky>
-          <TableBody>
-            { rows.map(({ item, decoded, timestamp }) => (
-              <RuntimeUpgradeTableRow
-                key={ `${ item.transaction_hash || 'tx' }-${ item.index }` }
-                item={ item }
-                decoded={ decoded }
-                timestamp={ timestamp }
-                isLoading={ isPlaceholderData }
-              />
-            )) }
-          </TableBody>
-        </TableRoot>
-      </Box>
+  const content = groupedRows.length ? (
+    <AccordionRoot display="flex" flexDirection="column" gap={ 4 }>
+      { groupedRows.map((group, index) => {
+        const isUnknownGenesis = !group.genesisHash;
 
-      <VStack hideFrom="lg" gap={ 3 } alignItems="stretch">
-        { rows.map(({ item, decoded, timestamp }) => (
-          <RuntimeUpgradeCard
-            key={ `${ item.transaction_hash || 'tx' }-${ item.index }` }
-            item={ item }
-            decoded={ decoded }
-            timestamp={ timestamp }
-            isLoading={ isPlaceholderData }
-          />
-        )) }
-      </VStack>
-    </>
+        return (
+          <AccordionItem key={ group.key } value={ group.key } borderWidth="1px" borderColor="border.divider" borderRadius="lg" overflow="hidden">
+            <AccordionItemTrigger px={ 4 } py={ 3 }>
+              <VStack alignItems="flex-start" flex={ 1 } gap={ 1 } mr={ 3 }>
+                <HStack gap={ 2 } flexWrap="wrap">
+                  <Text fontWeight={ 700 }>Genesis hash</Text>
+                  { isUnknownGenesis ? (
+                    <Text color="text.secondary">Unknown</Text>
+                  ) : (
+                    <HashCell value={ group.genesisHash } noCopy isLoading={ isPlaceholderData }/>
+                  ) }
+                  <Badge colorPalette="blue">{ group.entries.length } upgrades</Badge>
+                </HStack>
+
+                <HStack gap={ 3 } color="text.secondary" fontSize="sm" flexWrap="wrap">
+                  <Text>Version: { group.version || 'Mixed/unknown' }</Text>
+                  <Text>Code hash: { group.codeHash ? '' : 'Mixed/unknown' }</Text>
+                  { group.codeHash ? <HashCell value={ group.codeHash } noCopy isLoading={ isPlaceholderData }/> : null }
+                </HStack>
+              </VStack>
+            </AccordionItemTrigger>
+            <AccordionItemContent px={ 4 } pb={ 4 }>
+              <VStack alignItems="stretch" gap={ 3 }>
+                { group.entries.map(({ item, decoded, timestamp, systemTag }) => (
+                  <RuntimeUpgradeCard
+                    key={ `${ item.transaction_hash || 'tx' }-${ item.index }-${ index }` }
+                    item={ item }
+                    decoded={ decoded }
+                    timestamp={ timestamp }
+                    systemTag={ systemTag }
+                    isLoading={ isPlaceholderData }
+                  />
+                )) }
+              </VStack>
+            </AccordionItemContent>
+          </AccordionItem>
+        );
+      }) }
+    </AccordionRoot>
   ) : null;
 
   return (
@@ -179,60 +227,11 @@ interface RuntimeUpgradeRowProps {
   item: Log;
   decoded: ReturnType<typeof decodeRuntimeUpgradedLog>;
   timestamp: string | null;
+  systemTag: string | null;
   isLoading?: boolean;
 }
 
-const RuntimeUpgradeTableRow = ({ item, decoded, timestamp, isLoading }: RuntimeUpgradeRowProps) => {
-  return (
-    <TableRow>
-      <TableCell>
-        { typeof item.block_number === 'number' ? (
-          <BlockEntity number={ item.block_number } noIcon isLoading={ isLoading } fontWeight={ 600 }/>
-        ) : (
-          <Text color="text.secondary">—</Text>
-        ) }
-      </TableCell>
-      <TableCell>
-        { item.transaction_hash ? (
-          <TxEntity hash={ item.transaction_hash } noIcon isLoading={ isLoading } truncation="constant" maxW="100%"/>
-        ) : (
-          <Text color="text.secondary">—</Text>
-        ) }
-      </TableCell>
-      <TableCell>
-        { decoded.targetAddress ? (
-          <AddressEntity
-            address={{ hash: decoded.targetAddress }}
-            noIcon
-            isLoading={ isLoading }
-            truncation="constant"
-            maxW="100%"
-          />
-        ) : (
-          <Text color="text.secondary">Unable to decode</Text>
-        ) }
-      </TableCell>
-      <TableCell>
-        <Text lineClamp={ 2 }>{ decoded.genesisVersion || '—' }</Text>
-      </TableCell>
-      <TableCell>
-        <HashCell value={ decoded.genesisHash } isLoading={ isLoading }/>
-      </TableCell>
-      <TableCell>
-        <HashCell value={ decoded.codeHash } isLoading={ isLoading }/>
-      </TableCell>
-      <TableCell>
-        { timestamp ? (
-          <Time timestamp={ timestamp } format="DD MMM YYYY, HH:mm:ss"/>
-        ) : (
-          <Text color="text.secondary">—</Text>
-        ) }
-      </TableCell>
-    </TableRow>
-  );
-};
-
-const RuntimeUpgradeCard = ({ item, decoded, timestamp, isLoading }: RuntimeUpgradeRowProps) => {
+const RuntimeUpgradeCard = ({ item, decoded, timestamp, systemTag, isLoading }: RuntimeUpgradeRowProps) => {
   return (
     <Box borderWidth="1px" borderColor="border.divider" borderRadius="lg" p={ 4 }>
       <VStack alignItems="stretch" gap={ 2 }>
@@ -263,15 +262,18 @@ const RuntimeUpgradeCard = ({ item, decoded, timestamp, isLoading }: RuntimeUpgr
           ) }
         </RowLabel>
 
-        <RowLabel label="Target address">
+        <RowLabel label="Target contract">
           { decoded.targetAddress ? (
-            <AddressEntity
-              address={{ hash: decoded.targetAddress }}
-              noIcon
-              isLoading={ isLoading }
-              truncation="constant"
-              maxW="100%"
-            />
+            <VStack alignItems="flex-start" gap={ 1 }>
+              <AddressEntity
+                address={{ hash: decoded.targetAddress }}
+                noIcon
+                isLoading={ isLoading }
+                truncation="constant"
+                maxW="100%"
+              />
+              { systemTag ? <Badge colorPalette="purple">{ systemTag }</Badge> : null }
+            </VStack>
           ) : (
             <Text color="text.secondary">Unable to decode</Text>
           ) }
@@ -308,7 +310,7 @@ const RowLabel = ({ label, children }: { label: string; children: React.ReactNod
   </Box>
 );
 
-const HashCell = ({ value, isLoading }: { value: string | null; isLoading?: boolean }) => {
+const HashCell = ({ value, isLoading, noCopy }: { value: string | null; isLoading?: boolean; noCopy?: boolean }) => {
   if (!value) {
     return <Text color="text.secondary">—</Text>;
   }
@@ -316,7 +318,7 @@ const HashCell = ({ value, isLoading }: { value: string | null; isLoading?: bool
   return (
     <HStack gap={ 1 } maxW="100%" whiteSpace="nowrap">
       <HashStringShorten hash={ value } type="long"/>
-      <CopyToClipboard text={ value } isLoading={ isLoading } noTooltip/>
+      { noCopy ? null : <CopyToClipboard text={ value } isLoading={ isLoading } noTooltip/> }
     </HStack>
   );
 };
