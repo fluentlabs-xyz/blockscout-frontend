@@ -176,7 +176,7 @@ const RuntimeUpgradeTableRow = ({ item, decoded, isLoading }: RuntimeUpgradeRowP
         ) }
       </TableCell>
       <TableCell>
-        <Text noOfLines={ 2 }>{ decoded.genesisVersion || '—' }</Text>
+        <Text lineClamp={ 2 }>{ decoded.genesisVersion || '—' }</Text>
       </TableCell>
       <TableCell>
         <HashCell value={ decoded.genesisHash } isLoading={ isLoading }/>
