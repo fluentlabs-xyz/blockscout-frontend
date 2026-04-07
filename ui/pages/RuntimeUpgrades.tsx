@@ -6,8 +6,10 @@ import type { Block } from 'types/api/block';
 import type { Log } from 'types/api/log';
 
 import useApiFetch from 'lib/api/useApiFetch';
+import useApiInfiniteQuery from 'lib/api/useApiInfiniteQuery';
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from 'toolkit/chakra/accordion';
 import { Badge } from 'toolkit/chakra/badge';
+import { Button } from 'toolkit/chakra/button';
 import { Link } from 'toolkit/chakra/link';
 import {
   decodeRuntimeUpgradedLog,
@@ -24,12 +26,17 @@ import BlockEntity from 'ui/shared/entities/block/BlockEntity';
 import TxEntity from 'ui/shared/entities/tx/TxEntity';
 import HashStringShorten from 'ui/shared/HashStringShorten';
 import PageTitle from 'ui/shared/Page/PageTitle';
-import Pagination from 'ui/shared/pagination/Pagination';
-import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
 import Time from 'ui/shared/time/Time';
 
 const RuntimeUpgrades = () => {
-  const { data, isPlaceholderData, isPending, isError, pagination } = useQueryWithPages({
+  const {
+    data,
+    isPending,
+    isError,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useApiInfiniteQuery({
     resourceName: 'general:address_logs',
     pathParams: { hash: RUNTIME_UPGRADE_ADDRESS },
     queryParams: { topic: RUNTIME_UPGRADED_TOPIC },
@@ -38,11 +45,19 @@ const RuntimeUpgrades = () => {
   const apiFetch = useApiFetch();
   const apiLogsUrl = React.useMemo(() => getRuntimeUpgradeLogsApiUrl(), []);
 
+  const handleLoadMoreClick = React.useCallback(() => {
+    void fetchNextPage();
+  }, [ fetchNextPage ]);
+
+  const items = React.useMemo(() => {
+    return data?.pages.flatMap((page) => page.items) || [];
+  }, [ data?.pages ]);
+
   const blockNumbers = React.useMemo(() => {
-    return Array.from(new Set((data?.items || [])
+    return Array.from(new Set(items
       .map((item) => item.block_number)
       .filter((blockNumber): blockNumber is number => typeof blockNumber === 'number')));
-  }, [ data?.items ]);
+  }, [ items ]);
 
   const blockQueries = useQueries({
     queries: blockNumbers.map((blockNumber) => ({
@@ -50,7 +65,6 @@ const RuntimeUpgrades = () => {
       queryFn: () => apiFetch<'general:block', Block>('general:block', {
         pathParams: { height_or_hash: String(blockNumber) },
       }),
-      enabled: !isPlaceholderData,
       staleTime: 5 * 60 * 1000,
       retry: 1,
     })),
@@ -68,7 +82,7 @@ const RuntimeUpgrades = () => {
   }, [ blockNumbers, blockQueries ]);
 
   const rows = React.useMemo(() => {
-    return (data?.items || []).map((item) => {
+    return items.map((item) => {
       const decoded = decodeRuntimeUpgradedLog(item);
 
       return {
@@ -78,7 +92,7 @@ const RuntimeUpgrades = () => {
         systemTag: getSystemContractTag(decoded.targetAddress),
       };
     });
-  }, [ blockTimestamps, data?.items ]);
+  }, [ blockTimestamps, items ]);
 
   const groupedRows = React.useMemo(() => {
     const groupsMap = new Map<string, Array<(typeof rows)[number]>>();
@@ -119,7 +133,6 @@ const RuntimeUpgrades = () => {
       <Link href={ apiLogsUrl } external noIcon color="link.primary" fontWeight={ 500 }>
         Download raw logs (JSON)
       </Link>
-      <Pagination ml={{ base: 0, lg: 8 }} { ...pagination }/>
     </ActionBar>
   );
 
@@ -149,49 +162,60 @@ const RuntimeUpgrades = () => {
   );
 
   const content = groupedRows.length ? (
-    <AccordionRoot display="flex" flexDirection="column" gap={ 4 }>
-      { groupedRows.map((group, index) => {
-        const isUnknownGenesis = !group.genesisHash;
+    <VStack alignItems="stretch" gap={ 6 }>
+      <AccordionRoot display="flex" flexDirection="column" gap={ 4 }>
+        { groupedRows.map((group, index) => {
+          const isUnknownGenesis = !group.genesisHash;
 
-        return (
-          <AccordionItem key={ group.key } value={ group.key } borderWidth="1px" borderColor="border.divider" borderRadius="lg" overflow="hidden">
-            <AccordionItemTrigger px={ 4 } py={ 3 }>
-              <VStack alignItems="flex-start" flex={ 1 } gap={ 1 } mr={ 3 }>
-                <HStack gap={ 2 } flexWrap="wrap">
-                  <Text fontWeight={ 700 }>Genesis hash</Text>
-                  { isUnknownGenesis ? (
-                    <Text color="text.secondary">Unknown</Text>
-                  ) : (
-                    <HashCell value={ group.genesisHash } noCopy isLoading={ isPlaceholderData }/>
-                  ) }
-                  <Badge colorPalette="blue">{ group.entries.length } upgrades</Badge>
-                </HStack>
+          return (
+            <AccordionItem key={ group.key } value={ group.key } borderWidth="1px" borderColor="border.divider" borderRadius="lg" overflow="hidden">
+              <AccordionItemTrigger px={ 4 } py={ 3 }>
+                <VStack alignItems="flex-start" flex={ 1 } gap={ 1 } mr={ 3 }>
+                  <HStack gap={ 2 } flexWrap="wrap">
+                    <Text fontWeight={ 700 }>Genesis hash</Text>
+                    { isUnknownGenesis ? (
+                      <Text color="text.secondary">Unknown</Text>
+                    ) : (
+                      <HashCell value={ group.genesisHash } noCopy/>
+                    ) }
+                    <Badge colorPalette="blue">{ group.entries.length } upgrades</Badge>
+                  </HStack>
 
-                <HStack gap={ 3 } color="text.secondary" fontSize="sm" flexWrap="wrap">
-                  <Text>Version: { group.version || 'Mixed/unknown' }</Text>
-                  <Text>Code hash: { group.codeHash ? '' : 'Mixed/unknown' }</Text>
-                  { group.codeHash ? <HashCell value={ group.codeHash } noCopy isLoading={ isPlaceholderData }/> : null }
-                </HStack>
-              </VStack>
-            </AccordionItemTrigger>
-            <AccordionItemContent px={ 4 } pb={ 4 }>
-              <VStack alignItems="stretch" gap={ 3 }>
-                { group.entries.map(({ item, decoded, timestamp, systemTag }) => (
-                  <RuntimeUpgradeCard
-                    key={ `${ item.transaction_hash || 'tx' }-${ item.index }-${ index }` }
-                    item={ item }
-                    decoded={ decoded }
-                    timestamp={ timestamp }
-                    systemTag={ systemTag }
-                    isLoading={ isPlaceholderData }
-                  />
-                )) }
-              </VStack>
-            </AccordionItemContent>
-          </AccordionItem>
-        );
-      }) }
-    </AccordionRoot>
+                  <HStack gap={ 3 } color="text.secondary" fontSize="sm" flexWrap="wrap">
+                    <Text>Version: { group.version || 'Mixed/unknown' }</Text>
+                    <Text>Code hash: { group.codeHash ? '' : 'Mixed/unknown' }</Text>
+                    { group.codeHash ? <HashCell value={ group.codeHash } noCopy/> : null }
+                  </HStack>
+                </VStack>
+              </AccordionItemTrigger>
+              <AccordionItemContent px={ 4 } pb={ 4 }>
+                <VStack alignItems="stretch" gap={ 3 }>
+                  { group.entries.map(({ item, decoded, timestamp, systemTag }) => (
+                    <RuntimeUpgradeCard
+                      key={ `${ item.transaction_hash || 'tx' }-${ item.index }-${ index }` }
+                      item={ item }
+                      decoded={ decoded }
+                      timestamp={ timestamp }
+                      systemTag={ systemTag }
+                    />
+                  )) }
+                </VStack>
+              </AccordionItemContent>
+            </AccordionItem>
+          );
+        }) }
+      </AccordionRoot>
+      { hasNextPage ? (
+        <Button
+          alignSelf="center"
+          loading={ isFetchingNextPage }
+          loadingText="Loading"
+          onClick={ handleLoadMoreClick }
+        >
+          Load more
+        </Button>
+      ) : null }
+    </VStack>
   ) : null;
 
   return (
