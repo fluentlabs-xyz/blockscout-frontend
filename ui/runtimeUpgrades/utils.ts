@@ -10,8 +10,14 @@ export const RUNTIME_UPGRADED_TOPIC = '0x2b9d873d8fe3cc1332bb875ae358b40fd305d17
 const HASH_32_REGEX = /^0x[0-9a-fA-F]{64}$/;
 
 const runtimeUpgradedDataAbi = [
-  { name: 'genesis_version', type: 'string' },
-  { name: 'code_hash', type: 'bytes32' },
+  {
+    name: 'upgrade',
+    type: 'tuple',
+    components: [
+      { name: 'genesis_version', type: 'string' },
+      { name: 'code_hash', type: 'bytes32' },
+    ],
+  },
 ] as const;
 
 export interface RuntimeUpgradeDecoded {
@@ -44,9 +50,9 @@ export function decodeRuntimeUpgradedLog(log: Log): RuntimeUpgradeDecoded {
 
   if (typeof log.data === 'string' && log.data.startsWith('0x')) {
     try {
-      const [ decodedGenesisVersion, decodedCodeHash ] = decodeAbiParameters(runtimeUpgradedDataAbi, log.data as `0x${ string }`);
-      genesisVersion = decodedGenesisVersion;
-      codeHash = decodedCodeHash;
+      const [ decodedUpgrade ] = decodeAbiParameters(runtimeUpgradedDataAbi, log.data as `0x${ string }`);
+      genesisVersion = decodedUpgrade.genesis_version;
+      codeHash = decodedUpgrade.code_hash;
     } catch {
       genesisVersion = null;
       codeHash = null;

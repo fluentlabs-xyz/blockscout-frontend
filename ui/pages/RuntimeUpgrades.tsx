@@ -1,8 +1,11 @@
 import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import { useQueries } from '@tanstack/react-query';
 import React from 'react';
 
+import type { Block } from 'types/api/block';
 import type { Log } from 'types/api/log';
 
+import useApiFetch from 'lib/api/useApiFetch';
 import { LOG } from 'stubs/log';
 import { generateListStub } from 'stubs/utils';
 import { Badge } from 'toolkit/chakra/badge';
@@ -36,14 +39,45 @@ const RuntimeUpgrades = () => {
     },
   });
 
+  const apiFetch = useApiFetch();
   const apiLogsUrl = React.useMemo(() => getRuntimeUpgradeLogsApiUrl(), []);
+
+  const blockNumbers = React.useMemo(() => {
+    return Array.from(new Set((data?.items || [])
+      .map((item) => item.block_number)
+      .filter((blockNumber): blockNumber is number => typeof blockNumber === 'number')));
+  }, [ data?.items ]);
+
+  const blockQueries = useQueries({
+    queries: blockNumbers.map((blockNumber) => ({
+      queryKey: [ 'general:block', blockNumber ],
+      queryFn: () => apiFetch<'general:block', Block>('general:block', {
+        pathParams: { height_or_hash: String(blockNumber) },
+      }),
+      enabled: !isPlaceholderData,
+      staleTime: 5 * 60 * 1000,
+      retry: 1,
+    })),
+  });
+
+  const blockTimestamps = React.useMemo(() => {
+    return blockNumbers.reduce<Record<number, string>>((result, blockNumber, index) => {
+      const blockData = blockQueries[index]?.data;
+      const timestamp = blockData && 'timestamp' in blockData ? blockData.timestamp : null;
+      if (timestamp) {
+        result[blockNumber] = timestamp;
+      }
+      return result;
+    }, {});
+  }, [ blockNumbers, blockQueries ]);
 
   const rows = React.useMemo(() => {
     return (data?.items || []).map((item) => ({
       item,
       decoded: decodeRuntimeUpgradedLog(item),
+      timestamp: item.block_timestamp || (typeof item.block_number === 'number' ? blockTimestamps[item.block_number] : null),
     }));
-  }, [ data?.items ]);
+  }, [ blockTimestamps, data?.items ]);
 
   const actionBar = (
     <ActionBar mt={ -6 } showShadow justifyContent={{ base: 'space-between', lg: 'end' }}>
@@ -82,7 +116,7 @@ const RuntimeUpgrades = () => {
   const content = rows.length ? (
     <>
       <Box hideBelow="lg" overflowX="auto">
-        <TableRoot minW="1200px" tableLayout="fixed">
+        <TableRoot minW="1240px">
           <TableHeaderSticky top={ ACTION_BAR_HEIGHT_DESKTOP }>
             <TableRow>
               <TableColumnHeader w="150px">Block</TableColumnHeader>
@@ -95,11 +129,12 @@ const RuntimeUpgrades = () => {
             </TableRow>
           </TableHeaderSticky>
           <TableBody>
-            { rows.map(({ item, decoded }) => (
+            { rows.map(({ item, decoded, timestamp }) => (
               <RuntimeUpgradeTableRow
                 key={ `${ item.transaction_hash || 'tx' }-${ item.index }` }
                 item={ item }
                 decoded={ decoded }
+                timestamp={ timestamp }
                 isLoading={ isPlaceholderData }
               />
             )) }
@@ -108,11 +143,12 @@ const RuntimeUpgrades = () => {
       </Box>
 
       <VStack hideFrom="lg" gap={ 3 } alignItems="stretch">
-        { rows.map(({ item, decoded }) => (
+        { rows.map(({ item, decoded, timestamp }) => (
           <RuntimeUpgradeCard
             key={ `${ item.transaction_hash || 'tx' }-${ item.index }` }
             item={ item }
             decoded={ decoded }
+            timestamp={ timestamp }
             isLoading={ isPlaceholderData }
           />
         )) }
@@ -142,10 +178,11 @@ const RuntimeUpgrades = () => {
 interface RuntimeUpgradeRowProps {
   item: Log;
   decoded: ReturnType<typeof decodeRuntimeUpgradedLog>;
+  timestamp: string | null;
   isLoading?: boolean;
 }
 
-const RuntimeUpgradeTableRow = ({ item, decoded, isLoading }: RuntimeUpgradeRowProps) => {
+const RuntimeUpgradeTableRow = ({ item, decoded, timestamp, isLoading }: RuntimeUpgradeRowProps) => {
   return (
     <TableRow>
       <TableCell>
@@ -185,8 +222,8 @@ const RuntimeUpgradeTableRow = ({ item, decoded, isLoading }: RuntimeUpgradeRowP
         <HashCell value={ decoded.codeHash } isLoading={ isLoading }/>
       </TableCell>
       <TableCell>
-        { item.block_timestamp ? (
-          <Time timestamp={ item.block_timestamp } format="DD MMM YYYY, HH:mm:ss"/>
+        { timestamp ? (
+          <Time timestamp={ timestamp } format="DD MMM YYYY, HH:mm:ss"/>
         ) : (
           <Text color="text.secondary">—</Text>
         ) }
@@ -195,7 +232,7 @@ const RuntimeUpgradeTableRow = ({ item, decoded, isLoading }: RuntimeUpgradeRowP
   );
 };
 
-const RuntimeUpgradeCard = ({ item, decoded, isLoading }: RuntimeUpgradeRowProps) => {
+const RuntimeUpgradeCard = ({ item, decoded, timestamp, isLoading }: RuntimeUpgradeRowProps) => {
   return (
     <Box borderWidth="1px" borderColor="border.divider" borderRadius="lg" p={ 4 }>
       <VStack alignItems="stretch" gap={ 2 }>
@@ -253,8 +290,8 @@ const RuntimeUpgradeCard = ({ item, decoded, isLoading }: RuntimeUpgradeRowProps
         </RowLabel>
 
         <RowLabel label="Timestamp">
-          { item.block_timestamp ? (
-            <Time timestamp={ item.block_timestamp } format="DD MMM YYYY, HH:mm:ss"/>
+          { timestamp ? (
+            <Time timestamp={ timestamp } format="DD MMM YYYY, HH:mm:ss"/>
           ) : (
             <Text color="text.secondary">—</Text>
           ) }
@@ -277,7 +314,7 @@ const HashCell = ({ value, isLoading }: { value: string | null; isLoading?: bool
   }
 
   return (
-    <HStack gap={ 1 } maxW="100%">
+    <HStack gap={ 1 } maxW="100%" whiteSpace="nowrap">
       <HashStringShorten hash={ value } type="long"/>
       <CopyToClipboard text={ value } isLoading={ isLoading } noTooltip/>
     </HStack>
