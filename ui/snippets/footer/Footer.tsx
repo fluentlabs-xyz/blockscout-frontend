@@ -169,8 +169,20 @@ const Footer = () => {
         justifyContent="space-between"
         alignItems="center"
         width="100%"
+        flexDirection={{ lg: 'row', sm: 'column' }}
       >
-        <NetworkLogo/>
+        <Box
+          { ...contentProps }
+          display="flex"
+          justifyContent="center"
+          flexDirection="column"
+          gap={ 5 }
+        >
+          <NetworkLogo/>
+          { hasAddChainButton && <NetworkAddToWallet source="Footer"/> }
+        </Box>
+
+        { renderBlockscoutInfo() }
 
         <Box
           { ...contentProps }
@@ -189,8 +201,6 @@ const Footer = () => {
           </Grid>
         </Box>
       </Box>
-      { hasAddChainButton && <NetworkAddToWallet source="Footer"/> }
-      { renderBlockscoutInfo() }
     </Box>
   );
 };
