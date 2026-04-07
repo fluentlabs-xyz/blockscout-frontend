@@ -35,6 +35,16 @@ export const getEnvValue = (envName: string) => {
 };
 
 const getFluentApiConfig = () => {
+  const apiHost = getEnvValue('NEXT_PUBLIC_EXPLORER_API_HOST');
+  const apiUrl = getEnvValue('NEXT_PUBLIC_EXPLORER_API_URL');
+
+  if (apiHost || apiUrl) {
+    return {
+      host: apiHost || getUrlHost(apiUrl),
+      url: apiUrl || (apiHost ? `https://${ apiHost }` : undefined),
+    };
+  }
+
   const env = getEnvValue('NEXT_PUBLIC_CHAIN');
 
   switch (env) {
@@ -55,6 +65,18 @@ const getFluentApiConfig = () => {
       };
   }
 };
+
+function getUrlHost(url: string | undefined) {
+  if (!url) {
+    return;
+  }
+
+  try {
+    return new URL(url).host;
+  } catch (error) {
+    return;
+  }
+}
 
 export const getApiHost = () => {
   const value = getFluentApiConfig().host;
