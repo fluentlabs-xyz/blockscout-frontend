@@ -53,17 +53,17 @@ export const recipe = defineRecipe({
         borderWidth: '2px',
         borderStyle: 'solid',
         bg: 'transparent',
-        color: 'button.outline.fg',
-        borderColor: 'button.outline.fg',
+        color: 'white',
+        borderColor: 'white',
         _hover: {
           bg: 'transparent',
-          color: 'hover',
-          borderColor: 'hover',
+          color: 'white',
+          borderColor: 'white',
         },
         _loading: {
           opacity: 1,
           '& .chakra-spinner': {
-            borderColor: 'button.outline.fg',
+            borderColor: 'white',
             borderBottomColor: 'spinner.track',
             borderInlineStartColor: 'spinner.track',
           },
@@ -385,5 +385,6 @@ export const recipe = defineRecipe({
   defaultVariants: {
     size: 'md',
     variant: 'solid',
+    colorPalette: 'gray',
   },
 });

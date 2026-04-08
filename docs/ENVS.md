@@ -130,6 +130,8 @@ Also, be aware that if you customize the name of the currency or any of its deno
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_API_PROTOCOL | `http \| https` | Main API protocol | - | `https` | `http` | v1.0.x+ |
 | NEXT_PUBLIC_API_HOST | `string` | Main API host | Required (except for multichain) | - | `blockscout.com` | v1.0.x+ |
+| NEXT_PUBLIC_EXPLORER_API_HOST | `string` | Fluent-specific explorer API host override. Takes priority over the API host resolved from `NEXT_PUBLIC_CHAIN` preset. | - | - | `api-testnet.fluentscan.xyz` | fluent-fork |
+| NEXT_PUBLIC_EXPLORER_API_URL | `string` | Fluent-specific explorer API endpoint URL override. Takes priority over the API URL resolved from `NEXT_PUBLIC_CHAIN` preset and is used by Stats/Visualize API defaults. | - | - | `https://api-testnet.fluentscan.xyz` | fluent-fork |
 | NEXT_PUBLIC_API_PORT | `number` | Port where API is running on the host | - | - | `3001` | v1.0.x+ |
 | NEXT_PUBLIC_API_BASE_PATH | `string` | Base path for Main API endpoint url | - | - | `/poa/core` | v1.0.x+ |
 | NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL | `ws \| wss` | Main API websocket protocol | - | `wss` | `ws` | v1.0.x+ |
@@ -1102,6 +1104,6 @@ This feature enables cross-chain transaction tracking and visualization, allowin
 
 To obtain the variable values, please refer to the [reCAPTCHA documentation](https://developers.google.com/recaptcha) and check the [Blockscout reCAPTCHA config docs](https://docs.blockscout.com/setup/configuration-options/recaptcha). Please note that we currently support only **reCAPTCHA v2 in invisible mode**, read more [here](https://developers.google.com/recaptcha/docs/versions#recaptcha_v2_invisible_recaptcha_badge).
 
-| Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
-| --- | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_RE_CAPTCHA_APP_SITE_KEY | `string` | Google reCAPTCHA v2 site key | - | - | `<your-site-key>` | v1.0.x+ |
+| Variable                            | Type     | Description                  | Compulsoriness | Default value | Example value     | Version |
+|:------------------------------------|----------|------------------------------|----------------|---------------|-------------------|---------|
+| NEXT_PUBLIC_RE_CAPTCHA_APP_SITE_KEY | `string` | Google reCAPTCHA v2 site key | -              | -             | `<your-site-key>` | v1.0.x+ |

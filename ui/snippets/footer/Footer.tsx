@@ -1,5 +1,5 @@
 import type { GridProps, HTMLChakraProps } from '@chakra-ui/react';
-import { Box, Grid, VStack } from '@chakra-ui/react';
+import { Box, Grid, Flex, Text, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
@@ -8,7 +8,13 @@ import type { CustomLinksGroup } from 'types/footerLinks';
 import config from 'configs/app';
 import type { ResourceError } from 'lib/api/resources';
 import useFetch from 'lib/hooks/useFetch';
+import useIsMobile from 'lib/hooks/useIsMobile';
+import useProvider from 'lib/web3/useProvider';
+import { useColorModeValue } from 'toolkit/chakra/color-mode';
+import { Link } from 'toolkit/chakra/link';
 import { Skeleton } from 'toolkit/chakra/skeleton';
+import IconSvg from 'ui/shared/IconSvg';
+import NetworkAddToWallet from 'ui/shared/NetworkAddToWallet';
 
 import NetworkLogo from '../networkLogo/NetworkLogo';
 import FooterLinkItem from './FooterLinkItem';
@@ -37,6 +43,19 @@ const BLOCKSCOUT_LINKS = [
 ];
 
 const Footer = () => {
+  const logoColor = useColorModeValue('blue.600', 'white');
+
+  const web3 = useProvider();
+  const isMobile = useIsMobile();
+
+  const hasAddChainButton = Boolean(
+    web3.data?.provider &&
+    web3.data?.wallet &&
+    config.chain.rpcUrls.length &&
+    config.features.web3Wallet.isEnabled &&
+    !config.features.multichain.isEnabled &&
+    !isMobile,
+  );
   const fetch = useFetch();
 
   const { isPlaceholderData, data: linksData } = useQuery<unknown, ResourceError<unknown>, Array<CustomLinksGroup>>({
@@ -48,6 +67,49 @@ const Footer = () => {
   });
 
   const colNum = isPlaceholderData ? 1 : Math.min(linksData?.length || Infinity, MAX_LINKS_COLUMNS) + 1;
+
+  const renderBlockscoutInfo = React.useCallback((gridArea?: GridProps['gridArea']) => {
+    return (
+      <Box gridArea={ gridArea }>
+        <Flex columnGap={ 2 } fontSize="xs" lineHeight={ 5 } alignItems="center" color="text">
+          <Text display="flex" alignItems="center" h="32px">
+            Made with
+          </Text>
+          <Link noIcon href="https://www.blockscout.com" external display="inline-flex" color={ logoColor } _hover={{ color: 'cyan.200' }}>
+            <IconSvg
+              name="networks/logo-placeholder"
+              width="80px"
+              height="32px"
+            />
+          </Link>
+          <Text display="flex" alignItems="center" h="32px">
+            (GPLv3).
+          </Text>
+        </Flex>
+        <Box mt={ 2 } alignItems="start" fontSize="xs" lineHeight={ 5 }>
+          <Flex columnGap={ 2 } fontSize="xs" lineHeight={ 5 } alignItems="center" color="text">
+            <Text display="flex" alignItems="center" h="32px">
+              Based on blockscout/frontend
+            </Text>
+            <Link
+              noIcon
+              external
+              href="https://github.com/fluentlabs-xyz/blockscout-frontend"
+              height="32px"
+              display="inline-flex"
+              color={ logoColor }
+              _hover={{ color: 'cyan.200' }}
+            >
+              modified by Fluent Labs.
+            </Link>
+          </Flex>
+          <Text height="32px">
+            Copyright © Blockscout Limited 2023-{ (new Date()).getFullYear() }
+          </Text>
+        </Box>
+      </Box>
+    );
+  }, [ logoColor ]);
 
   const containerProps: HTMLChakraProps<'div'> = {
     as: 'footer',
@@ -64,6 +126,10 @@ const Footer = () => {
     return (
       <Box { ...containerProps }>
         <Grid { ...contentProps }>
+          { hasAddChainButton && <NetworkAddToWallet source="Footer"/> }
+          <div>
+            { renderBlockscoutInfo() }
+          </div>
           <Grid
             gap={{ base: 6, lg: colNum === MAX_LINKS_COLUMNS + 1 ? 2 : 8, xl: 12 }}
             gridTemplateColumns={{
@@ -96,30 +162,44 @@ const Footer = () => {
   }
 
   return (
-    <Box
-      { ...containerProps }
-      display="flex"
-      justifyContent="space-between"
-      alignItems="center"
-      px={ 12 }
-      width="100%"
-    >
-      <NetworkLogo/>
+    <Box display="flex" flexDirection="column" gap={ 2 } px={ 12 }>
       <Box
-        { ...contentProps }
+        { ...containerProps }
         display="flex"
-        justifyContent="flex-end"
+        justifyContent="space-between"
+        alignItems="center"
+        width="100%"
+        flexDirection={{ lg: 'row', sm: 'column' }}
       >
-        <Grid
+        <Box
+          { ...contentProps }
           display="flex"
-          alignContent="start"
-          justifyContent={{ lg: 'flex-end' }}
-          gap={ 8 }
-          mt={{ base: 8, lg: 0 }}
-          flexDirection={{ lg: 'row', sm: 'column' }}
+          justifyContent="center"
+          flexDirection="column"
+          gap={ 5 }
         >
-          { BLOCKSCOUT_LINKS.map(link => <FooterLinkItem { ...link } key={ link.text }/>) }
-        </Grid>
+          <NetworkLogo/>
+          { hasAddChainButton && <NetworkAddToWallet source="Footer"/> }
+        </Box>
+
+        { renderBlockscoutInfo() }
+
+        <Box
+          { ...contentProps }
+          display="flex"
+          justifyContent="flex-end"
+        >
+          <Grid
+            display="flex"
+            alignContent="start"
+            justifyContent={{ lg: 'flex-end' }}
+            gap={ 8 }
+            mt={{ base: 8, lg: 0 }}
+            flexDirection={{ lg: 'row', sm: 'column' }}
+          >
+            { BLOCKSCOUT_LINKS.map(link => <FooterLinkItem { ...link } key={ link.text }/>) }
+          </Grid>
+        </Box>
       </Box>
     </Box>
   );

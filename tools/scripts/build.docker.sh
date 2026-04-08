@@ -11,5 +11,5 @@ docker build \
   --build-arg GIT_COMMIT_SHA=$(git rev-parse --short HEAD) \
   --build-arg GIT_TAG=$(git describe --tags --abbrev=0) \
   --build-arg NODE_MAX_OLD_SPACE_SIZE=${NODE_MAX_OLD_SPACE_SIZE:-4096} \
-  -t ghcr.io/fluentlabs-xyz/blockscout-frontend:devel \
+  -t ghcr.io/fluentlabs-xyz/blockscout-frontend:latest \
   ./

@@ -72,6 +72,13 @@ const TokenPageContent = () => {
     },
   });
 
+  const contractQuery = useApiQuery('general:contract', {
+    pathParams: { hash: addressQuery.data?.hash },
+    queryOptions: {
+      enabled: isQueryEnabled && addressQuery.data?.is_contract,
+    },
+  });
+
   React.useEffect(() => {
     if (tokenQuery.data && totalSupplySocket) {
       queryClient.setQueryData(getResourceKey('general:token', { pathParams: { hash: hashString } }), (prevData: TokenInfo | undefined) => {
@@ -281,6 +288,7 @@ const TokenPageContent = () => {
       <TokenPageTitle
         tokenQuery={ tokenQuery }
         addressQuery={ addressQuery }
+        contractQuery={ contractQuery }
         verifiedInfoQuery={ verifiedInfoQuery }
         hash={ hashString }
       />

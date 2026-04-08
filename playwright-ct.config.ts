@@ -100,6 +100,13 @@ const config: PlaywrightTestConfig = defineConfig({
           // Mock for growthbook to test feature flags
           { find: 'lib/growthbook/useFeatureValue', replacement: './playwright/mocks/lib/growthbook/useFeatureValue.js' },
 
+          // Mock next/router for CT builds (avoids bundling Next internals in Vite)
+          { find: /^next\/router$/, replacement: './playwright/mocks/modules/next/router.js' },
+
+          // Mock Node fs module for CT bundling paths that still reference it indirectly
+          { find: /^fs$/, replacement: './playwright/mocks/modules/fs.js' },
+          { find: /^node:fs$/, replacement: './playwright/mocks/modules/fs.js' },
+
           // Mock for reCaptcha hook
           { find: 'ui/shared/reCaptcha/useReCaptcha', replacement: './playwright/mocks/ui/shared/recaptcha/useReCaptcha.js' },
 
