@@ -73,6 +73,7 @@ const TEMPLATE_MAP: Record<Route['pathname'], string> = {
   '/interop-messages': '%network_name% interop messages',
   '/operations': '%network_name% operations',
   '/operation/[id]': '%network_name% operation %id%',
+  '/runtime-upgrades': '%network_name% runtime upgrades',
   '/cc/tx/[hash]': '%network_name% cross-chain transaction %hash% details',
   '/cross-chain-tx/[id]': '%network_name% cross-chain transaction %id% details',
 
@@ -84,6 +85,7 @@ const TEMPLATE_MAP: Record<Route['pathname'], string> = {
   '/chain/[chain_slug]/block/countdown/[height]': '%network_name% block %height% countdown',
   '/chain/[chain_slug]/csv-export': '%network_name% export data to CSV',
   '/chain/[chain_slug]/op/[hash]': '%network_name% user operation %hash% details',
+  '/chain/[chain_slug]/runtime-upgrades': '%network_name% runtime upgrades',
   '/chain/[chain_slug]/token/[hash]': '%network_name% token details',
   '/chain/[chain_slug]/token/[hash]/instance/[id]': '%network_name% token NFT instance',
   '/chain/[chain_slug]/tx/[hash]': '%network_name% transaction %hash% details',

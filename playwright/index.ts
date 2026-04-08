@@ -14,13 +14,15 @@ const NEXT_ROUTER_MOCK = {
 
 beforeMount(async({ hooksConfig }: { hooksConfig?: { router: typeof router } }) => {
   // Before mount, redefine useRouter to return mock value from test.
-
-  // @ts-ignore: I really want to redefine this property :)
-  // eslint-disable-next-line no-import-assign
-  router.useRouter = () => ({
+  const nextRouterState = {
     ...NEXT_ROUTER_MOCK,
     ...hooksConfig?.router,
-  });
+  };
+
+  const setRouterMock = (router as Record<string, unknown>).__setRouterMock;
+  if (typeof setRouterMock === 'function') {
+    (setRouterMock as (value: typeof nextRouterState) => void)(nextRouterState);
+  }
 
   // set current date
   MockDate.set('2022-11-11T12:00:00Z');
