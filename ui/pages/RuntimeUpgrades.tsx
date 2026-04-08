@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, Flex, HStack, Text, useBreakpointValue, VStack } from '@chakra-ui/react';
 import React from 'react';
 
 import type { RuntimeUpgrade, RuntimeUpgradeVersion } from 'types/api/runtimeUpgrades';
@@ -25,6 +25,11 @@ import Time from 'ui/shared/time/Time';
 const RuntimeUpgrades = () => {
   const { data, isPending, isError } = useApiQuery('general:runtime_upgrades');
   const [ expandedValues, setExpandedValues ] = React.useState<Array<string>>([]);
+
+  const sourceContractTruncation = useBreakpointValue<'none' | 'constant'>({
+    base: 'constant',
+    md: 'none',
+  }) ?? 'none';
 
   const apiLogsUrl = React.useMemo(() => getRuntimeUpgradesApiUrl(), []);
 
@@ -59,14 +64,10 @@ const RuntimeUpgrades = () => {
         <AddressEntity
           address={{ hash: RUNTIME_UPGRADE_ADDRESS }}
           noIcon
-          truncation="constant"
-          maxW="400px"
+          truncation={ sourceContractTruncation }
+          maxW="800px"
           fontWeight={ 600 }
         />
-      </HStack>
-      <HStack gap={ 2 }>
-        <Text as="span">Event:</Text>
-        <Badge colorPalette="blue">RuntimeUpgraded</Badge>
       </HStack>
     </Flex>
   );
@@ -197,6 +198,18 @@ interface RuntimeUpgradeRowProps {
 
 const RuntimeUpgradeCard = ({ item, isLoading }: RuntimeUpgradeRowProps) => {
   const systemTag = getSystemContractTag(item.target_address_hash);
+  const targetAddressTruncation = useBreakpointValue<'none' | 'constant'>({
+    base: 'constant',
+    sm: 'constant',
+    md: 'none',
+    lg: 'none',
+    xl: 'constant',
+    '2xl': 'constant',
+    '3xl': 'constant',
+    '4xl': 'constant',
+    '5xl': 'constant',
+    '6xl': 'constant',
+  }) ?? 'none';
 
   return (
     <Box
@@ -205,108 +218,134 @@ const RuntimeUpgradeCard = ({ item, isLoading }: RuntimeUpgradeRowProps) => {
       borderRadius="lg"
       overflow="hidden"
       display="grid"
-      gridTemplateColumns={{ base: 'minmax(0, 1fr)', xl: 'repeat(2, minmax(0, 1fr))' }}
+      gridTemplateColumns={{
+        base: '120px minmax(0, 1fr)',
+        lg: '160px minmax(0, 1fr)',
+        xl: '160px minmax(0, 1fr) 160px minmax(0, 1fr)',
+      }}
     >
-      <VStack
-        alignItems="stretch"
-        gap={ 0 }
-        borderBottomWidth={{ base: '1px', xl: 0 }}
-        borderRightWidth={{ base: 0, xl: '1px' }}
-        borderColor="border.divider"
-      >
-        <RowLabel label="Target address">
-          { item.target_address_hash ? (
-            <VStack alignItems="flex-start" gap={ 1 }>
-              <AddressEntity
-                address={{ hash: item.target_address_hash }}
-                noIcon
-                isLoading={ isLoading }
-                truncation="constant"
-                maxW="100%"
-              />
-              { systemTag ? <Badge colorPalette="purple">{ systemTag }</Badge> : null }
-            </VStack>
-          ) : (
-            <Text color="text.secondary">—</Text>
-          ) }
-        </RowLabel>
-
-        <RowLabel label="Version">
-          <Text>{ item.genesis_version || '—' }</Text>
-        </RowLabel>
-
-        <RowLabel label="Genesis hash">
-          <HashCell value={ item.genesis_hash } isLoading={ isLoading }/>
-        </RowLabel>
-
-        <RowLabel label="Code hash">
-          <HashCell value={ item.code_hash } isLoading={ isLoading }/>
-        </RowLabel>
-      </VStack>
-
-      <VStack alignItems="stretch" gap={ 0 }>
-        <RowLabel label="Event">
-          <Text fontWeight={ 600 }>RuntimeUpgraded</Text>
-        </RowLabel>
-
-        <RowLabel label="Block">
-          { typeof item.block_number === 'number' ? (
-            <BlockEntity number={ item.block_number } noIcon isLoading={ isLoading }/>
-          ) : (
-            <Text color="text.secondary">—</Text>
-          ) }
-        </RowLabel>
-
-        <RowLabel label="Log index">
-          { typeof item.log_index === 'number' ? (
-            <Text>{ item.log_index }</Text>
-          ) : (
-            <Text color="text.secondary">—</Text>
-          ) }
-        </RowLabel>
-
-        <RowLabel label="Transaction">
-          { item.transaction_hash ? (
-            <TxEntity
-              hash={ item.transaction_hash }
+      <RowLabel label="Target address" row={ 1 } column="left">
+        { item.target_address_hash ? (
+          <VStack alignItems="flex-start" gap={ 1 }>
+            <AddressEntity
+              address={{ hash: item.target_address_hash }}
               noIcon
               isLoading={ isLoading }
-              truncation="constant"
+              truncation={ targetAddressTruncation }
               maxW="100%"
             />
-          ) : (
-            <Text color="text.secondary">—</Text>
-          ) }
-        </RowLabel>
+            { systemTag ? <Badge colorPalette="purple">{ systemTag }</Badge> : null }
+          </VStack>
+        ) : (
+          <Text color="text.secondary">—</Text>
+        ) }
+      </RowLabel>
 
-        <RowLabel label="Timestamp">
-          { item.block_timestamp ? (
-            <Time timestamp={ item.block_timestamp } format="DD MMM YYYY, HH:mm:ss"/>
-          ) : (
-            <Text color="text.secondary">—</Text>
-          ) }
-        </RowLabel>
-      </VStack>
+      <RowLabel label="Version" row={ 2 } column="left">
+        <Text>{ item.genesis_version || '—' }</Text>
+      </RowLabel>
+
+      <RowLabel label="Genesis hash" row={ 3 } column="left">
+        <HashCell value={ item.genesis_hash } isLoading={ isLoading }/>
+      </RowLabel>
+
+      <RowLabel label="Code hash" row={ 4 } column="left" isLastInColumn>
+        <HashCell value={ item.code_hash } isLoading={ isLoading }/>
+      </RowLabel>
+
+      <RowLabel label="Block" row={ 1 } column="right">
+        { typeof item.block_number === 'number' ? (
+          <BlockEntity number={ item.block_number } noIcon isLoading={ isLoading }/>
+        ) : (
+          <Text color="text.secondary">—</Text>
+        ) }
+      </RowLabel>
+
+      <RowLabel label="Log index" row={ 2 } column="right">
+        { typeof item.log_index === 'number' ? (
+          <Text>{ item.log_index }</Text>
+        ) : (
+          <Text color="text.secondary">—</Text>
+        ) }
+      </RowLabel>
+
+      <RowLabel label="Transaction" row={ 3 } column="right">
+        { item.transaction_hash ? (
+          <TxEntity
+            hash={ item.transaction_hash }
+            noIcon
+            isLoading={ isLoading }
+            truncation="constant"
+            maxW="100%"
+          />
+        ) : (
+          <Text color="text.secondary">—</Text>
+        ) }
+      </RowLabel>
+
+      <RowLabel label="Timestamp" row={ 4 } column="right" isLastInColumn isLast>
+        { item.block_timestamp ? (
+          <Time timestamp={ item.block_timestamp } format="DD MMM YYYY, HH:mm:ss"/>
+        ) : (
+          <Text color="text.secondary">—</Text>
+        ) }
+      </RowLabel>
     </Box>
   );
 };
 
-const RowLabel = ({ label, children }: { label: string; children: React.ReactNode }) => (
-  <Box
-    display="grid"
-    gridTemplateColumns={{ base: '120px minmax(0, 1fr)', lg: '160px minmax(0, 1fr)' }}
-    gap={ 3 }
-    alignItems="flex-start"
-    px={ 3 }
-    py={ 2 }
-    _notLast={{ borderBottomWidth: '1px', borderColor: 'border.divider' }}
-  >
-    <Text color="text.secondary" fontSize="sm" whiteSpace="nowrap">{ label }</Text>
-    <Box minW={ 0 }>
-      { children }
-    </Box>
-  </Box>
-);
+const RowLabel = ({
+  label,
+  children,
+  row,
+  column,
+  isLastInColumn,
+  isLast,
+}: {
+  label: string;
+  children: React.ReactNode;
+  row: number;
+  column: 'left' | 'right';
+  isLastInColumn?: boolean;
+  isLast?: boolean;
+}) => {
+  const labelColumn = column === 'left' ? '1' : '3';
+  const valueColumn = column === 'left' ? '2' : '4';
+  const borderBottomWidth = {
+    base: isLast ? 0 : '1px',
+    xl: isLastInColumn ? 0 : '1px',
+  };
+
+  return (
+    <>
+      <Text
+        color="text.secondary"
+        fontSize="sm"
+        whiteSpace="nowrap"
+        px={ 3 }
+        py={ 2 }
+        borderBottomWidth={ borderBottomWidth }
+        borderColor="border.divider"
+        gridColumn={{ xl: labelColumn }}
+        gridRow={{ xl: row }}
+      >
+        { label }
+      </Text>
+      <Box
+        minW={ 0 }
+        px={ 3 }
+        py={ 2 }
+        borderBottomWidth={ borderBottomWidth }
+        borderRightWidth={{ base: 0, xl: column === 'left' ? '1px' : 0 }}
+        borderColor="border.divider"
+        gridColumn={{ xl: valueColumn }}
+        gridRow={{ xl: row }}
+      >
+        { children }
+      </Box>
+    </>
+  );
+};
 
 const HashCell = ({ value, isLoading, noCopy }: { value: string | null; isLoading?: boolean; noCopy?: boolean }) => {
   if (!value) {
