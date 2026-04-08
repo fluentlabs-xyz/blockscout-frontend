@@ -199,11 +199,55 @@ const RuntimeUpgradeCard = ({ item, isLoading }: RuntimeUpgradeRowProps) => {
   const systemTag = getSystemContractTag(item.target_address_hash);
 
   return (
-    <Box borderWidth="1px" borderColor="border.divider" borderRadius="lg" p={ 4 }>
-      <VStack alignItems="stretch" gap={ 2 }>
-        <HStack justifyContent="space-between" alignItems="flex-start">
+    <Box
+      borderWidth="1px"
+      borderColor="border.divider"
+      borderRadius="lg"
+      overflow="hidden"
+      display="grid"
+      gridTemplateColumns={{ base: 'minmax(0, 1fr)', xl: 'repeat(2, minmax(0, 1fr))' }}
+    >
+      <VStack
+        alignItems="stretch"
+        gap={ 0 }
+        borderBottomWidth={{ base: '1px', xl: 0 }}
+        borderRightWidth={{ base: 0, xl: '1px' }}
+        borderColor="border.divider"
+      >
+        <RowLabel label="Target address">
+          { item.target_address_hash ? (
+            <VStack alignItems="flex-start" gap={ 1 }>
+              <AddressEntity
+                address={{ hash: item.target_address_hash }}
+                noIcon
+                isLoading={ isLoading }
+                truncation="constant"
+                maxW="100%"
+              />
+              { systemTag ? <Badge colorPalette="purple">{ systemTag }</Badge> : null }
+            </VStack>
+          ) : (
+            <Text color="text.secondary">—</Text>
+          ) }
+        </RowLabel>
+
+        <RowLabel label="Version">
+          <Text>{ item.genesis_version || '—' }</Text>
+        </RowLabel>
+
+        <RowLabel label="Genesis hash">
+          <HashCell value={ item.genesis_hash } isLoading={ isLoading }/>
+        </RowLabel>
+
+        <RowLabel label="Code hash">
+          <HashCell value={ item.code_hash } isLoading={ isLoading }/>
+        </RowLabel>
+      </VStack>
+
+      <VStack alignItems="stretch" gap={ 0 }>
+        <RowLabel label="Event">
           <Text fontWeight={ 600 }>RuntimeUpgraded</Text>
-        </HStack>
+        </RowLabel>
 
         <RowLabel label="Block">
           { typeof item.block_number === 'number' ? (
@@ -235,35 +279,6 @@ const RuntimeUpgradeCard = ({ item, isLoading }: RuntimeUpgradeRowProps) => {
           ) }
         </RowLabel>
 
-        <RowLabel label="Target contract">
-          { item.target_address_hash ? (
-            <VStack alignItems="flex-start" gap={ 1 }>
-              <AddressEntity
-                address={{ hash: item.target_address_hash }}
-                noIcon
-                isLoading={ isLoading }
-                truncation="constant"
-                maxW="100%"
-              />
-              { systemTag ? <Badge colorPalette="purple">{ systemTag }</Badge> : null }
-            </VStack>
-          ) : (
-            <Text color="text.secondary">—</Text>
-          ) }
-        </RowLabel>
-
-        <RowLabel label="Genesis version">
-          <Text>{ item.genesis_version || '—' }</Text>
-        </RowLabel>
-
-        <RowLabel label="Genesis hash">
-          <HashCell value={ item.genesis_hash } isLoading={ isLoading }/>
-        </RowLabel>
-
-        <RowLabel label="Code hash">
-          <HashCell value={ item.code_hash } isLoading={ isLoading }/>
-        </RowLabel>
-
         <RowLabel label="Timestamp">
           { item.block_timestamp ? (
             <Time timestamp={ item.block_timestamp } format="DD MMM YYYY, HH:mm:ss"/>
@@ -277,9 +292,19 @@ const RuntimeUpgradeCard = ({ item, isLoading }: RuntimeUpgradeRowProps) => {
 };
 
 const RowLabel = ({ label, children }: { label: string; children: React.ReactNode }) => (
-  <Box>
-    <Text color="text.secondary" fontSize="sm" mb={ 1 }>{ label }</Text>
-    { children }
+  <Box
+    display="grid"
+    gridTemplateColumns={{ base: '120px minmax(0, 1fr)', lg: '160px minmax(0, 1fr)' }}
+    gap={ 3 }
+    alignItems="flex-start"
+    px={ 3 }
+    py={ 2 }
+    _notLast={{ borderBottomWidth: '1px', borderColor: 'border.divider' }}
+  >
+    <Text color="text.secondary" fontSize="sm" whiteSpace="nowrap">{ label }</Text>
+    <Box minW={ 0 }>
+      { children }
+    </Box>
   </Box>
 );
 
