@@ -78,6 +78,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/pools/[hash]", { "hash": string }>
     | StaticRoute<"/pools">
     | StaticRoute<"/public-tags/submit">
+    | StaticRoute<"/runtime-upgrades">
     | StaticRoute<"/search-results">
     | StaticRoute<"/sprite">
     | DynamicRoute<"/stats/[id]", { "id": string }>

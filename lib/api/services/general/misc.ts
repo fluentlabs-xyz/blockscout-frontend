@@ -16,6 +16,7 @@ import type { NovesAccountHistoryResponse, NovesDescribeTxsResponse, NovesRespon
 import type {
   OptimisticL2DepositsItem,
 } from 'types/api/optimisticL2';
+import type { RuntimeUpgradeDetailsResponse, RuntimeUpgradesResponse } from 'types/api/runtimeUpgrades';
 import type { SearchRedirectResult, SearchResult, SearchResultFilters, SearchResultItem } from 'types/api/search';
 import type { HomeStats } from 'types/api/stats';
 import type {
@@ -252,6 +253,15 @@ export const GENERAL_API_MISC_RESOURCES = {
     path: '/api/v2/advanced-filters/csv',
   },
 
+  // RUNTIME UPGRADES
+  runtime_upgrades: {
+    path: '/api/v2/runtime-upgrades',
+  },
+  runtime_upgrade: {
+    path: '/api/v2/runtime-upgrades/:genesis_hash',
+    pathParams: [ 'genesis_hash' as const ],
+  },
+
   // CONFIGS
   config_backend: {
     path: '/api/v2/config/backend',
@@ -326,6 +336,8 @@ R extends 'general:deposits' ? DepositsResponse :
 R extends 'general:deposits_counters' ? DepositsCounters :
 R extends 'general:advanced_filter' ? AdvancedFilterResponse :
 R extends 'general:advanced_filter_methods' ? AdvancedFilterMethodsResponse :
+R extends 'general:runtime_upgrades' ? RuntimeUpgradesResponse :
+R extends 'general:runtime_upgrade' ? RuntimeUpgradeDetailsResponse :
 never;
 /* eslint-enable @stylistic/indent */
 

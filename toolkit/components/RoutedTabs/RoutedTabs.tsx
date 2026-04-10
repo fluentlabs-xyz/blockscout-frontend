@@ -31,7 +31,7 @@ const RoutedTabs = (props: RoutedTabsProps) => {
         return true;
       }
 
-      return router.pathname.includes(`[${ key }]`);
+      return router.pathname.includes(`[${ String(key) }]`);
     });
     router.push(
       { pathname: router.pathname, query: { ...queryForPathname, tab: value } },

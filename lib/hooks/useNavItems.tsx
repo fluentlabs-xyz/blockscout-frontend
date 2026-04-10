@@ -89,6 +89,12 @@ export default function useNavItems(): ReturnType {
        icon: 'verified',
        isActive: pathname === '/verified-contracts',
      };
+    const runtimeUpgrades: NavItem = {
+      text: 'Runtime upgrades',
+      nextRoute: { pathname: '/runtime-upgrades' as const },
+      icon: 'operation',
+      isActive: pathname === '/runtime-upgrades',
+    };
     const nameLookup = config.features.nameServices?.isEnabled ? {
       text: 'Name services lookup',
       nextRoute: { pathname: '/name-domains' as const },
@@ -180,6 +186,7 @@ export default function useNavItems(): ReturnType {
           topAccounts,
           validators,
           verifiedContracts,
+          runtimeUpgrades,
           mudWorlds,
           nameLookup,
         ].filter(Boolean) as Array<NavItem>,
@@ -197,6 +204,7 @@ export default function useNavItems(): ReturnType {
           userOps,
           topAccounts,
           verifiedContracts,
+          runtimeUpgrades,
           nameLookup,
         ].filter(Boolean) as Array<NavItem>,
       ];
@@ -213,6 +221,7 @@ export default function useNavItems(): ReturnType {
           topAccounts,
           validators,
           verifiedContracts,
+          runtimeUpgrades,
           nameLookup,
         ].filter(Boolean) as Array<NavItem>,
       ];
@@ -228,6 +237,7 @@ export default function useNavItems(): ReturnType {
         topAccounts,
         validators,
         verifiedContracts,
+        runtimeUpgrades,
         nameLookup,
         ...(config.features.beaconChain.isEnabled ? [
           {
