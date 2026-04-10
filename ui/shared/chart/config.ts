@@ -25,12 +25,12 @@ export function useChartsConfig(): Array<ChartConfig> {
 }
 
 export function useDefaultLineColor() {
-  const [ lineColor ] = useToken('colors', useColorModeValue('theme.graph.line._light', 'theme.graph.line._dark'));
+  const [ lineColor ] = useToken('colors', useColorModeValue('yellow.400', 'yellow.400'));
   return React.useMemo(() => lineColor, [ lineColor ]);
 }
 
 export function useDefaultGradient() {
-  const [ startColor ] = useToken('colors', useColorModeValue('theme.graph.gradient.start._light', 'theme.graph.gradient.start._dark'));
-  const [ stopColor ] = useToken('colors', useColorModeValue('theme.graph.gradient.stop._light', 'theme.graph.gradient.stop._dark'));
+  const [ startColor ] = useToken('colors', useColorModeValue('orange.600', 'orange.600'));
+  const [ stopColor ] = useToken('colors', useColorModeValue('blackAlpha.900', 'blackAlpha.900'));
   return React.useMemo(() => ({ startColor, stopColor }), [ startColor, stopColor ]);
 }

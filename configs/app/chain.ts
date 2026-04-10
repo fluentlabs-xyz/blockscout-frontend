@@ -4,9 +4,18 @@ import type { NetworkVerificationType, NetworkVerificationTypeEnvs } from 'types
 
 import { urlValidator } from 'toolkit/components/forms/validators/url';
 
+import {
+  DEVNET_RPC_URL,
+  FLUENT_DEVNET_CHAIN_ID,
+  DEVNET_NETWORK_NATIVE_CURRENCY,
+  MAINNET_RPC_URL,
+  FLUENT_MAINNET_CHAIN_ID,
+  MAINNET_NETWORK_NATIVE_CURRENCY,
+  TESTNET_RPC_URL,
+  FLUENT_TESTNET_CHAIN_ID,
+  TESTNET_NETWORK_NATIVE_CURRENCY,
+} from './fluent';
 import { getEnvValue, parseEnvJson } from './utils';
-
-const DEFAULT_CURRENCY_DECIMALS = 18;
 
 const rollupType = getEnvValue('NEXT_PUBLIC_ROLLUP_TYPE') as RollupType;
 
@@ -20,39 +29,131 @@ const verificationType: NetworkVerificationType = (() => {
   return getEnvValue('NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE') as NetworkVerificationTypeEnvs || 'mining';
 })();
 
-const rpcUrls = (() => {
-  const envValue = getEnvValue('NEXT_PUBLIC_NETWORK_RPC_URL');
-  const isUrl = urlValidator(envValue);
+const additionalTokenTypes = parseEnvJson<Array<AdditionalTokenType>>(getEnvValue('NEXT_PUBLIC_NETWORK_ADDITIONAL_TOKEN_TYPES')) || [];
 
-  if (envValue && isUrl === true) {
-    return [ envValue ];
+const rpcUrls = (() => {
+  const env = getEnvValue('NEXT_PUBLIC_CHAIN');
+  const customRpc = getEnvValue('NEXT_PUBLIC_NETWORK_RPC_URL');
+  let defaultRpcUrl;
+
+  switch (env) {
+    case 'devnet':
+      defaultRpcUrl = DEVNET_RPC_URL;
+      break;
+    case 'mainnet':
+      defaultRpcUrl = MAINNET_RPC_URL;
+      break;
+    default:
+      defaultRpcUrl = TESTNET_RPC_URL;
+      break;
   }
 
-  const parsedValue = parseEnvJson<Array<string>>(envValue);
+  const value =
+    customRpc || defaultRpcUrl;
 
-  return Array.isArray(parsedValue) ? parsedValue : [];
+  if (!value) {
+    return [];
+  }
+
+  const parsed = parseEnvJson<Array<string>>(value);
+  if (Array.isArray(parsed)) {
+    return parsed.filter((url) => urlValidator(url));
+  }
+
+  return urlValidator(value) ? [ value ] : [];
 })();
 
-const chain = Object.freeze({
-  id: getEnvValue('NEXT_PUBLIC_NETWORK_ID'),
-  name: getEnvValue('NEXT_PUBLIC_NETWORK_NAME'),
-  shortName: getEnvValue('NEXT_PUBLIC_NETWORK_SHORT_NAME'),
-  currency: {
-    name: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_NAME'),
-    weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
-    gweiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_GWEI_NAME'),
-    symbol: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL'),
-    decimals: Number(getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS')) || DEFAULT_CURRENCY_DECIMALS,
-  },
-  secondaryCoin: {
-    symbol: getEnvValue('NEXT_PUBLIC_NETWORK_SECONDARY_COIN_SYMBOL'),
-  },
-  hasMultipleGasCurrencies: getEnvValue('NEXT_PUBLIC_NETWORK_MULTIPLE_GAS_CURRENCIES') === 'true',
-  tokenStandard: getEnvValue('NEXT_PUBLIC_NETWORK_TOKEN_STANDARD_NAME') || 'ERC',
-  additionalTokenTypes: parseEnvJson<Array<AdditionalTokenType>>(getEnvValue('NEXT_PUBLIC_NETWORK_ADDITIONAL_TOKEN_TYPES')) || [],
-  rpcUrls,
-  isTestnet: getEnvValue('NEXT_PUBLIC_IS_TESTNET') === 'true',
-  verificationType,
-});
+const getChain = () => {
+  const env = getEnvValue('NEXT_PUBLIC_CHAIN');
+
+  switch (env) {
+    case 'mainnet':
+      return {
+        id: String(FLUENT_MAINNET_CHAIN_ID),
+        name: 'Fluent',
+        shortName: 'Fluent',
+        currency: {
+          name: MAINNET_NETWORK_NATIVE_CURRENCY.name,
+          weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
+          symbol: MAINNET_NETWORK_NATIVE_CURRENCY.symbol,
+          decimals: MAINNET_NETWORK_NATIVE_CURRENCY.decimals,
+        },
+        secondaryCoin: {
+          symbol: getEnvValue('NEXT_PUBLIC_NETWORK_SECONDARY_COIN_SYMBOL'),
+        },
+        hasMultipleGasCurrencies: false,
+        tokenStandard: 'ERC',
+        additionalTokenTypes,
+        rpcUrls,
+        isTestnet: false,
+        verificationType,
+      };
+    case 'devnet':
+      return {
+        id: String(FLUENT_DEVNET_CHAIN_ID),
+        name: 'Fluent Devnet',
+        shortName: 'Fluent Devnet',
+        currency: {
+          name: DEVNET_NETWORK_NATIVE_CURRENCY.name,
+          weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
+          symbol: DEVNET_NETWORK_NATIVE_CURRENCY.symbol,
+          decimals: DEVNET_NETWORK_NATIVE_CURRENCY.decimals,
+        },
+        secondaryCoin: {
+          symbol: getEnvValue('NEXT_PUBLIC_NETWORK_SECONDARY_COIN_SYMBOL'),
+        },
+        hasMultipleGasCurrencies: false,
+        tokenStandard: 'ERC',
+        additionalTokenTypes,
+        rpcUrls,
+        isTestnet: true,
+        verificationType,
+      };
+    case 'testnet':
+      return {
+        id: String(FLUENT_TESTNET_CHAIN_ID),
+        name: 'Fluent Testnet',
+        shortName: 'Fluent Testnet',
+        currency: {
+          name: TESTNET_NETWORK_NATIVE_CURRENCY.name,
+          weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
+          symbol: TESTNET_NETWORK_NATIVE_CURRENCY.symbol,
+          decimals: TESTNET_NETWORK_NATIVE_CURRENCY.decimals,
+        },
+        secondaryCoin: {
+          symbol: getEnvValue('NEXT_PUBLIC_NETWORK_SECONDARY_COIN_SYMBOL'),
+        },
+        hasMultipleGasCurrencies: false,
+        tokenStandard: 'ERC',
+        additionalTokenTypes,
+        rpcUrls,
+        isTestnet: true,
+        verificationType,
+      };
+    default:
+      return {
+        id: String(FLUENT_DEVNET_CHAIN_ID),
+        name: 'Fluent Devnet',
+        shortName: 'Fluent Devnet',
+        currency: {
+          name: DEVNET_NETWORK_NATIVE_CURRENCY.name,
+          weiName: getEnvValue('NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME'),
+          symbol: DEVNET_NETWORK_NATIVE_CURRENCY.symbol,
+          decimals: DEVNET_NETWORK_NATIVE_CURRENCY.decimals,
+        },
+        secondaryCoin: {
+          symbol: getEnvValue('NEXT_PUBLIC_NETWORK_SECONDARY_COIN_SYMBOL'),
+        },
+        hasMultipleGasCurrencies: false,
+        tokenStandard: 'ERC',
+        additionalTokenTypes,
+        rpcUrls,
+        isTestnet: true,
+        verificationType,
+      };
+  }
+};
+
+const chain = Object.freeze(getChain());
 
 export default chain;

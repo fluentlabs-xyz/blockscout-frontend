@@ -1,9 +1,11 @@
 import type { HTMLChakraProps } from '@chakra-ui/react';
+import { Global } from '@emotion/react';
 import { GrowthBookProvider } from '@growthbook/growthbook-react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
+import localFont from 'next/font/local';
 import React from 'react';
 
 import type { NextPageWithLayout } from 'nextjs/types';
@@ -34,9 +36,16 @@ const RewardsContextProvider = dynamic(() => import('lib/contexts/rewards').then
 const RewardsLoginModal = dynamic(() => import('ui/rewards/login/RewardsLoginModal'), { ssr: false });
 const RewardsActivityTracker = dynamic(() => import('ui/rewards/RewardsActivityTracker'), { ssr: false });
 
+import './global.css';
 import 'lib/setLocale';
-// import 'focus-visible/dist/focus-visible';
 import 'nextjs/global.css';
+
+const Bossa = localFont({
+  src: '../public/fonts/Bossa-Regular.woff2',
+  weight: 'normal',
+  style: 'normal',
+  variable: '--font-Bossa',
+});
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -60,15 +69,40 @@ If you don't understand what this console is for, close it now and stay safe.`;
 
 const CONSOLE_SCAM_WARNING_DELAY_MS = 500;
 
-function MyApp({ Component, pageProps, router }: AppPropsWithLayout) {
+const Fonts = () => (
+  <Global
+    styles={ `
+      @font-face {
+        font-family: 'Bossa';
+        src: url('./fonts/Bossa-Regular.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+      }
 
+      @font-face {
+        font-family: 'Bossa';
+        src: url('./fonts/Bossa-Bold.woff2') format('woff2');
+        font-weight: bold;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'Bossa';
+        src: url('./fonts/Bossa-Medium.woff2') format('woff2');
+        font-weight: 600;
+        font-style: normal;
+      }
+    ` }
+  />
+);
+
+function MyApp({ Component, pageProps, router }: AppPropsWithLayout) {
   const growthBook = initGrowthBook(pageProps.uuid);
   useLoadFeatures(growthBook);
 
   const queryClient = useQueryClientConfig();
 
   React.useEffect(() => {
-    // after the app is rendered/hydrated, show the console scam warning
     const timeoutId = window.setTimeout(() => {
       // eslint-disable-next-line no-console
       console.warn(CONSOLE_SCAM_WARNING);
@@ -95,13 +129,13 @@ function MyApp({ Component, pageProps, router }: AppPropsWithLayout) {
   })();
 
   const RewardsProvider = config.features.rewards.isEnabled ? RewardsContextProvider : FallbackProvider;
-
   const socketUrl = !config.features.multichain.isEnabled ? getSocketUrl() : undefined;
 
   return (
-    <>
+    <div className={ `${ Bossa.className } ${ Bossa.variable }` }>
       <PageMetadata pathname={ router.pathname as Route['pathname'] } query={ pageProps.query } apiData={ pageProps.apiData }/>
       <ChakraProvider>
+        <Fonts/>
         <RollbarProvider config={ rollbarConfig }>
           <AppErrorBoundary
             { ...ERROR_SCREEN_STYLES }
@@ -129,7 +163,7 @@ function MyApp({ Component, pageProps, router }: AppPropsWithLayout) {
           </AppErrorBoundary>
         </RollbarProvider>
       </ChakraProvider>
-    </>
+    </div>
   );
 }
 

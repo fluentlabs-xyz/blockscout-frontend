@@ -10,11 +10,11 @@ git diff --diff-filter=ACMRT --cached --name-only | npx cspell --config cspell.j
 
 # format svg
 echo 🧿 Running svg formatter...
-for file in `git diff --diff-filter=ACMRT --cached --name-only | grep ".svg\$"`
-    do 
-        echo "Formatting $file" 
-        ./node_modules/.bin/svgo -q $file --config svgo.config.format.js
-        git add $file
-    done
+git diff --diff-filter=ACMRT --cached --name-only -z | grep -z -E "\.svg$" | while IFS= read -r -d '' file
+do
+    echo "Formatting $file"
+    ./node_modules/.bin/svgo -q "$file" --config svgo.config.format.js
+    git add "$file"
+done
 
 echo ✅ All pre-commit jobs are done

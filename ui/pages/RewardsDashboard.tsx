@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 
 import config from 'configs/app';
 import { useRewardsContext } from 'lib/contexts/rewards';
-import useIsMobile from 'lib/hooks/useIsMobile';
 import { Alert } from 'toolkit/chakra/alert';
 import { Button } from 'toolkit/chakra/button';
 import { Link } from 'toolkit/chakra/link';
@@ -18,7 +17,6 @@ import ActivityTab from 'ui/rewards/dashboard/tabs/ActivityTab';
 import ReferralsTab from 'ui/rewards/dashboard/tabs/ReferralsTab';
 import ResourcesTab from 'ui/rewards/dashboard/tabs/ResourcesTab';
 import useStreakBadges from 'ui/rewards/hooks/useStreakBadges';
-import AdBanner from 'ui/shared/ad/AdBanner';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import useRedirectForInvalidAuthToken from 'ui/snippets/auth/useRedirectForInvalidAuthToken';
 
@@ -26,7 +24,6 @@ const RewardsDashboard = () => {
   const { balancesQuery, isAuth, referralsQuery, rewardsConfigQuery, dailyRewardQuery, isInitialized } = useRewardsContext();
   const { nextAchievementText, isLoading: isBadgesLoading, badgesQuery } = useStreakBadges();
   const streakModal = useDisclosure();
-  const isMobile = useIsMobile();
 
   const [ isError, setIsError ] = useState(false);
 
@@ -61,7 +58,6 @@ const RewardsDashboard = () => {
           ) }
           mb={ 0 }
         />
-        { !isMobile && <AdBanner format="mobile" w="fit-content" flexShrink={ 0 } borderRadius="md" overflow="hidden"/> }
       </Flex>
       <Flex flexDirection="column" alignItems="flex-start" w="full" gap={ 6 }>
         { isError && <Alert status="error">Failed to load some data. Please try again later.</Alert> }

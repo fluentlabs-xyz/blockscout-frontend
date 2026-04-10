@@ -11,7 +11,6 @@ import getResourceErrorPayload from 'lib/errors/getResourceErrorPayload';
 import { Button } from 'toolkit/chakra/button';
 import { Link } from 'toolkit/chakra/link';
 
-import AdBanner from '../ad/AdBanner';
 import AppErrorIcon from './AppErrorIcon';
 import AppErrorTitle from './AppErrorTitle';
 import AppErrorBlockConsensus from './custom/AppErrorBlockConsensus';
@@ -104,7 +103,6 @@ const AppError = ({ error, className }: Props) => {
                 Back to home
               </Button>
             </Link>
-            { statusCode === 404 && <AdBanner mt={ 12 }/> }
           </>
         );
       }

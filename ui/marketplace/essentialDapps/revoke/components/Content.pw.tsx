@@ -16,10 +16,9 @@ test('base view +@dark-mode +@mobile', async({ render, mockAssetResponse }: Test
     isAddressMatch: false,
     coinBalanceQuery: {
       isPlaceholderData: false,
-      data: { balance: '12', balanceUsd: '47844', symbol: 'ETH', coinImage: revokeMock.allowances[0].tokenIcon },
+      data: { balance: '12', balanceUsd: '47844', symbol: 'ETH' as const, coinImage: revokeMock.allowances[0].tokenIcon },
     },
     approvalsQuery: { data: revokeMock.allowances, isPlaceholderData: false } as ReturnType<typeof useApprovalsQuery>,
-    hideApproval: () => {},
   };
 
   await mockAssetResponse(revokeMock.allowances[0].tokenIcon as string, './playwright/mocks/image_s.jpg');

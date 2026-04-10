@@ -28,7 +28,7 @@ const config: Feature<{ provider: AdTextProviders; sevio: SevioConfig }> = (() =
   if (!app.isPrivateMode && provider !== 'none') {
     return Object.freeze({
       title,
-      isEnabled: true,
+      isEnabled: false,
       provider,
       sevio: {
         zone: SEVIO_ZONE,

@@ -1,3 +1,5 @@
+const path = require('path');
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.BUNDLE_ANALYZER === 'true',
 });
@@ -17,6 +19,11 @@ const moduleExports = {
   ],
   reactStrictMode: true,
   webpack(config) {
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@noble/hashes/utils$': path.resolve(__dirname, 'node_modules/@noble/hashes/esm/utils.js'),
+      '@noble/hashes/utils.js$': path.resolve(__dirname, 'node_modules/@noble/hashes/esm/utils.js'),
+    };
     config.module.rules.push(
       {
         test: /\.svg$/,
@@ -44,6 +51,7 @@ const moduleExports = {
   redirects,
   headers,
   output: 'standalone',
+  outputFileTracingRoot: __dirname,
   productionBrowserSourceMaps: false,
   serverExternalPackages: ["@opentelemetry/sdk-node", "@opentelemetry/auto-instrumentations-node"],
   experimental: {

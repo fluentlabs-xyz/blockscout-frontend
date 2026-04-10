@@ -6,6 +6,8 @@ import type { NetworkVerificationTypeEnvs } from 'types/networks';
 // Blockchain parameters schema
 export default yup.object({
     NEXT_PUBLIC_NETWORK_NAME: yup.string().required(),
+    // Fluent-specific chain selector used by configs/app/chain.ts
+    NEXT_PUBLIC_CHAIN: yup.string().oneOf([ 'mainnet', 'testnet', 'devnet' ]),
     NEXT_PUBLIC_NETWORK_SHORT_NAME: yup.string(),
     NEXT_PUBLIC_NETWORK_ID: yup.number().positive().integer().required(),
     NEXT_PUBLIC_NETWORK_RPC_URL: yup

@@ -71,6 +71,7 @@ const TEMPLATE_MAP: Record<Route['pathname'], string> = {
   '/interop-messages': DEFAULT_TEMPLATE,
   '/operations': DEFAULT_TEMPLATE,
   '/operation/[id]': DEFAULT_TEMPLATE,
+  '/runtime-upgrades': DEFAULT_TEMPLATE,
   '/cc/tx/[hash]': DEFAULT_TEMPLATE,
   '/cross-chain-tx/[id]': DEFAULT_TEMPLATE,
 
@@ -82,6 +83,7 @@ const TEMPLATE_MAP: Record<Route['pathname'], string> = {
   '/chain/[chain_slug]/block/countdown/[height]': DEFAULT_TEMPLATE,
   '/chain/[chain_slug]/csv-export': DEFAULT_TEMPLATE,
   '/chain/[chain_slug]/op/[hash]': DEFAULT_TEMPLATE,
+  '/chain/[chain_slug]/runtime-upgrades': DEFAULT_TEMPLATE,
   '/chain/[chain_slug]/token/[hash]': DEFAULT_TEMPLATE,
   '/chain/[chain_slug]/token/[hash]/instance/[id]': DEFAULT_TEMPLATE,
   '/chain/[chain_slug]/tx/[hash]': DEFAULT_TEMPLATE,

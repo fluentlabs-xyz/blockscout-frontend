@@ -114,7 +114,6 @@ const TxEntity = (props: EntityProps) => {
 
   return (
     <Container { ...partsProps.container }>
-      <Icon { ...partsProps.icon } isPendingUpdate={ props.isPendingUpdate }/>
       { props.noLink ? content : <Link { ...partsProps.link }>{ content }</Link> }
       <Copy { ...partsProps.copy }/>
     </Container>

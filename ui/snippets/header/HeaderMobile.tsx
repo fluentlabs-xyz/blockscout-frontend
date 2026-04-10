@@ -5,12 +5,10 @@ import React from 'react';
 import config from 'configs/app';
 import { useIsSticky } from 'toolkit/hooks/useIsSticky';
 import RewardsButton from 'ui/rewards/RewardsButton';
-import NetworkIcon from 'ui/snippets/networkLogo/NetworkIcon';
 import UserProfileAuth0 from 'ui/snippets/user/profile/auth0/UserProfileMobile';
 import UserWalletMobile from 'ui/snippets/user/wallet/UserWalletMobile';
 
-import RollupStageBadge from '../navigation/RollupStageBadge';
-import TestnetBadge from '../navigation/TestnetBadge';
+import NetworkLogo from '../networkLogo/NetworkLogo';
 import SearchBarMobile from '../searchBar/SearchBarMobile';
 import Burger from './Burger';
 
@@ -45,7 +43,7 @@ const HeaderMobile = ({ hideSearchButton, onGoToSearchResults }: Props) => {
   return (
     <Box
       ref={ ref }
-      bgColor="bg.primary"
+      bgColor={{ _light: 'white', _dark: 'black' }}
       display={{ base: 'block', lg: 'none' }}
       position="sticky"
       top="-1px"
@@ -58,7 +56,7 @@ const HeaderMobile = ({ hideSearchButton, onGoToSearchResults }: Props) => {
         as="header"
         paddingX={ 3 }
         paddingY={ 2 }
-        bgColor="bg.primary"
+        bgColor={{ _light: 'white', _dark: 'black' }}
         width="100%"
         alignItems="center"
         transitionProperty="box-shadow"
@@ -66,17 +64,13 @@ const HeaderMobile = ({ hideSearchButton, onGoToSearchResults }: Props) => {
         boxShadow={ isSticky ? 'md' : 'none' }
       >
         <Burger/>
-        <Flex alignItems="center" flexGrow={ 1 } mx={ 2 }>
-          <NetworkIcon/>
-          <TestnetBadge ml={ 2 }/>
-          <RollupStageBadge ml={ 2 }/>
-        </Flex>
+        <NetworkLogo ml={ 2 } mr="auto"/>
         <Flex columnGap={ 2 }>
-          { !hideSearchButton && <SearchBarMobile onGoToSearchResults={ onGoToSearchResults }/> }
           { config.features.rewards.isEnabled && <RewardsButton/> }
           { userProfile }
         </Flex>
       </Flex>
+      { !hideSearchButton && <SearchBarMobile onGoToSearchResults={ onGoToSearchResults }/> }
     </Box>
   );
 };

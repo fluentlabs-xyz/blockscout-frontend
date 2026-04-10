@@ -40,6 +40,7 @@ const CopyToClipboard = (props: Props) => {
 
   const button = (
     <IconButton
+      color="white"
       aria-label="copy"
       boxSize={ boxSize }
       onClick={ handleClick }

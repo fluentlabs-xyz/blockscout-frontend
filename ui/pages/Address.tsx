@@ -57,6 +57,7 @@ import AddressAddToWallet from 'ui/shared/address/AddressAddToWallet';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import EnsEntity from 'ui/shared/entities/ens/EnsEntity';
 import EntityTags from 'ui/shared/EntityTags/EntityTags';
+import formatPublicTags from 'ui/shared/EntityTags/formatPublicTags';
 import formatUserTags from 'ui/shared/EntityTags/formatUserTags';
 import sortEntityTags from 'ui/shared/EntityTags/sortEntityTags';
 import IconSvg from 'ui/shared/IconSvg';
@@ -86,6 +87,13 @@ const AddressPageContent = () => {
 
   const areQueriesEnabled = !checkDomainName && !checkAddressFormat;
   const addressQuery = useAddressQuery({ hash, isEnabled: areQueriesEnabled });
+
+  const contractQuery = useApiQuery('general:contract', {
+    pathParams: { hash: addressQuery.data?.hash },
+    queryOptions: {
+      enabled: addressQuery.data?.is_contract,
+    },
+  });
 
   const addressTabsCountersQuery = useApiQuery('general:address_tabs_counters', {
     pathParams: { hash },
@@ -327,20 +335,17 @@ const AddressPageContent = () => {
 
   const usernameApiTag = userPropfileApiQuery.data?.user_profile?.username;
 
+  const isUST20Token = contractQuery?.data?.deployed_bytecode?.startsWith('0xef44000000000000000000000000000000000000520008');
+  const isWASM = contractQuery?.data?.deployed_bytecode?.startsWith('0xef52');
+
   const tags: Array<EntityTag> = React.useMemo(() => {
     return [
-      ...(addressQuery.data?.public_tags?.map((tag) => {
+      ...formatPublicTags(addressQuery.data?.public_tags, (tag) => {
         const isFhe = tag.label.toLowerCase() === 'fhe' || tag.display_name.toLowerCase() === 'fhe';
-        return {
-          slug: tag.label,
-          name: tag.display_name,
-          tagType: 'custom' as const,
-          ordinal: -1,
-          meta: isFhe ? {
-            tooltipDescription: FHE_TOOLTIP_DESCRIPTION,
-          } : undefined,
-        };
-      }) || []),
+        return isFhe ? {
+          tooltipDescription: FHE_TOOLTIP_DESCRIPTION,
+        } : undefined;
+      }),
       addressQuery.data?.celo?.account ? {
         slug: 'celo-account',
         name: 'Celo account',
@@ -397,6 +402,30 @@ const AddressPageContent = () => {
           },
         } :
         undefined,
+      isUST20Token ?
+        {
+          slug: 'UST-20',
+          name: 'UST-20',
+          tagType: 'custom' as const,
+          ordinal: PREDEFINED_TAG_PRIORITY,
+          meta: {
+            tooltipDescription: 'UST20 is Fluentbase’s shared token runtime',
+            tooltipUrl: 'https://github.com/fluentlabs-xyz/fluentbase/blob/devel/docs/08-universal-token.md',
+            bgColor: 'linear-gradient(90deg, #FE6901 -7.32%, #FF7FFE 81.62%)',
+            textColor: 'black',
+          },
+        } : undefined,
+      isWASM ? {
+        slug: 'wasm',
+        name: 'WASM',
+        tagType: 'custom' as const,
+        ordinal: PREDEFINED_TAG_PRIORITY,
+        meta: {
+          tooltipDescription: 'WASM is WebAssembly',
+          bgColor: 'linear-gradient(90deg, #FE6901 -7.32%, #FF7FFE 81.62%)',
+          textColor: 'black',
+        },
+      } : undefined,
     ].filter(Boolean).sort(sortEntityTags);
   }, [
     addressMetadataQuery.data,
@@ -407,6 +436,8 @@ const AddressPageContent = () => {
     mudTablesCountQuery.data,
     usernameApiTag,
     xStarQuery.data?.data,
+    isUST20Token,
+    isWASM,
   ]);
 
   const titleContentAfter = (

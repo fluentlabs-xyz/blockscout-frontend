@@ -1,5 +1,4 @@
-import { Box, Flex, Grid } from '@chakra-ui/react';
-import { capitalize } from 'es-toolkit';
+import { Box, Flex } from '@chakra-ui/react';
 import React from 'react';
 
 import type { Block } from 'types/api/block';
@@ -10,12 +9,10 @@ import getNetworkValidatorTitle from 'lib/networks/getNetworkValidatorTitle';
 import { currencyUnits } from 'lib/units';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import { Tooltip } from 'toolkit/chakra/tooltip';
-import { thinsp } from 'toolkit/utils/htmlEntities';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import BlockEntity from 'ui/shared/entities/block/BlockEntity';
 import IconSvg from 'ui/shared/IconSvg';
 import TimeWithTooltip from 'ui/shared/time/TimeWithTooltip';
-import SimpleValue from 'ui/shared/value/SimpleValue';
 
 type Props = {
   block: Block;
@@ -38,7 +35,7 @@ const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
           isLoading={ isLoading }
           number={ block.height }
           tailLength={ 2 }
-          textStyle="md"
+          textStyle="xl"
           fontWeight={ 500 }
           mr="auto"
         />
@@ -59,35 +56,37 @@ const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
           ml={ 2 }
         />
       </Flex>
-      <Grid gridGap={ 2 } templateColumns="auto minmax(0, 1fr)" textStyle="sm">
-        <Skeleton loading={ isLoading }>Txn</Skeleton>
-        <Skeleton loading={ isLoading } color="text.secondary"><span>{ block.transactions_count }</span></Skeleton>
+      <Flex gap={ 2 } direction="column" fontSize="sm">
+        <Flex justify="space-between">
+          <Skeleton loading={ isLoading } color="grey.50">Txn</Skeleton>
+          <Skeleton loading={ isLoading } color="white"><span>{ block.transactions_count }</span></Skeleton>
+        </Flex>
 
         { !config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.total_reward && (
-          <>
-            <Skeleton loading={ isLoading }>Reward</Skeleton>
-            <SimpleValue
-              value={ totalReward }
-              loading={ isLoading }
-              color="text.secondary"
-              endElement={ `${ thinsp }${ currencyUnits.ether }` }
-            />
-          </>
+          <Flex justify="space-between">
+            <Skeleton loading={ isLoading } color="grey.50">Reward</Skeleton>
+            <Skeleton loading={ isLoading } color="white">
+              <span>
+                { totalReward.dp(10).toFixed() } { currencyUnits.ether }
+              </span>
+            </Skeleton>
+          </Flex>
         ) }
 
         { !config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.miner && (
-          <>
-            <Skeleton loading={ isLoading }>{ capitalize(getNetworkValidatorTitle()) }</Skeleton>
+          <Flex justify="space-between" w="100%">
+            <Skeleton loading={ isLoading } color="grey.50" textTransform="capitalize">{ getNetworkValidatorTitle() }</Skeleton>
             <AddressEntity
               address={ block.miner }
               isLoading={ isLoading }
+              color="white"
               noIcon
               noCopy
               truncation="constant"
             />
-          </>
+          </Flex>
         ) }
-      </Grid>
+      </Flex>
     </Box>
   );
 };

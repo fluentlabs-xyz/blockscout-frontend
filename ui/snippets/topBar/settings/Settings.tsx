@@ -8,7 +8,6 @@ import { useDisclosure } from 'toolkit/hooks/useDisclosure';
 import IconSvg from 'ui/shared/IconSvg';
 
 import SettingsAddressFormat from './SettingsAddressFormat';
-import SettingsColorTheme from './SettingsColorTheme';
 import SettingsIdentIcon from './SettingsIdentIcon';
 import SettingsLocalTime from './SettingsLocalTime';
 import SettingsPoorReputationTokens from './SettingsPoorReputationTokens';
@@ -53,7 +52,6 @@ const Settings = () => {
       </Tooltip>
       <PopoverContent overflowY="hidden" w="auto" fontSize="sm">
         <PopoverBody>
-          <SettingsColorTheme onSelect={ popover.onClose }/>
           <Separator my={ 3 }/>
           <SettingsIdentIcon/>
           <SettingsAddressFormat/>

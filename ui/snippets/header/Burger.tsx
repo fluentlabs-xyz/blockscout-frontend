@@ -7,7 +7,8 @@ import IconSvg from 'ui/shared/IconSvg';
 import NavigationMobile from 'ui/snippets/navigation/mobile/NavigationMobile';
 import RollupStageBadge from 'ui/snippets/navigation/RollupStageBadge';
 import TestnetBadge from 'ui/snippets/navigation/TestnetBadge';
-import NetworkLogo from 'ui/snippets/networkLogo/NetworkLogo';
+
+import NetworkLogo from '../networkLogo/NetworkLogo';
 
 interface Props {
   isMarketplaceAppPage?: boolean;
@@ -29,7 +30,7 @@ const Burger = ({ isMarketplaceAppPage }: Props) => {
             name="burger"
             boxSize={ 6 }
             display="block"
-            color={{ _light: 'gray.600', _dark: 'white' }}
+            color={{ _light: 'grey.30', _dark: 'white' }}
           />
         </IconButton>
       </DrawerTrigger>

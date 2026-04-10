@@ -2,6 +2,7 @@ import type { DocumentContext } from 'next/document';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import React from 'react';
 
+import generateCspPolicy from 'nextjs/csp/generateCspPolicy';
 import logRequestFromBot from 'nextjs/utils/logRequestFromBot';
 import * as serverTiming from 'nextjs/utils/serverTiming';
 
@@ -27,18 +28,20 @@ class MyDocument extends Document {
 
     const initialProps = await Document.getInitialProps(ctx);
 
+    // Add CSP header
+    const cspPolicy = generateCspPolicy();
+    if (ctx.res) {
+      ctx.res.setHeader('Content-Security-Policy', cspPolicy);
+    }
+
     return initialProps;
   }
 
   render() {
     return (
-      <Html lang="en">
+      <Html lang="en" style={{ backgroundColor: '#000000' }}>
         <Head>
           { /* FONTS */ }
-          <link
-            href={ config.UI.fonts.heading?.url ?? 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap' }
-            rel="stylesheet"
-          />
           <link
             href={ config.UI.fonts.body?.url ?? 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap' }
             rel="stylesheet"
@@ -67,6 +70,12 @@ class MyDocument extends Document {
           <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon-180x180.png"/>
           <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon/android-chrome-192x192.png"/>
           <link rel="preload" as="image" href={ svgSprite.href }/>
+          <link
+            rel="preload"
+            href="/fonts/Bossa-Regular.woff2"
+            as="font"
+            crossOrigin="anonymous"
+          />
         </Head>
         <body>
           <Main/>

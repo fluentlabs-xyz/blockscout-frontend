@@ -1,6 +1,7 @@
 import type CspDev from 'csp-dev';
 
 import config from 'configs/app';
+import { DEVNET_EXPLORER_URL, MAINNET_EXPLORER_URL, TESTNET_EXPLORER_URL } from 'configs/app/fluent';
 
 import { KEY_WORDS } from '../utils';
 
@@ -12,7 +13,6 @@ const MAIN_DOMAINS = [
 const externalFontsDomains = (() => {
   try {
     return [
-      config.UI.fonts.heading?.url,
       config.UI.fonts.body?.url,
     ]
       .filter(Boolean)
@@ -40,6 +40,13 @@ export function app(isPrivateMode = false): CspDev.DirectiveDescriptor {
       // APIs
       ...Object.values(config.apis).filter(Boolean).map((api) => api.endpoint),
       ...Object.values(config.apis).filter(Boolean).map((api) => api.socketEndpoint),
+      // Ensure fluent explorer origins are always allowed (prevents env mismatch between CSP and client envs).
+      DEVNET_EXPLORER_URL,
+      TESTNET_EXPLORER_URL,
+      MAINNET_EXPLORER_URL,
+      'https://api-devnet.fluentscan.xyz/',
+      'https://api.fluentscan.xyz/',
+      'https://api-testnet.fluentscan.xyz/',
 
       // chain RPC server
       ...config.chain.rpcUrls,

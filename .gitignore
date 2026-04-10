@@ -5,6 +5,7 @@
 /node_modules_linux
 /.pnp
 .pnp.js
+/.idea
 
 # testing
 /coverage
@@ -44,6 +45,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 /configs/envs/.env.secrets
 /configs/envs/.samples
 

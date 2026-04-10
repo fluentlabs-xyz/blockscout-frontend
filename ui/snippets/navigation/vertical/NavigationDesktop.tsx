@@ -1,39 +1,31 @@
 import { Flex, Box, VStack } from '@chakra-ui/react';
 import React from 'react';
 
-import { useAppContext } from 'lib/contexts/app';
+// import type { NavItem } from 'types/client/navigation';
+// import { useAppContext } from 'lib/contexts/app';
 import * as cookies from 'lib/cookies';
 import useNavItems, { isGroupItem } from 'lib/hooks/useNavItems';
 import IconSvg from 'ui/shared/IconSvg';
 import useIsAuth from 'ui/snippets/auth/useIsAuth';
-import NetworkIcon from 'ui/snippets/networkLogo/NetworkIcon';
 import NetworkLogo from 'ui/snippets/networkLogo/NetworkLogo';
 
-import NavigationPromoBanner from '../promoBanner/NavigationPromoBanner';
 import RollupStageBadge from '../RollupStageBadge';
-import TestnetBadge from '../TestnetBadge';
 import NavLink from './NavLink';
 import NavLinkGroup from './NavLinkGroup';
 import NavLinkRewards from './NavLinkRewards';
 
+// import { useColorModeValue } from 'toolkit/chakra/color-mode';
+
 const NavigationDesktop = () => {
-  const appProps = useAppContext();
-  const cookiesString = appProps.cookies;
-
-  const isNavBarCollapsedCookie = cookies.get(cookies.NAMES.NAV_BAR_COLLAPSED, cookiesString);
-  let isNavBarCollapsed;
-  if (isNavBarCollapsedCookie === 'true') {
-    isNavBarCollapsed = true;
-  }
-  if (isNavBarCollapsedCookie === 'false') {
-    isNavBarCollapsed = false;
-  }
-
   const { mainNavItems, accountNavItems } = useNavItems();
+  // const [subLinks, setSubLinks] = useState<NavItem[] | NavItem[][] | null>(null)
+  // const [open, setOpen] = useState(false)
+  // const navBg = useColorModeValue('white', 'grey.10')
+  // const borderColor = useColorModeValue('transparent', 'rgba(255, 255, 255, 0.30)')
 
   const isAuth = useIsAuth();
 
-  const [ isCollapsed, setCollapsedState ] = React.useState<boolean | undefined>(isNavBarCollapsed);
+  const [ isCollapsed, setCollapsedState ] = React.useState<boolean | undefined>();
 
   const handleTogglerClick = React.useCallback(() => {
     setCollapsedState((flag) => !flag);
@@ -48,6 +40,9 @@ const NavigationDesktop = () => {
 
   const isExpanded = isCollapsed === false;
 
+  // const onMouseOver = (subItems: NavItem[] | NavItem[][] | null) => {
+  //   setSubLinks(subItems)
+  // }
   return (
     <Flex
       display={{ base: 'none', lg: 'flex' }}
@@ -60,13 +55,13 @@ const NavigationDesktop = () => {
       px={{ lg: isExpanded ? 6 : 4, xl: isCollapsed ? 4 : 6 }}
       pt={ 12 }
       pb={ 6 }
-      width={{ lg: isExpanded ? '229px' : '92px', xl: isCollapsed ? '92px' : '229px' }}
+      width={{ lg: isExpanded ? '260px' : '92px', xl: isCollapsed ? '92px' : '260px' }}
+      minWidth={{ lg: isExpanded ? '260px' : '92px', xl: isCollapsed ? '92px' : '260px' }}
       onClick={ handleContainerClick }
       transitionProperty="width, padding"
       transitionDuration="normal"
       transitionTimingFunction="ease"
     >
-      <TestnetBadge position="absolute" pl={ 3 } w="49px" top="34px"/>
       <RollupStageBadge position="absolute" ml={{ lg: isExpanded ? 3 : '10px', xl: isCollapsed ? '10px' : 3 }} top="34px"/>
       <Box
         as="header"
@@ -75,19 +70,13 @@ const NavigationDesktop = () => {
         alignItems="center"
         flexDirection="row"
         w="100%"
-        pl={{ lg: isExpanded ? 3 : '15px', xl: isCollapsed ? '15px' : 3 }}
-        pr={{ lg: isExpanded ? 0 : '15px', xl: isCollapsed ? '15px' : 0 }}
+        pl={ isCollapsed ? '18px' : '14px' }
         h={ 10 }
         transitionProperty="padding"
         transitionDuration="normal"
         transitionTimingFunction="ease"
       >
-        <Box display={{ base: 'none', lg: isCollapsed === false ? 'block' : 'none', xl: isCollapsed ? 'none' : 'block' }}>
-          <NetworkLogo/>
-        </Box>
-        <Box display={{ base: 'none', lg: isCollapsed === false ? 'none' : 'block', xl: isCollapsed ? 'block' : 'none' }}>
-          <NetworkIcon/>
-        </Box>
+        <NetworkLogo isCollapsed={ isCollapsed }/>
       </Box>
       <Box as="nav" mt={ 6 } w="100%">
         <VStack as="ul" gap="1" alignItems="flex-start">
@@ -95,7 +84,7 @@ const NavigationDesktop = () => {
             if (isGroupItem(item)) {
               return <NavLinkGroup key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
             } else {
-              return <NavLink key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
+              return <NavLink isMainNav key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
             }
           }) }
         </VStack>
@@ -108,14 +97,13 @@ const NavigationDesktop = () => {
           </VStack>
         </Box>
       ) }
-      <NavigationPromoBanner isCollapsed={ isCollapsed }/>
       <IconSvg
         name="arrows/east-mini"
         width={ 6 }
         height={ 6 }
         _hover={{ color: 'hover' }}
         borderRadius="base"
-        bgColor="bg.primary"
+        bgColor={{ base: 'white', _dark: 'black' }}
         color={{ base: 'blackAlpha.400', _dark: 'whiteAlpha.400' }}
         borderWidth="1px"
         borderColor="border.divider"
@@ -123,7 +111,7 @@ const NavigationDesktop = () => {
         transformOrigin="center"
         position="absolute"
         top="104px"
-        left={{ lg: isExpanded ? '216px' : '80px', xl: isCollapsed ? '80px' : '216px' }}
+        left={{ lg: isExpanded ? '246px' : '80px', xl: isCollapsed ? '80px' : '246px' }}
         cursor="pointer"
         onClick={ handleTogglerClick }
         aria-label="Expand/Collapse menu"

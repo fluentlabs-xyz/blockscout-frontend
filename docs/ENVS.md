@@ -106,6 +106,7 @@ Also, be aware that if you customize the name of the currency or any of its deno
 | Variable | Type| Description | Compulsoriness | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_NETWORK_NAME | `string` | Displayed name of the network | Required | - | `Gnosis Chain` | v1.0.x+ |
+| NEXT_PUBLIC_CHAIN | `mainnet \| testnet \| devnet` | Fluent-specific chain preset selector used by custom Fluent frontend logic. | - | `testnet` | `mainnet` | fluent-fork |
 | NEXT_PUBLIC_NETWORK_SHORT_NAME | `string` | Used for SEO attributes (e.g, page description) | - | -  | `OoG` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_ID | `number` | Chain id, see [https://chainlist.org](https://chainlist.org) for the reference | Required (except for multichain) | -  | `99` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_RPC_URL | `string \| Array<string>` | Chain public RPC server url, see [https://chainlist.org](https://chainlist.org) for the reference. Can contain a single string value, or an array of urls. | - | - | `https://core.poa.network` | v1.0.x+ |
@@ -129,6 +130,8 @@ Also, be aware that if you customize the name of the currency or any of its deno
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_API_PROTOCOL | `http \| https` | Main API protocol | - | `https` | `http` | v1.0.x+ |
 | NEXT_PUBLIC_API_HOST | `string` | Main API host | Required (except for multichain) | - | `blockscout.com` | v1.0.x+ |
+| NEXT_PUBLIC_EXPLORER_API_HOST | `string` | Fluent-specific explorer API host override. Takes priority over the API host resolved from `NEXT_PUBLIC_CHAIN` preset. | - | - | `api-testnet.fluentscan.xyz` | fluent-fork |
+| NEXT_PUBLIC_EXPLORER_API_URL | `string` | Fluent-specific explorer API endpoint URL override. Takes priority over the API URL resolved from `NEXT_PUBLIC_CHAIN` preset and is used by Stats/Visualize API defaults. | - | - | `https://api-testnet.fluentscan.xyz` | fluent-fork |
 | NEXT_PUBLIC_API_PORT | `number` | Port where API is running on the host | - | - | `3001` | v1.0.x+ |
 | NEXT_PUBLIC_API_BASE_PATH | `string` | Base path for Main API endpoint url | - | - | `/poa/core` | v1.0.x+ |
 | NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL | `ws \| wss` | Main API websocket protocol | - | `wss` | `ws` | v1.0.x+ |
@@ -595,6 +598,7 @@ Ads are enabled by default on all self-hosted instances. If you would like to di
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_API_DOCS_TABS | `Array<TabId>` | Controls which tabs appear on the API documentation page. Possible values for `TabId` are `rest_api`, `eth_rpc_api`, `rpc_api`, and `graphql_api`. **Note** that this variable has a default value, so the feature is enabled by default. Pass an empty array to disable it. | - | `['rest_api','eth_rpc_api','rpc_api','graphql_api']` | `[]` | v2.3.x+ |
 | NEXT_PUBLIC_API_DOCS_ALERT_MESSAGE | `string` | Used for displaying custom alerts on the API documentation page. Could be a regular string or a HTML code. | - | - | `Hello world! 🤪` | v2.7.0+ |
+| NEXT_PUBLIC_API_SPEC_URL | `string` | Deprecated compatibility variable. Accepted by runtime validator but ignored by current API docs implementation (spec URL is resolved from backend configuration). | - | - | `https://raw.githubusercontent.com/blockscout/blockscout-api-v2-swagger/main/swagger.yaml` | fluent-fork |
 
 &nbsp;
 
@@ -1100,6 +1104,6 @@ This feature enables cross-chain transaction tracking and visualization, allowin
 
 To obtain the variable values, please refer to the [reCAPTCHA documentation](https://developers.google.com/recaptcha) and check the [Blockscout reCAPTCHA config docs](https://docs.blockscout.com/setup/configuration-options/recaptcha). Please note that we currently support only **reCAPTCHA v2 in invisible mode**, read more [here](https://developers.google.com/recaptcha/docs/versions#recaptcha_v2_invisible_recaptcha_badge).
 
-| Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
-| --- | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_RE_CAPTCHA_APP_SITE_KEY | `string` | Google reCAPTCHA v2 site key | - | - | `<your-site-key>` | v1.0.x+ |
+| Variable                            | Type     | Description                  | Compulsoriness | Default value | Example value     | Version |
+|:------------------------------------|----------|------------------------------|----------------|---------------|-------------------|---------|
+| NEXT_PUBLIC_RE_CAPTCHA_APP_SITE_KEY | `string` | Google reCAPTCHA v2 site key | -              | -             | `<your-site-key>` | v1.0.x+ |
