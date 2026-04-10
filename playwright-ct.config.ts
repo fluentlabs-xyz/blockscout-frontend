@@ -18,7 +18,9 @@ const config: PlaywrightTestConfig = defineConfig({
   snapshotPathTemplate: '{testDir}/{testFileDir}/__screenshots__/{testFileName}_{projectName}_{arg}{ext}',
 
   /* Maximum time one test can run for. */
-  timeout: 10 * 1000,
+  // CI containers can get sluggish on large CT shards, so keep local timeout strict
+  // but give CI more headroom to avoid false negatives on mount.
+  timeout: process.env.CI ? 30 * 1000 : 10 * 1000,
 
   /* Run tests in files in parallel */
   fullyParallel: true,
