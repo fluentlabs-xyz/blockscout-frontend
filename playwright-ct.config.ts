@@ -119,6 +119,11 @@ const config: PlaywrightTestConfig = defineConfig({
 
           // Mock for @specify-sh/sdk to avoid build issues in tests
           { find: '@specify-sh/sdk', replacement: './playwright/mocks/modules/@specify-sh/sdk.js' },
+
+          // Next.js internals may reference Node built-ins when bundled by Vite in CT mode
+          // (e.g. resolving `next/router`), so we stub them for browser tests.
+          { find: /^fs$/, replacement: './playwright/mocks/modules/fs.js' },
+          { find: /^node:fs$/, replacement: './playwright/mocks/modules/fs.js' },
         ],
       },
       define: {
