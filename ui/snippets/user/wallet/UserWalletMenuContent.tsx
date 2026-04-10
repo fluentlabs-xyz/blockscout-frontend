@@ -1,11 +1,8 @@
-import { Box, Flex, Spinner, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import delay from 'lib/delay';
 import { Button } from 'toolkit/chakra/button';
-import { IconButton } from 'toolkit/chakra/icon-button';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
-import IconSvg from 'ui/shared/IconSvg';
 
 import UserWalletAutoConnectAlert from '../UserWalletAutoConnectAlert';
 
@@ -18,12 +15,7 @@ interface Props {
   onOpenWallet: () => void;
 }
 
-const UserWalletMenuContent = ({ isAutoConnectDisabled, address, domain, isReconnecting, onDisconnect, onOpenWallet }: Props) => {
-
-  const handleOpenWalletClick = React.useCallback(async() => {
-    await delay(100);
-    onOpenWallet();
-  }, [ onOpenWallet ]);
+const UserWalletMenuContent = ({ isAutoConnectDisabled, address, domain, onDisconnect }: Props) => {
 
   return (
     <Box>
@@ -39,16 +31,6 @@ const UserWalletMenuContent = ({ isAutoConnectDisabled, address, domain, isRecon
           fontSize="sm"
           fontWeight={ 700 }
         />
-        { isReconnecting ? <Spinner size="sm" m="2px" flexShrink={ 0 }/> : (
-          <IconButton
-            aria-label="Open wallet"
-            variant="icon_secondary"
-            size="2xs"
-            onClick={ handleOpenWalletClick }
-          >
-            <IconSvg name="gear"/>
-          </IconButton>
-        ) }
       </Flex>
       <Button
         size="sm"
