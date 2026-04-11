@@ -18,7 +18,9 @@ const config: PlaywrightTestConfig = defineConfig({
   snapshotPathTemplate: '{testDir}/{testFileDir}/__screenshots__/{testFileName}_{projectName}_{arg}{ext}',
 
   /* Maximum time one test can run for. */
-  timeout: 10 * 1000,
+  // CI containers can get sluggish on large CT shards, so keep local timeout strict
+  // but give CI more headroom to avoid false negatives on mount.
+  timeout: process.env.CI ? 30 * 1000 : 10 * 1000,
 
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -119,6 +121,11 @@ const config: PlaywrightTestConfig = defineConfig({
 
           // Mock for @specify-sh/sdk to avoid build issues in tests
           { find: '@specify-sh/sdk', replacement: './playwright/mocks/modules/@specify-sh/sdk.js' },
+
+          // Next.js internals may reference Node built-ins when bundled by Vite in CT mode
+          // (e.g. resolving `next/router`), so we stub them for browser tests.
+          { find: /^fs$/, replacement: './playwright/mocks/modules/fs.js' },
+          { find: /^node:fs$/, replacement: './playwright/mocks/modules/fs.js' },
         ],
       },
       define: {

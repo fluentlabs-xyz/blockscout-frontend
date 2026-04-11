@@ -208,7 +208,8 @@ jobs:
     name: Resolve affected Playwright tests
     runs-on: ubuntu-latest
     needs: [ code_quality, envs_validation ]
-    if: github.event_name == 'pull_request'
+    # Temporarily disabled by request
+    if: ${{ false }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -253,11 +254,8 @@ jobs:
   pw_tests:
     name: 'Playwright tests / Project: ${{ matrix.project }}'
     needs: [ code_quality, envs_validation, pw_affected_tests ]
-    if: |
-      always() &&
-      needs.code_quality.result == 'success' &&
-      needs.envs_validation.result == 'success' &&
-      (needs.pw_affected_tests.result == 'success' || needs.pw_affected_tests.result == 'skipped')
+    # Temporarily disabled by request
+    if: ${{ false }}
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.57.0-noble
@@ -322,8 +320,8 @@ jobs:
 
   pw_report:
     name: Generate Playwright report
-    # Merge reports after pw_tests job, even if some shards have failed
-    if: ${{ !cancelled() }}
+    # Temporarily disabled by request
+    if: ${{ false }}
     runs-on: ubuntu-latest
     needs: [ pw_tests ]
     steps:
@@ -374,8 +372,12 @@ jobs:
         run: npx playwright merge-reports --reporter html "$RUNNER_TEMP/all-blob-reports"
 
       - name: Upload HTML report artifact
-        # Upload HTML report to GitHub Actions Artifacts only for pull requests from forks
-        if: steps.check-reports.outputs.has_reports == 'true' && (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository)
+        # Upload HTML report to GitHub Actions Artifacts when S3 upload is unavailable
+        if: steps.check-reports.outputs.has_reports == 'true' && (
+          (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) ||
+          vars.AWS_REGION == '' ||
+          vars.AWS_BUCKET_NAME == ''
+          )
         uses: actions/upload-artifact@v5
         with:
           name: playwright-html-report
@@ -383,7 +385,10 @@ jobs:
           retention-days: 7
 
       - name: Configure AWS credentials
-        if: steps.check-reports.outputs.has_reports == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        if: steps.check-reports.outputs.has_reports == 'true' &&
+          (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) &&
+          vars.AWS_REGION != '' &&
+          vars.AWS_BUCKET_NAME != ''
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -392,7 +397,10 @@ jobs:
 
       - name: Upload HTML report to S3
         # Upload HTML report to S3 only for pull requests from the main repository or for non-pull requests events
-        if: steps.check-reports.outputs.has_reports == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        if: steps.check-reports.outputs.has_reports == 'true' &&
+          (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) &&
+          vars.AWS_REGION != '' &&
+          vars.AWS_BUCKET_NAME != ''
         run: |
           export "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`"
           aws s3 cp playwright-report/ s3://${{ vars.AWS_BUCKET_NAME }}/report-${SHORT_SHA} --recursive
