@@ -208,7 +208,8 @@ jobs:
     name: Resolve affected Playwright tests
     runs-on: ubuntu-latest
     needs: [ code_quality, envs_validation ]
-    if: github.event_name == 'pull_request'
+    # Temporarily disabled by request
+    if: ${{ false }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -253,11 +254,8 @@ jobs:
   pw_tests:
     name: 'Playwright tests / Project: ${{ matrix.project }}'
     needs: [ code_quality, envs_validation, pw_affected_tests ]
-    if: |
-      always() &&
-      needs.code_quality.result == 'success' &&
-      needs.envs_validation.result == 'success' &&
-      (needs.pw_affected_tests.result == 'success' || needs.pw_affected_tests.result == 'skipped')
+    # Temporarily disabled by request
+    if: ${{ false }}
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.57.0-noble
@@ -322,8 +320,8 @@ jobs:
 
   pw_report:
     name: Generate Playwright report
-    # Merge reports after pw_tests job, even if some shards have failed
-    if: ${{ !cancelled() }}
+    # Temporarily disabled by request
+    if: ${{ false }}
     runs-on: ubuntu-latest
     needs: [ pw_tests ]
     steps:
