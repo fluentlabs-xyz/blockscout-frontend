@@ -78,7 +78,6 @@ export const PAGE_TYPE_DICT: Record<Route['pathname'], string> = {
   '/chain/[chain_slug]/block/countdown/[height]': 'Chain block countdown',
   '/chain/[chain_slug]/csv-export': 'Chain export data to CSV',
   '/chain/[chain_slug]/op/[hash]': 'Chain user operation details',
-  '/chain/[chain_slug]/runtime-upgrades': 'Chain runtime upgrades',
   '/chain/[chain_slug]/token/[hash]': 'Chain token details',
   '/chain/[chain_slug]/token/[hash]/instance/[id]': 'Chain token NFT instance',
   '/chain/[chain_slug]/tx/[hash]': 'Chain transaction details',

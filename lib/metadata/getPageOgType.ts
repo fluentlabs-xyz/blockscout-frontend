@@ -80,7 +80,6 @@ const OG_TYPE_DICT: Record<Route['pathname'], OGPageType> = {
   '/chain/[chain_slug]/block/countdown/[height]': 'Regular page',
   '/chain/[chain_slug]/csv-export': 'Regular page',
   '/chain/[chain_slug]/op/[hash]': 'Regular page',
-  '/chain/[chain_slug]/runtime-upgrades': 'Regular page',
   '/chain/[chain_slug]/token/[hash]': 'Regular page',
   '/chain/[chain_slug]/token/[hash]/instance/[id]': 'Regular page',
   '/chain/[chain_slug]/tx/[hash]': 'Regular page',

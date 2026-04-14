@@ -83,7 +83,6 @@ const TEMPLATE_MAP: Record<Route['pathname'], string> = {
   '/chain/[chain_slug]/block/countdown/[height]': DEFAULT_TEMPLATE,
   '/chain/[chain_slug]/csv-export': DEFAULT_TEMPLATE,
   '/chain/[chain_slug]/op/[hash]': DEFAULT_TEMPLATE,
-  '/chain/[chain_slug]/runtime-upgrades': DEFAULT_TEMPLATE,
   '/chain/[chain_slug]/token/[hash]': DEFAULT_TEMPLATE,
   '/chain/[chain_slug]/token/[hash]/instance/[id]': DEFAULT_TEMPLATE,
   '/chain/[chain_slug]/tx/[hash]': DEFAULT_TEMPLATE,
