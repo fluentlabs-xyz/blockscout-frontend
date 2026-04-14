@@ -43,7 +43,9 @@ jobs:
           file: ./Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ env.IMAGE_NAME }}:v2.7-${{ env.SHORT_SHA }}
+          tags: |
+            ${{ env.IMAGE_NAME }}:v2.7-${{ env.SHORT_SHA }}
+            ${{ env.IMAGE_NAME }}:latest
           build-args: |
             GIT_COMMIT_SHA=${{ env.SHORT_SHA }}
             GIT_TAG=
