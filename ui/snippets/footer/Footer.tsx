@@ -71,11 +71,12 @@ const Footer = () => {
   const renderBlockscoutInfo = React.useCallback((gridArea?: GridProps['gridArea']) => {
     return (
       <Box gridArea={ gridArea }>
-        <Flex columnGap={ 2 } fontSize="xs" lineHeight={ 5 } alignItems="center" color="text">
+        <Flex columnGap={ 2 } fontSize="xs" lineHeight={ 2 } alignItems="center" color="text">
           <Text display="flex" alignItems="center" h="32px">
             Made with
           </Text>
           <Link noIcon href="https://www.blockscout.com" external display="inline-flex" color={ logoColor } _hover={{ color: 'cyan.200' }}>
+            &nbsp;
             <IconSvg
               name="networks/logo-placeholder"
               width="80px"
@@ -85,24 +86,22 @@ const Footer = () => {
           <Text display="flex" alignItems="center" h="32px">
             (GPLv3).
           </Text>
+          <Text display="flex" alignItems="center" h="32px">
+            Based on blockscout/frontend.
+          </Text>
+          <Link
+            noIcon
+            external
+            href="https://github.com/fluentlabs-xyz/blockscout-frontend"
+            height="32px"
+            display="inline-flex"
+            color={ logoColor }
+            _hover={{ color: 'cyan.200' }}
+          >
+            Modified by Fluent Labs.
+          </Link>
         </Flex>
-        <Box mt={ 2 } alignItems="start" fontSize="xs" lineHeight={ 5 }>
-          <Flex columnGap={ 2 } fontSize="xs" lineHeight={ 5 } alignItems="center" color="text">
-            <Text display="flex" alignItems="center" h="32px">
-              Based on blockscout/frontend
-            </Text>
-            <Link
-              noIcon
-              external
-              href="https://github.com/fluentlabs-xyz/blockscout-frontend"
-              height="32px"
-              display="inline-flex"
-              color={ logoColor }
-              _hover={{ color: 'cyan.200' }}
-            >
-              modified by Fluent Labs.
-            </Link>
-          </Flex>
+        <Box mt={ 2 } alignItems="start" fontSize="xs" lineHeight={ 2 }>
           <Text height="32px">
             Copyright © Blockscout Limited 2023-{ (new Date()).getFullYear() }
           </Text>
