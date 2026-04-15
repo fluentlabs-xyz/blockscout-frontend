@@ -165,7 +165,8 @@ export default function useNavItems(): ReturnType {
       rollupFeature.type === 'optimistic' ||
       rollupFeature.type === 'arbitrum' ||
       rollupFeature.type === 'zkEvm' ||
-      rollupFeature.type === 'scroll'
+      rollupFeature.type === 'scroll' ||
+      rollupFeature.type === 'fluent'
     )) {
       blockchainNavItems = [
         [

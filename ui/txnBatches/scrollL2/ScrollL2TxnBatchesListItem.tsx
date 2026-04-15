@@ -20,7 +20,7 @@ const rollupFeature = config.features.rollup;
 type Props = { item: ScrollL2TxnBatch; isLoading?: boolean };
 
 const ScrollL2TxnBatchesListItem = ({ item, isLoading }: Props) => {
-  if (!rollupFeature.isEnabled || rollupFeature.type !== 'scroll') {
+  if (!rollupFeature.isEnabled || (rollupFeature.type !== 'scroll' && rollupFeature.type !== 'fluent')) {
     return null;
   }
 

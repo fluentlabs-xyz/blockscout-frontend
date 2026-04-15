@@ -17,7 +17,7 @@ const rollupFeature = config.features.rollup;
 type Props = { item: ScrollL2MessageItem; isLoading?: boolean };
 
 const ScrollL2WithdrawalsTableItem = ({ item, isLoading }: Props) => {
-  if (!rollupFeature.isEnabled || rollupFeature.type !== 'scroll') {
+  if (!rollupFeature.isEnabled || (rollupFeature.type !== 'scroll' && rollupFeature.type !== 'fluent')) {
     return null;
   }
 
