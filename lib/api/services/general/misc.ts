@@ -255,10 +255,10 @@ export const GENERAL_API_MISC_RESOURCES = {
 
   // RUNTIME UPGRADES
   runtime_upgrades: {
-    path: '/api/v2/runtime-upgrades',
+    path: '/api/v2/fluent/runtime-upgrades',
   },
   runtime_upgrade: {
-    path: '/api/v2/runtime-upgrades/:genesis_hash',
+    path: '/api/v2/fluent/runtime-upgrades/:genesis_hash',
     pathParams: [ 'genesis_hash' as const ],
   },
 
