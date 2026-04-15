@@ -532,7 +532,7 @@ Ads are enabled by default on all self-hosted instances. If you would like to di
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_ROLLUP_TYPE | `'optimistic' \| 'arbitrum' \| 'shibarium' \| 'zkEvm' \| 'zkSync' \| 'scroll'` | Rollup chain type | Required | - | `'optimistic'` | v1.24.0+ |
+| NEXT_PUBLIC_ROLLUP_TYPE | `'optimistic' \| 'arbitrum' \| 'shibarium' \| 'zkEvm' \| 'zkSync' \| 'scroll' \| 'fluent'` | Rollup chain type | Required | - | `'optimistic'` | v1.24.0+ |
 | NEXT_PUBLIC_ROLLUP_PARENT_CHAIN | `ParentChain`, see details [below](#parent-chain-configuration-properties) | Configuration parameters for the parent chain. | Required | - | `{'baseUrl':'https://explorer.duckchain.io'}` | v1.38.0+ |
 | NEXT_PUBLIC_ROLLUP_L2_WITHDRAWAL_URL | `string` | URL for rollup to parent chain withdrawals (Optimistic stack only) | - | - | `https://app.optimism.io/bridge/withdraw` | v1.24.0+ |
 | NEXT_PUBLIC_ROLLUP_LAYER_NUMBER | `number` | Layer number of the rollup | - | `2` | `3` | v2.7.0+ |

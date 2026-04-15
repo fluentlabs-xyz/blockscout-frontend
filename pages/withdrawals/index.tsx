@@ -25,8 +25,12 @@ const Withdrawals = dynamic(() => {
     return import('ui/pages/ZkEvmL2Withdrawals');
   }
 
-  if (rollupFeature.isEnabled && (rollupFeature.type === 'scroll' || rollupFeature.type === 'fluent')) {
+  if (rollupFeature.isEnabled && rollupFeature.type === 'scroll') {
     return import('ui/pages/ScrollL2Withdrawals');
+  }
+
+  if (rollupFeature.isEnabled && rollupFeature.type === 'fluent') {
+    return import('ui/pages/FluentL2Withdrawals');
   }
 
   if (beaconChainFeature.isEnabled) {

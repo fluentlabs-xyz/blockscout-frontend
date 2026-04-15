@@ -62,6 +62,8 @@ const BlockDetails = ({ query }: Props) => {
 
   const { data, isPlaceholderData } = query;
 
+  const hideRollupBlockReward = rollupFeature.isEnabled && rollupFeature.type !== 'fluent';
+
   const handlePrevNextClick = React.useCallback((direction: 'prev' | 'next') => {
     if (!data) {
       return;
@@ -82,7 +84,7 @@ const BlockDetails = ({ query }: Props) => {
   const validatorTitle = getNetworkValidatorTitle();
 
   const rewardBreakDown = (() => {
-    if (rollupFeature.isEnabled || totalReward.isEqualTo(ZERO) || txFees.isEqualTo(ZERO) || burntFees.isEqualTo(ZERO)) {
+    if (hideRollupBlockReward || totalReward.isEqualTo(ZERO) || txFees.isEqualTo(ZERO) || burntFees.isEqualTo(ZERO)) {
       return null;
     }
 
@@ -380,7 +382,7 @@ const BlockDetails = ({ query }: Props) => {
         </>
       ) }
 
-      { !rollupFeature.isEnabled && !totalReward.isEqualTo(ZERO) && !config.UI.views.block.hiddenFields?.total_reward && (
+      { !hideRollupBlockReward && !totalReward.isEqualTo(ZERO) && !config.UI.views.block.hiddenFields?.total_reward && (
         <>
           <DetailedInfo.ItemLabel
             hint={
