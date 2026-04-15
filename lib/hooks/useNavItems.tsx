@@ -112,13 +112,13 @@ export default function useNavItems(): ReturnType {
     const rollupDeposits = {
       text: `Deposits (${ layerLabels.parent }${ rightLineArrow }${ layerLabels.current })`,
       nextRoute: { pathname: '/deposits' as const },
-      icon: 'arrows/south-east',
+      icon: 'navigation/deposits',
       isActive: pathname === '/deposits',
     };
     const rollupWithdrawals = {
       text: `Withdrawals (${ layerLabels.current }${ rightLineArrow }${ layerLabels.parent })`,
       nextRoute: { pathname: '/withdrawals' as const },
-      icon: 'arrows/north-east',
+      icon: 'navigation/withdrawals',
       isActive: pathname === '/withdrawals',
     };
     const rollupTxnBatches = {
@@ -246,13 +246,13 @@ export default function useNavItems(): ReturnType {
           {
             text: 'Deposits',
             nextRoute: { pathname: '/deposits' as const },
-            icon: 'arrows/south-east',
+            icon: 'navigation/deposits',
             isActive: pathname === '/deposits',
           },
           {
             text: 'Withdrawals',
             nextRoute: { pathname: '/withdrawals' as const },
-            icon: 'arrows/north-east',
+            icon: 'navigation/withdrawals',
             isActive: pathname === '/withdrawals',
           },
         ] : []),
