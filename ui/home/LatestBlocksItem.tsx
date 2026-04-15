@@ -22,6 +22,8 @@ type Props = {
 
 const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
   const totalReward = getBlockTotalReward(block);
+  const hideRollupRewardAndMiner = config.features.rollup.isEnabled && config.features.rollup.type !== 'fluent';
+
   return (
     <Box
       animation={ animation }
@@ -62,7 +64,7 @@ const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
           <Skeleton loading={ isLoading } color="white"><span>{ block.transactions_count }</span></Skeleton>
         </Flex>
 
-        { !config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.total_reward && (
+        { !hideRollupRewardAndMiner && !config.UI.views.block.hiddenFields?.total_reward && (
           <Flex justify="space-between">
             <Skeleton loading={ isLoading } color="grey.50">Reward</Skeleton>
             <Skeleton loading={ isLoading } color="white">
@@ -73,7 +75,7 @@ const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
           </Flex>
         ) }
 
-        { !config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.miner && (
+        { !hideRollupRewardAndMiner && !config.UI.views.block.hiddenFields?.miner && (
           <Flex justify="space-between" w="100%">
             <Skeleton loading={ isLoading } color="grey.50" textTransform="capitalize">{ getNetworkValidatorTitle() }</Skeleton>
             <AddressEntity

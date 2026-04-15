@@ -30,9 +30,10 @@ import LatestBlocksItem from './LatestBlocksItem';
 
 const LatestBlocks = () => {
   const isMobile = useIsMobile();
+  const hideRollupRewardAndMiner = config.features.rollup.isEnabled && config.features.rollup.type !== 'fluent';
   // const blocksMaxCount = isMobile ? 2 : 3;
   let blocksMaxCount: number;
-  if (config.features.rollup.isEnabled || config.UI.views.block.hiddenFields?.total_reward) {
+  if (hideRollupRewardAndMiner || config.UI.views.block.hiddenFields?.total_reward) {
     blocksMaxCount = isMobile ? 4 : 5;
   } else {
     blocksMaxCount = isMobile ? 2 : 3;
