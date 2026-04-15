@@ -158,7 +158,13 @@ const TxDetails = ({ data, isLoading, socketStatus, noTxActions }: Props) => {
       >
         {
           rollupFeature.isEnabled &&
-          (rollupFeature.type === 'zkEvm' || rollupFeature.type === 'zkSync' || rollupFeature.type === 'arbitrum' || rollupFeature.type === 'scroll') ?
+          (
+            rollupFeature.type === 'zkEvm' ||
+            rollupFeature.type === 'zkSync' ||
+            rollupFeature.type === 'arbitrum' ||
+            rollupFeature.type === 'scroll' ||
+            rollupFeature.type === 'fluent'
+          ) ?
             `${ layerLabels.current } status and method` :
             'Status and method'
         }

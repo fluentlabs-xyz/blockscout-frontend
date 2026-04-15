@@ -281,43 +281,43 @@ export const GENERAL_API_ROLLUP_RESOURCES = {
     path: '/api/v2/shibarium/withdrawals/count',
   },
 
-  // SCROLL
+  // SCROLL / FLUENT
   scroll_l2_deposits: {
-    path: '/api/v2/scroll/deposits',
+    path: '/api/v2/fluent/deposits',
     filterFields: [],
     paginated: true,
   },
   scroll_l2_deposits_count: {
-    path: '/api/v2/scroll/deposits/count',
+    path: '/api/v2/fluent/deposits/count',
   },
   scroll_l2_withdrawals: {
-    path: '/api/v2/scroll/withdrawals',
+    path: '/api/v2/fluent/withdrawals',
     filterFields: [],
     paginated: true,
   },
   scroll_l2_withdrawals_count: {
-    path: '/api/v2/scroll/withdrawals/count',
+    path: '/api/v2/fluent/withdrawals/count',
   },
   scroll_l2_txn_batches: {
-    path: '/api/v2/scroll/batches',
+    path: '/api/v2/fluent/batches',
     filterFields: [],
     paginated: true,
   },
   scroll_l2_txn_batches_count: {
-    path: '/api/v2/scroll/batches/count',
+    path: '/api/v2/fluent/batches/count',
   },
   scroll_l2_txn_batch: {
-    path: '/api/v2/scroll/batches/:number',
+    path: '/api/v2/fluent/batches/:number',
     pathParams: [ 'number' as const ],
   },
   scroll_l2_txn_batch_txs: {
-    path: '/api/v2/transactions/scroll-batch/:number',
+    path: '/api/v2/transactions/fluent-batch/:number',
     pathParams: [ 'number' as const ],
     filterFields: [],
     paginated: true,
   },
   scroll_l2_txn_batch_blocks: {
-    path: '/api/v2/blocks/scroll-batch/:number',
+    path: '/api/v2/blocks/fluent-batch/:number',
     pathParams: [ 'number' as const ],
     filterFields: [],
     paginated: true,

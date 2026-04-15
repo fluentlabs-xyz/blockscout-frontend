@@ -22,6 +22,7 @@ const Batches = dynamic(() => {
     case 'arbitrum':
       return import('ui/pages/ArbitrumL2TxnBatches');
     case 'scroll':
+    case 'fluent':
       return import('ui/pages/ScrollL2TxnBatches');
   }
   throw new Error('Txn batches feature is not enabled.');
