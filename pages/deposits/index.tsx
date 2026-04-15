@@ -25,8 +25,12 @@ const Deposits = dynamic(() => {
     return import('ui/pages/ZkEvmL2Deposits');
   }
 
-  if (rollupFeature.isEnabled && (rollupFeature.type === 'scroll' || rollupFeature.type === 'fluent')) {
+  if (rollupFeature.isEnabled && rollupFeature.type === 'scroll') {
     return import('ui/pages/ScrollL2Deposits');
+  }
+
+  if (rollupFeature.isEnabled && rollupFeature.type === 'fluent') {
+    return import('ui/pages/FluentL2Deposits');
   }
 
   if (beaconChainFeature.isEnabled && !beaconChainFeature.withdrawalsOnly) {

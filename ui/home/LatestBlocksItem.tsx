@@ -1,6 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
 import React from 'react';
 
+import { getFeaturePayload } from 'configs/app/features/types';
 import type { Block } from 'types/api/block';
 
 import config from 'configs/app';
@@ -22,7 +23,8 @@ type Props = {
 
 const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
   const totalReward = getBlockTotalReward(block);
-  const hideRollupRewardAndMiner = config.features.rollup.isEnabled && config.features.rollup.type !== 'fluent';
+  const rollupFeature = getFeaturePayload(config.features.rollup);
+  const hideRollupRewardAndMiner = Boolean(rollupFeature && rollupFeature.type !== 'fluent');
 
   return (
     <Box

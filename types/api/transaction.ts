@@ -106,6 +106,7 @@ export type Transaction = {
   max_fee_per_blob_gas?: string;
   arbitrum?: ArbitrumTransactionData;
   scroll?: ScrollTransactionData;
+  fluent?: ScrollTransactionData;
   // EIP-7702
   authorization_list?: Array<TxAuthorization>;
   // Interop

@@ -24,8 +24,9 @@ const Batch = dynamic(() => {
     case 'zkSync':
       return import('ui/pages/ZkSyncL2TxnBatch');
     case 'scroll':
-    case 'fluent':
       return import('ui/pages/ScrollL2TxnBatch');
+    case 'fluent':
+      return import('ui/pages/FluentL2TxnBatch');
   }
   throw new Error('Txn batches feature is not enabled.');
 }, { ssr: false });

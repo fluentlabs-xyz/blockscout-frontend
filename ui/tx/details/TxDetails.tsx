@@ -81,6 +81,7 @@ const rollupFeature = config.features.rollup;
 
 const TxDetails = ({ data, isLoading, socketStatus, noTxActions }: Props) => {
   const [ isExpanded, setIsExpanded ] = React.useState(false);
+  const rollupTxData = data?.fluent ?? data?.scroll;
 
   const handleCutLinkClick = React.useCallback(() => {
     setIsExpanded((flag) => !flag);
@@ -283,7 +284,7 @@ const TxDetails = ({ data, isLoading, socketStatus, noTxActions }: Props) => {
       >
         Block
       </DetailedInfo.ItemLabel>
-      <DetailedInfo.ItemValue multiRow={ Boolean(data.scroll?.l2_block_status) }>
+      <DetailedInfo.ItemValue multiRow={ Boolean(rollupTxData?.l2_block_status) }>
         { data.block_number === null ?
           <Text>Pending</Text> : (
             <BlockEntity
@@ -300,10 +301,10 @@ const TxDetails = ({ data, isLoading, socketStatus, noTxActions }: Props) => {
             </Skeleton>
           </>
         ) }
-        { data.scroll?.l2_block_status && (
+        { rollupTxData?.l2_block_status && (
           <>
             <TextSeparator/>
-            <VerificationSteps steps={ SCROLL_L2_BLOCK_STATUSES } currentStep={ data.scroll.l2_block_status } isLoading={ isLoading }/>
+            <VerificationSteps steps={ SCROLL_L2_BLOCK_STATUSES } currentStep={ rollupTxData.l2_block_status } isLoading={ isLoading }/>
           </>
         ) }
       </DetailedInfo.ItemValue>
@@ -690,7 +691,7 @@ const TxDetails = ({ data, isLoading, socketStatus, noTxActions }: Props) => {
         </>
       ) }
 
-      { data.scroll?.l1_gas_used !== undefined && (
+      { rollupTxData?.l1_gas_used !== undefined && (
         <>
           <DetailedInfo.ItemLabel
             hint={ `Total gas used on ${ layerLabels.parent }` }
@@ -699,7 +700,7 @@ const TxDetails = ({ data, isLoading, socketStatus, noTxActions }: Props) => {
             { layerLabels.parent } Gas used
           </DetailedInfo.ItemLabel>
           <DetailedInfo.ItemValue>
-            <Skeleton loading={ isLoading }>{ BigNumber(data.scroll?.l1_gas_used || 0).toFormat() }</Skeleton>
+            <Skeleton loading={ isLoading }>{ BigNumber(rollupTxData?.l1_gas_used || 0).toFormat() }</Skeleton>
           </DetailedInfo.ItemValue>
         </>
       ) }
@@ -903,7 +904,7 @@ const TxDetails = ({ data, isLoading, socketStatus, noTxActions }: Props) => {
           </>
         ) }
 
-        <TxDetailsOther nonce={ data.nonce } type={ data.type } position={ data.position } queueIndex={ data.scroll?.queue_index }/>
+        <TxDetailsOther nonce={ data.nonce } type={ data.type } position={ data.position } queueIndex={ rollupTxData?.queue_index }/>
 
         <DetailedInfo.ItemLabel
           hint="Binary data included with the transaction. See logs tab for additional info"
