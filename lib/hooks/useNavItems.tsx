@@ -187,6 +187,8 @@ export default function useNavItems(): ReturnType {
           topAccounts,
           validators,
           verifiedContracts,
+        ].filter(Boolean) as Array<NavItem>,
+        [
           runtimeUpgrades,
           mudWorlds,
           nameLookup,

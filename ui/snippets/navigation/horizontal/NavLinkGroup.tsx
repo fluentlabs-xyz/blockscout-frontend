@@ -66,7 +66,18 @@ const NavLinkGroup = ({ item, onMouseOver, hideSublinks }: Props) => {
                 }
 
                 return (
-                  <chakra.ul key={ index } display="flex" flexDir="column" rowGap={ 1 }>
+                  <chakra.ul
+                    key={ index }
+                    display="flex"
+                    flexDir="column"
+                    rowGap={ 1 }
+                    _notLast={{
+                      mr: 3,
+                      pr: 3,
+                      borderRightWidth: '1px',
+                      borderColor: 'border.divider',
+                    }}
+                  >
                     { subItem.map((navItem) => <NavLink noIcon key={ navItem.text } item={ navItem }/>) }
                   </chakra.ul>
                 );
