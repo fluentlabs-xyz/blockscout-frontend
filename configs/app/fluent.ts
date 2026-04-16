@@ -10,7 +10,7 @@ export const DEVNET_EXPLORER_HOST = 'devnet.fluentscan.xyz';
 export const DEVNET_EXPLORER_URL = `https://${ DEVNET_EXPLORER_HOST }`;
 export const DEVNET_EXPLORER_API_HOST = 'api-devnet.fluentscan.xyz';
 export const DEVNET_EXPLORER_API_URL = `https://${ DEVNET_EXPLORER_API_HOST }`;
-export const DEVNET_RPC_URL = 'https://rpc.dev.gblend.xyz';
+export const DEVNET_RPC_URL = 'https://rpc.devnet.fluent.xyz';
 export const DEVNET_NETWORK_NAME = 'Fluent Developer Preview';
 
 export const MAINNET_NETWORK = 'fluent';
