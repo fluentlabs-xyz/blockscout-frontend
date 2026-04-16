@@ -7,6 +7,7 @@ import type {
   FormFieldsMultiPartFile,
   FormFieldsStandardInput,
   FormFieldsStandardInputZk,
+  FormFieldsFluent,
   FormFieldsStylusGitHubRepo,
   FormFieldsVyperContract,
   FormFieldsVyperMultiPartFile,
@@ -32,6 +33,7 @@ export const SUPPORTED_VERIFICATION_METHODS: Array<SmartContractVerificationMeth
   'vyper-multi-part',
   'vyper-standard-input',
   'stylus-github-repository',
+  'fluent',
 ];
 
 export const METHOD_LABELS: Record<SmartContractVerificationMethod, string> = {
@@ -45,6 +47,7 @@ export const METHOD_LABELS: Record<SmartContractVerificationMethod, string> = {
   'solidity-hardhat': 'Solidity (Hardhat)',
   'solidity-foundry': 'Solidity (Foundry)',
   'stylus-github-repository': 'Stylus (GitHub repository)',
+  fluent: 'Fluent (Rust)',
 };
 
 export const DEFAULT_VALUES: Record<SmartContractVerificationMethod, FormFields> = {
@@ -136,6 +139,23 @@ export const DEFAULT_VALUES: Record<SmartContractVerificationMethod, FormFields>
     repository_url: '',
     commit_hash: '',
     path_prefix: '',
+    license_type: [],
+  },
+  fluent: {
+    address: '',
+    method: [ 'fluent' ],
+    name: '',
+    compiler: [],
+    abi: '',
+    source_type: [ 'git' ],
+    repository_url: '',
+    commit_ref: '',
+    archive_content: '',
+    features: '',
+    rust_flags: '',
+    no_default_features: false,
+    rust_toolchain: '',
+    manifest_path: '',
     license_type: [],
   },
 };
@@ -302,6 +322,24 @@ export function prepareRequestBody(data: FormFields): FetchParams['body'] {
       };
     }
 
+    case 'fluent': {
+      const _data = data as FormFieldsFluent;
+
+      return {
+        contract_name: _data.name,
+        abi: parseJsonArray(_data.abi),
+        compile_settings: {
+          sdk_version: _data.compiler?.[0],
+          features: splitMultilineValue(_data.features),
+          rust_flags: splitMultilineValue(_data.rust_flags),
+          no_default_features: _data.no_default_features,
+          rust_toolchain: _data.rust_toolchain || undefined,
+          manifest_path: _data.manifest_path || undefined,
+        },
+        ...(getFluentSourceBody(_data)),
+      };
+    }
+
     default: {
       return {};
     }
@@ -334,13 +372,51 @@ function addFilesToFormData(body: FormData, files: Array<File> | undefined, fiel
   }
 }
 
+function splitMultilineValue(value: string | undefined) {
+  const items = value?.split('\n').map((item) => item.trim()).filter(Boolean);
+
+  return items?.length ? items : undefined;
+}
+
+function parseJsonArray(value: string) {
+  const parsed = JSON.parse(value) as Array<unknown>;
+
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+function getFluentSourceBody(data: FormFieldsFluent) {
+  if (data.source_type[0] === 'archive') {
+    return {
+      archive_source: {
+        content: data.archive_content,
+      },
+    };
+  }
+
+  return {
+    git_source: {
+      repository_url: data.repository_url,
+      commit_ref: data.commit_ref,
+    },
+  };
+}
+
 const API_ERROR_TO_FORM_FIELD: Record<keyof SmartContractVerificationError, FieldPath<FormFields>> = {
   contract_source_code: 'code',
   files: 'sources',
   interfaces: 'interfaces',
   compiler_version: 'compiler',
+  sdk_version: 'compiler',
   constructor_arguments: 'constructor_args',
   name: 'name',
+  abi: 'abi',
+  repository_url: 'repository_url',
+  commit_ref: 'commit_ref',
+  archive_content: 'archive_content',
+  manifest_path: 'manifest_path',
+  rust_toolchain: 'rust_toolchain',
+  features: 'features',
+  rust_flags: 'rust_flags',
 };
 
 export function formatSocketErrors(errors: SmartContractVerificationError): Array<[FieldPath<FormFields>, ErrorOption] | undefined> {

@@ -112,7 +112,7 @@ export interface SmartContractExternalLibrary {
 // VERIFICATION
 
 export type SmartContractVerificationMethodApi = 'flattened-code' | 'standard-input' | 'sourcify' | 'multi-part' |
-'vyper-code' | 'vyper-multi-part' | 'vyper-standard-input' | 'stylus-github-repository';
+'vyper-code' | 'vyper-multi-part' | 'vyper-standard-input' | 'stylus-github-repository' | 'fluent';
 
 export interface SmartContractVerificationConfigRaw {
   solidity_compiler_versions: Array<string>;
@@ -120,6 +120,7 @@ export interface SmartContractVerificationConfigRaw {
   verification_options: Array<string>;
   vyper_compiler_versions: Array<string>;
   stylus_compiler_versions?: Array<string>;
+  fluent_compiler_versions?: Array<string>;
   vyper_evm_versions: Array<string>;
   is_rust_verifier_microservice_enabled: boolean;
   license_types: Record<SmartContractLicenseType, number>;
@@ -139,8 +140,17 @@ export interface SmartContractVerificationError {
   files?: Array<string>;
   interfaces?: Array<string>;
   compiler_version?: Array<string>;
+  sdk_version?: Array<string>;
   constructor_arguments?: Array<string>;
   name?: Array<string>;
+  abi?: Array<string>;
+  repository_url?: Array<string>;
+  commit_ref?: Array<string>;
+  archive_content?: Array<string>;
+  manifest_path?: Array<string>;
+  rust_toolchain?: Array<string>;
+  features?: Array<string>;
+  rust_flags?: Array<string>;
 }
 
 type SmartContractSecurityAudit = {

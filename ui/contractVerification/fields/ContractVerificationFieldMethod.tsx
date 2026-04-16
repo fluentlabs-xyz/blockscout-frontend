@@ -75,6 +75,8 @@ const ContractVerificationFieldMethod = ({ methods }: Props) => {
         return <List.Item key={ method }>Verification through Foundry.</List.Item>;
       case 'stylus-github-repository':
         return <List.Item key={ method }>Verification of Stylus contract via GitHub repository.</List.Item>;
+      case 'fluent':
+        return <List.Item key={ method }>Verification of Fluent contract compiled from Rust sources.</List.Item>;
     }
   }, []);
 

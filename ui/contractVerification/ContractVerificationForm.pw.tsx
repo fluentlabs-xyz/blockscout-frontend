@@ -39,6 +39,12 @@ const formConfig: SmartContractVerificationConfig = {
     'vyper-standard-input',
     'solidity-hardhat',
     'solidity-foundry',
+    'fluent',
+  ],
+  fluent_compiler_versions: [
+    '0.9.3',
+    '0.9.2',
+    '0.9.1',
   ],
   vyper_compiler_versions: [
     'v0.3.7+commit.6020b8bb',
@@ -197,6 +203,18 @@ test('verification of zkSync contract', async({ render, mockEnvs }) => {
   const component = await render(<ContractVerificationForm config={ zkSyncFormConfig } hash={ hash }/>, { hooksConfig });
 
   await expect(component).toHaveScreenshot();
+});
+
+test('verification of fluent rust contract', async({ render, page }) => {
+  const component = await render(<ContractVerificationForm config={ formConfig } hash={ hash }/>, { hooksConfig });
+
+  await component.locator('button').filter({ hasText: 'Verification method' }).click();
+  await page.getByRole('option', { name: 'Fluent (Rust)' }).click();
+
+  await expect(component.getByLabel(/sdk version/i)).toBeVisible();
+  await expect(component.getByLabel(/contract abi/i)).toBeVisible();
+  await expect(component.getByLabel(/repository url/i)).toBeVisible();
+  await expect(component.getByLabel(/commit ref/i)).toBeVisible();
 });
 
 test('verification of stylus rust contract', async({ render, page }) => {
