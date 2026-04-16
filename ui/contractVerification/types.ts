@@ -90,5 +90,21 @@ export interface FormFieldsStylusGitHubRepo extends FormFieldsBase {
   path_prefix: string;
 }
 
+export interface FormFieldsFluent extends FormFieldsBase {
+  name: string;
+  compiler: Array<string>;
+  abi: string;
+  source_type: Array<'git' | 'archive'>;
+  repository_url: string;
+  commit_ref: string;
+  archive_content: string;
+  features: string;
+  rust_flags: string;
+  no_default_features: boolean;
+  rust_toolchain: string;
+  manifest_path: string;
+}
+
 export type FormFields = FormFieldsFlattenSourceCode | FormFieldsStandardInput | FormFieldsStandardInputZk | FormFieldsSourcify |
-FormFieldsMultiPartFile | FormFieldsVyperContract | FormFieldsVyperMultiPartFile | FormFieldsVyperStandardInput | FormFieldsStylusGitHubRepo;
+FormFieldsMultiPartFile | FormFieldsVyperContract | FormFieldsVyperMultiPartFile | FormFieldsVyperStandardInput |
+FormFieldsStylusGitHubRepo | FormFieldsFluent;

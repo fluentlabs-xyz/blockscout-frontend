@@ -26,6 +26,7 @@ import ContractVerificationFieldAddress from './fields/ContractVerificationField
 import ContractVerificationFieldLicenseType from './fields/ContractVerificationFieldLicenseType';
 import ContractVerificationFieldMethod from './fields/ContractVerificationFieldMethod';
 import ContractVerificationFlattenSourceCode from './methods/ContractVerificationFlattenSourceCode';
+import ContractVerificationFluentRust from './methods/ContractVerificationFluentRust';
 import ContractVerificationMultiPartFile from './methods/ContractVerificationMultiPartFile';
 import ContractVerificationSolidityFoundry from './methods/ContractVerificationSolidityFoundry';
 import ContractVerificationSolidityHardhat from './methods/ContractVerificationSolidityHardhat';
@@ -173,12 +174,14 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
       'solidity-hardhat': <ContractVerificationSolidityHardhat config={ config }/>,
       'solidity-foundry': <ContractVerificationSolidityFoundry/>,
       'stylus-github-repository': <ContractVerificationStylusGitHubRepo config={ config }/>,
+      fluent: <ContractVerificationFluentRust config={ config }/>,
     };
   }, [ config ]);
   const method = watch('method');
   const methodValue = method?.[0];
   const licenseType = watch('license_type');
   const content = methods[methodValue] || null;
+  const showLicenseField = methodValue !== 'fluent';
 
   useUpdateEffect(() => {
     if (methodValue) {
@@ -200,7 +203,7 @@ const ContractVerificationForm = ({ method: methodFromQuery, config, hash }: Pro
       >
         <Grid as="section" columnGap="30px" rowGap={{ base: 2, lg: 5 }} templateColumns={{ base: '1fr', lg: 'minmax(auto, 680px) minmax(0, 340px)' }}>
           { !hash && <ContractVerificationFieldAddress/> }
-          <ContractVerificationFieldLicenseType/>
+          { showLicenseField && <ContractVerificationFieldLicenseType/> }
           <ContractVerificationFieldMethod methods={ config.verification_options }/>
         </Grid>
         { content }
