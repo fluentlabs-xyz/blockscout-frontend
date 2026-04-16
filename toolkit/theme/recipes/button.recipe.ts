@@ -53,17 +53,17 @@ export const recipe = defineRecipe({
         borderWidth: '2px',
         borderStyle: 'solid',
         bg: 'transparent',
-        color: 'white',
-        borderColor: 'white',
+        color: 'button.outline.fg',
+        borderColor: 'button.outline.fg',
         _hover: {
           bg: 'transparent',
-          color: 'white',
-          borderColor: 'white',
+          color: 'button.outline.fg',
+          borderColor: 'button.outline.fg',
         },
         _loading: {
           opacity: 1,
           '& .chakra-spinner': {
-            borderColor: 'white',
+            borderColor: 'button.outline.fg',
             borderBottomColor: 'spinner.track',
             borderInlineStartColor: 'spinner.track',
           },
