@@ -2,12 +2,41 @@ import React from 'react';
 import type { AddEthereumChainParameter } from 'viem';
 
 import config from 'configs/app';
+import {
+  DEVNET_EXPLORER_URL,
+  FLUENT_DEVNET_CHAIN_ID,
+  FLUENT_MAINNET_CHAIN_ID,
+  FLUENT_TESTNET_CHAIN_ID,
+  MAINNET_EXPLORER_URL,
+  TESTNET_EXPLORER_URL,
+} from 'configs/app/fluent';
 import { useMultichainContext } from 'lib/contexts/multichain';
 import { SECOND } from 'toolkit/utils/consts';
 
 import useRewardsActivity from '../hooks/useRewardsActivity';
 import useProvider from './useProvider';
 import { getHexadecimalChainId } from './utils';
+
+const FLUENT_NETWORK_ICON = 'https://cdn.fluent.xyz/favicon.svg';
+
+function isFluentChain(chainConfig: typeof config) {
+  return chainConfig.chain.name.toLowerCase().includes('fluent');
+}
+
+function getDefaultBlockExplorerUrl(chainConfig: typeof config) {
+  const chainId = Number(chainConfig.chain.id);
+
+  switch (chainId) {
+    case FLUENT_DEVNET_CHAIN_ID:
+      return DEVNET_EXPLORER_URL;
+    case FLUENT_TESTNET_CHAIN_ID:
+      return TESTNET_EXPLORER_URL;
+    case FLUENT_MAINNET_CHAIN_ID:
+      return MAINNET_EXPLORER_URL;
+    default:
+      return chainConfig.app.baseUrl;
+  }
+}
 
 function getParams(chainConfig: typeof config): AddEthereumChainParameter {
   if (!chainConfig.chain.id) {
@@ -23,7 +52,8 @@ function getParams(chainConfig: typeof config): AddEthereumChainParameter {
       decimals: chainConfig.chain.currency.decimals ?? 18,
     },
     rpcUrls: chainConfig.chain.rpcUrls,
-    blockExplorerUrls: [ chainConfig.app.baseUrl ],
+    blockExplorerUrls: [ getDefaultBlockExplorerUrl(chainConfig) ],
+    iconUrls: isFluentChain(chainConfig) ? [ FLUENT_NETWORK_ICON ] : undefined,
   };
 }
 
