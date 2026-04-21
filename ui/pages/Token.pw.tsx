@@ -67,6 +67,7 @@ test('with verified info', async({ render, page, createSocket, mockApiResponse, 
 
 test('bridged token', async({ render, page, createSocket, mockApiResponse, mockAssetResponse, mockEnvs }) => {
   const hash = bridgedTokenA.address_hash;
+  const foreignAddress = bridgedTokenA.foreign_address;
   const hooksConfig = {
     router: {
       query: { hash, tab: 'token_transfers' },
@@ -85,6 +86,8 @@ test('bridged token', async({ render, page, createSocket, mockApiResponse, mockA
   const socket = await createSocket();
   await socketServer.joinChannel(socket, `tokens:${ hash.toLowerCase() }`);
   await component.getByText('369,000,000 HyFi').waitFor({ state: 'visible' });
+  await expect(component.getByText('Origin token on Ethereum')).toBeVisible();
+  await expect(component.locator(`a[href="https://eth.blockscout.com/token/${ foreignAddress }"]`)).toBeVisible();
 
   await expect(component).toHaveScreenshot({
     mask: [ page.locator(pwConfig.adsBannerSelector) ],
