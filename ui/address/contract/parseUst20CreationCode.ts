@@ -3,7 +3,7 @@ const UST20_WORD_HEX_LENGTH = 64;
 const UST20_ADDRESS_HEX_LENGTH = 40;
 
 export interface ParsedUst20CreationCodeArg {
-  id: 'token_name' | 'token_symbol' | 'decimals' | 'initial_supply' | 'minter' | 'pauser';
+  id: 'token_name' | 'token_symbol' | 'decimals' | 'initial_supply' | 'minter' | 'pauser' | 'wrapped';
   label: string;
   type: 'string' | 'number' | 'address';
   value: string;
@@ -100,6 +100,11 @@ export default function parseUst20CreationCode(value: string): Array<ParsedUst20
   const pauserWord = getWord(payload, 5);
   if (pauserWord) {
     parsed.push({ id: 'pauser', label: 'Pauser', type: 'address', value: decodeAddress(pauserWord) });
+  }
+
+  const wrappedWord = getWord(payload, 6);
+  if (wrappedWord) {
+    parsed.push({ id: 'wrapped', label: 'Wrapped', type: 'number', value: decodeNumber(wrappedWord) });
   }
 
   return parsed.length > 0 ? parsed : null;

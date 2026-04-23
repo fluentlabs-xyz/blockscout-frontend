@@ -20,3 +20,31 @@ test('scilla decoded bytecode', async({ render, mockEnvs }) => {
   );
   await expect(component).toHaveScreenshot();
 });
+
+test('runtime-owned bytecode raw wrapper toggle', async({ render, page }) => {
+  const bytecode = '0xef440000000000000000000000000000000000005200080000000000000000000000001111111111111111111111111111111111111111';
+  const runtimeOwner = '0x0000000000000000000000000000000000520008';
+
+  const component = await render(
+    <ContractDetailsDeployedByteCode
+      bytecode={ bytecode }
+      isLoading={ false }
+      addressData={{ ...addressMock.contract, is_verified: false }}
+      showVerificationButton
+    />,
+  );
+
+  await expect(component.getByText('Runtime-owned contract')).toBeVisible();
+  await expect(component.getByText(runtimeOwner)).toBeVisible();
+  await expect(component.locator(`a[href="/address/${ runtimeOwner }?tab=contract_bytecode"]`)).toBeVisible();
+  await expect(component.getByRole('button', { name: 'View raw wrapper bytes' })).toBeVisible();
+  await expect(page.getByText(bytecode, { exact: true })).toHaveCount(0);
+
+  await component.getByRole('button', { name: 'View raw wrapper bytes' }).click();
+  await expect(component.getByRole('button', { name: 'Hide raw wrapper bytes' })).toBeVisible();
+  await expect(page.getByText(bytecode, { exact: true })).toBeVisible();
+
+  await component.getByRole('button', { name: 'Hide raw wrapper bytes' }).click();
+  await expect(component.getByRole('button', { name: 'View raw wrapper bytes' })).toBeVisible();
+  await expect(page.getByText(bytecode, { exact: true })).toHaveCount(0);
+});
