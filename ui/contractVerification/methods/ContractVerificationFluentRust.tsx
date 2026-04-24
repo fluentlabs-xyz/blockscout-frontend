@@ -142,6 +142,8 @@ const ContractVerificationFluentRust = ({ config }: { config: SmartContractVerif
 
       <ContractVerificationFormRow>
         <FormFieldCheckbox<FormFields, 'no_default_features'>
+          readOnly
+          pointerEvents="none"
           name="no_default_features"
           label="Disable default Cargo features"
         />
@@ -150,9 +152,19 @@ const ContractVerificationFluentRust = ({ config }: { config: SmartContractVerif
 
       <ContractVerificationFormRow>
         <FormFieldText<FormFields>
+          readOnly
+          pointerEvents="none"
+          bgColor="transparent"
           name="rust_toolchain"
           placeholder="Rust toolchain"
           rules={{ maxLength: 255 }}
+          inputProps={{
+            readOnly: true,
+            bg: 'transparent',
+            _readOnly: {
+              bg: 'transparent',
+            },
+          }}
         />
         <span>Optional. For example, `stable`, `beta`, or a pinned toolchain version.</span>
       </ContractVerificationFormRow>
