@@ -1,69 +1,76 @@
 import { Box, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import useApiQuery from 'lib/api/useApiQuery';
-import { FLUENT_L2_TXN_BATCH } from 'stubs/fluentL2';
 import { generateListStub } from 'stubs/utils';
+import { VERIFIER_BATCH } from 'stubs/verifier';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import { ACTION_BAR_HEIGHT_DESKTOP } from 'ui/shared/ActionBar';
 import DataListDisplay from 'ui/shared/DataListDisplay';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
 import StickyPaginationWithText from 'ui/shared/StickyPaginationWithText';
-import ScrollL2TxnBatchesListItem from 'ui/txnBatches/scrollL2/ScrollL2TxnBatchesListItem';
-import ScrollL2TxnBatchesTable from 'ui/txnBatches/scrollL2/ScrollL2TxnBatchesTable';
+import FluentTxnBatchesListItem from 'ui/txnBatches/fluent/FluentTxnBatchesListItem';
+import FluentTxnBatchesTable from 'ui/txnBatches/fluent/FluentTxnBatchesTable';
+
+const PAGE_LIMIT = 50;
 
 const FluentL2TxnBatches = () => {
   const { data, isError, isPlaceholderData, pagination } = useQueryWithPages({
-    resourceName: 'general:fluent_l2_txn_batches',
+    resourceName: 'verifier:batches',
+    queryParams: {
+      limit: PAGE_LIMIT,
+    },
     options: {
-      placeholderData: generateListStub<'general:fluent_l2_txn_batches'>(
-        FLUENT_L2_TXN_BATCH,
-        50,
+      placeholderData: generateListStub<'verifier:batches'>(
+        VERIFIER_BATCH,
+        PAGE_LIMIT,
         {
+          limit: PAGE_LIMIT,
+          has_more: true,
+          next_cursor: 272,
           next_page_params: {
-            items_count: 50,
-            number: 224,
+            cursor: 272,
+            limit: PAGE_LIMIT,
           },
         },
       ),
-    },
-  });
-
-  const countersQuery = useApiQuery('general:fluent_l2_txn_batches_count', {
-    queryOptions: {
-      placeholderData: 123456,
+      select: (response) => ({
+        ...response,
+        next_page_params: response.has_more && typeof response.next_cursor === 'number' ? {
+          cursor: response.next_cursor,
+          limit: response.limit || PAGE_LIMIT,
+        } : null,
+      }),
     },
   });
 
   const content = data?.items ? (
     <>
       <Box hideFrom="lg">
-        { data.items.map(((item, index) => (
-          <ScrollL2TxnBatchesListItem
-            key={ item.number + (isPlaceholderData ? String(index) : '') }
+        { data.items.map((item, index) => (
+          <FluentTxnBatchesListItem
+            key={ item.index + (isPlaceholderData ? String(index) : '') }
             item={ item }
             isLoading={ isPlaceholderData }
           />
-        ))) }
+        )) }
       </Box>
       <Box hideBelow="lg">
-        <ScrollL2TxnBatchesTable items={ data.items } top={ pagination.isVisible ? ACTION_BAR_HEIGHT_DESKTOP : 0 } isLoading={ isPlaceholderData }/>
+        <FluentTxnBatchesTable items={ data.items } top={ pagination.isVisible ? ACTION_BAR_HEIGHT_DESKTOP : 0 } isLoading={ isPlaceholderData }/>
       </Box>
     </>
   ) : null;
 
   const text = (() => {
-    if (countersQuery.isError || isError || !data?.items.length) {
+    if (isError || !data?.items.length) {
       return null;
     }
 
     return (
-      <Skeleton loading={ countersQuery.isPlaceholderData || isPlaceholderData } display="flex" flexWrap="wrap">
+      <Skeleton loading={ isPlaceholderData } display="flex" flexWrap="wrap">
         Txn batch
-        <Text fontWeight={ 600 } whiteSpace="pre"> #{ data.items[0].number } </Text>to
-        <Text fontWeight={ 600 } whiteSpace="pre"> #{ data.items[data.items.length - 1].number } </Text>
-        (total of { countersQuery.data?.toLocaleString() } batches)
+        <Text fontWeight={ 600 } whiteSpace="pre"> #{ data.items[0].index } </Text>to
+        <Text fontWeight={ 600 } whiteSpace="pre"> #{ data.items[data.items.length - 1].index } </Text>
       </Skeleton>
     );
   })();

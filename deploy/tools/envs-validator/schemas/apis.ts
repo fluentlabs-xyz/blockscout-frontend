@@ -20,6 +20,8 @@ export default yup.object({
 
     NEXT_PUBLIC_REWARDS_SERVICE_API_HOST: yup.string().test(urlTest),
 
+    NEXT_PUBLIC_VERIFIER_API_HOST: yup.string().test(urlTest),
+
     NEXT_PUBLIC_METADATA_SERVICE_API_HOST: yup
       .string()
       .test(urlTest),

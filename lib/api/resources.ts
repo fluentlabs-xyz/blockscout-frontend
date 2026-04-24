@@ -38,6 +38,8 @@ import type {
 } from './services/tac-operation-lifecycle';
 import { USER_OPS_API_RESOURCES } from './services/userOps';
 import type { IsPaginated } from './services/utils';
+import type { VerifierApiResourceName, VerifierApiResourcePayload } from './services/verifier';
+import { VERIFIER_API_RESOURCES } from './services/verifier';
 import { VISUALIZE_API_RESOURCES } from './services/visualize';
 import type { VisualizeApiResourceName, VisualizeApiResourcePayload } from './services/visualize';
 import { ZETA_CHAIN_API_RESOURCES } from './services/zetaChain';
@@ -57,6 +59,7 @@ export const RESOURCES = {
   stats: STATS_API_RESOURCES,
   tac: TAC_OPERATION_LIFECYCLE_API_RESOURCES,
   userOps: USER_OPS_API_RESOURCES,
+  verifier: VERIFIER_API_RESOURCES,
   visualize: VISUALIZE_API_RESOURCES,
   zetachain: ZETA_CHAIN_API_RESOURCES,
   // external API resources
@@ -90,6 +93,7 @@ R extends MultichainStatsApiResourceName ? MultichainStatsApiResourcePayload<R> 
 R extends RewardsApiResourceName ? RewardsApiResourcePayload<R> :
 R extends StatsApiResourceName ? StatsApiResourcePayload<R> :
 R extends TacOperationLifecycleApiResourceName ? TacOperationLifecycleApiResourcePayload<R> :
+R extends VerifierApiResourceName ? VerifierApiResourcePayload<R> :
 R extends VisualizeApiResourceName ? VisualizeApiResourcePayload<R> :
 R extends ZetaChainApiResourceName ? ZetaChainApiResourcePayload<R> :
 never;
