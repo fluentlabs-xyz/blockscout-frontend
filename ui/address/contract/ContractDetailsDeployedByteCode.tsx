@@ -83,7 +83,7 @@ const ContractDetailsDeployedByteCode = ({ bytecode, isLoading: isLoadingProp, a
       <Box>
         <Box fontWeight={ 600 } mb={ 2 }>Runtime-owned contract</Box>
         <Box>This account uses Fluent runtime-owned bytecode (OwnableAccount wrapper).</Box>
-        <Box>The executable EVM bytecode is provided by its runtime owner, not stored here as plain bytecode.</Box>
+        <Box>The executable bytecode is provided by its runtime owner, not stored here as plain bytecode.</Box>
       </Box>
       <Flex flexDir="column" rowGap={ 3 }>
         <Box>
@@ -113,6 +113,14 @@ const ContractDetailsDeployedByteCode = ({ bytecode, isLoading: isLoadingProp, a
             { isRawWrapperVisible ? 'Hide raw wrapper bytes' : 'View raw wrapper bytes' }
           </Button>
         </Flex>
+        { isRawWrapperVisible && (
+          <RawDataSnippet
+            data={ bytecode }
+            textareaMaxHeight="220px"
+            textareaMinHeight="auto"
+            contentProps={{ mt: 1 }}
+          />
+        ) }
       </Flex>
     </Flex>
   ) : null;

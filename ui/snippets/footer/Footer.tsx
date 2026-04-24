@@ -1,5 +1,5 @@
 import type { GridProps, HTMLChakraProps } from '@chakra-ui/react';
-import { Box, Grid, Flex, Text, VStack } from '@chakra-ui/react';
+import { Box, Grid, Text, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
@@ -71,36 +71,36 @@ const Footer = () => {
   const renderBlockscoutInfo = React.useCallback((gridArea?: GridProps['gridArea']) => {
     return (
       <Box gridArea={ gridArea }>
-        <Flex columnGap={ 2 } fontSize="xs" lineHeight={ 2 } alignItems="center" color="text">
-          <Text display="flex" alignItems="center" h="32px">
-            Made with
+        <Box fontSize="xs" lineHeight="32px" color="text">
+          <Text>
+            Made with{ ' ' }
+            <Link
+              noIcon
+              href="https://www.blockscout.com"
+              external
+              display="inline-flex"
+              verticalAlign="middle"
+              color={ logoColor }
+              _hover={{ color: 'cyan.200' }}
+            >
+              <IconSvg
+                name="networks/logo-placeholder"
+                width="80px"
+                height="32px"
+              />
+            </Link>
+            { ' ' }(GPLv3). Based on blockscout/frontend.{ ' ' }
+            <Link
+              noIcon
+              external
+              href="https://github.com/fluentlabs-xyz/blockscout-frontend"
+              color={ logoColor }
+              _hover={{ color: 'cyan.200' }}
+            >
+              Modified by Fluent Labs.
+            </Link>
           </Text>
-          <Link noIcon href="https://www.blockscout.com" external display="inline-flex" color={ logoColor } _hover={{ color: 'cyan.200' }}>
-            &nbsp;
-            <IconSvg
-              name="networks/logo-placeholder"
-              width="80px"
-              height="32px"
-            />
-          </Link>
-          <Text display="flex" alignItems="center" h="32px">
-            (GPLv3).
-          </Text>
-          <Text display="flex" alignItems="center" h="32px">
-            Based on blockscout/frontend.
-          </Text>
-          <Link
-            noIcon
-            external
-            href="https://github.com/fluentlabs-xyz/blockscout-frontend"
-            height="32px"
-            display="inline-flex"
-            color={ logoColor }
-            _hover={{ color: 'cyan.200' }}
-          >
-            Modified by Fluent Labs.
-          </Link>
-        </Flex>
+        </Box>
         <Box mt={ 2 } alignItems="start" fontSize="xs" lineHeight={ 2 }>
           <Text height="32px">
             Copyright © Blockscout Limited 2023-{ (new Date()).getFullYear() }
@@ -168,7 +168,7 @@ const Footer = () => {
         justifyContent="space-between"
         alignItems="center"
         width="100%"
-        flexDirection={{ lg: 'row', sm: 'column' }}
+        flexDirection={{ lg: 'row', sm: 'column', smDown: 'column' }}
       >
         <Box
           { ...contentProps }
@@ -194,7 +194,7 @@ const Footer = () => {
             justifyContent={{ lg: 'flex-end' }}
             gap={ 8 }
             mt={{ base: 8, lg: 0 }}
-            flexDirection={{ lg: 'row', sm: 'column' }}
+            flexDirection={{ lg: 'row', sm: 'column', smDown: 'column' }}
           >
             { BLOCKSCOUT_LINKS.map(link => <FooterLinkItem { ...link } key={ link.text }/>) }
           </Grid>

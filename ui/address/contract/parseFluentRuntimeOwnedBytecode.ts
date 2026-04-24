@@ -1,4 +1,4 @@
-const RUNTIME_OWNED_PREFIX = 'ef44';
+const RUNTIME_OWNED_PREFIX = 'ef4400';
 const ADDRESS_HEX_LENGTH = 40;
 
 function normalizeHex(value: string): string | null {
@@ -17,12 +17,13 @@ export interface ParsedFluentRuntimeOwnedBytecode {
 
 export default function parseFluentRuntimeOwnedBytecode(value: string): ParsedFluentRuntimeOwnedBytecode | null {
   const normalized = normalizeHex(value);
+  const payload = normalized?.slice(RUNTIME_OWNED_PREFIX.length);
 
-  if (!normalized || !normalized.startsWith(RUNTIME_OWNED_PREFIX) || normalized.length < ADDRESS_HEX_LENGTH) {
+  if (!normalized || !normalized.startsWith(RUNTIME_OWNED_PREFIX) || !payload || payload.length < ADDRESS_HEX_LENGTH) {
     return null;
   }
 
   return {
-    runtimeOwner: `0x${ normalized.slice(-ADDRESS_HEX_LENGTH) }`,
+    runtimeOwner: `0x${ payload.slice(0, ADDRESS_HEX_LENGTH) }`,
   };
 }

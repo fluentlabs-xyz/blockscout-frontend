@@ -1,7 +1,8 @@
-import { Flex, useToken } from '@chakra-ui/react';
+import { Flex, Text, useToken } from '@chakra-ui/react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import React from 'react';
 
+import { getFeaturePayload } from 'configs/app/features/types';
 import type { Address } from 'types/api/address';
 import type { SmartContract } from 'types/api/contract';
 import type { TokenInfo, TokenVerifiedInfo as TTokenVerifiedInfo } from 'types/api/token';
@@ -13,6 +14,7 @@ import type { ResourceError } from 'lib/api/resources';
 import { useMultichainContext } from 'lib/contexts/multichain';
 import { getTokenTypeName } from 'lib/token/tokenTypes';
 import { Tooltip } from 'toolkit/chakra/tooltip';
+import { stripTrailingSlash } from 'toolkit/utils/url';
 import AddressAlerts from 'ui/address/details/AddressAlerts';
 import AddressQrCode from 'ui/address/details/AddressQrCode';
 import AccountActionsMenu from 'ui/shared/AccountActionsMenu/AccountActionsMenu';
@@ -54,9 +56,17 @@ const TokenPageTitle = ({ tokenQuery, addressQuery, contractQuery, verifiedInfoQ
 
   const [ bridgedTokenTagBgColor ] = useToken('colors', 'blue.500');
   const [ bridgedTokenTagTextColor ] = useToken('colors', 'white');
+  const bridgedTokensFeature = getFeaturePayload(config.features.bridgedTokens);
 
   const isUST20Token = contractQuery?.data?.deployed_bytecode?.startsWith('0xef44000000000000000000000000000000000000520008');
   const isWASM = contractQuery?.data?.deployed_bytecode?.startsWith('0xef52');
+  const originChain = bridgedTokensFeature && tokenQuery.data?.origin_chain_id ?
+    bridgedTokensFeature.chains.find(({ id }) => id === tokenQuery.data?.origin_chain_id) :
+    undefined;
+  const foreignAddress = tokenQuery.data?.is_bridged ? tokenQuery.data?.foreign_address : undefined;
+  const originTokenUrl = foreignAddress && originChain ?
+    `${ stripTrailingSlash(originChain.base_url) }/${ foreignAddress }` :
+    undefined;
 
   const tags: Array<EntityTag> = React.useMemo(() => {
     return [
@@ -66,7 +76,7 @@ const TokenPageTitle = ({ tokenQuery, addressQuery, contractQuery, verifiedInfoQ
         tagType: 'custom' as const,
         ordinal: PREDEFINED_TAG_PRIORITY,
       } : undefined,
-      config.features.bridgedTokens.isEnabled && tokenQuery.data?.is_bridged ?
+      bridgedTokensFeature && tokenQuery.data?.is_bridged ?
         {
           slug: 'bridged',
           name: 'Bridged',
@@ -111,6 +121,7 @@ const TokenPageTitle = ({ tokenQuery, addressQuery, contractQuery, verifiedInfoQ
     addressQuery.data,
     bridgedTokenTagBgColor,
     bridgedTokenTagTextColor,
+    bridgedTokensFeature,
     tokenQuery.data,
     verifiedInfoQuery.data?.projectSector,
     hash,
@@ -137,24 +148,42 @@ const TokenPageTitle = ({ tokenQuery, addressQuery, contractQuery, verifiedInfoQ
   );
 
   const secondRow = (
-    <Flex alignItems="center" w="100%" minW={ 0 } columnGap={ 2 } rowGap={ 2 } flexWrap={{ base: 'wrap', lg: 'nowrap' }}>
-      { addressQuery.data && (
-        <AddressEntity
-          address={{ ...addressQuery.data, name: '' }}
-          isLoading={ isLoading }
-          variant="subheading"
-          icon={ multichainContext?.chain ? {
-            shield: { name: 'pie_chart', isLoading },
-          } : undefined }
-        />
-      ) }
-      { !isLoading && tokenQuery.data && <AddressAddToWallet token={ tokenQuery.data } variant="button"/> }
-      { addressQuery.data && <AddressQrCode hash={ addressQuery.data.hash } isLoading={ isLoading }/> }
-      <AccountActionsMenu isLoading={ isLoading }/>
-      <Flex ml={{ base: 0, lg: 'auto' }} columnGap={ 2 } flexGrow={{ base: 1, lg: 0 }}>
-        <TokenVerifiedInfo verifiedInfoQuery={ verifiedInfoQuery }/>
-        <NetworkExplorers type="token" pathParam={ addressHash } ml={{ base: 'auto', lg: 0 }}/>
+    <Flex flexDir="column" w="100%" minW={ 0 } rowGap={ 2 }>
+      <Flex alignItems="center" w="100%" minW={ 0 } columnGap={ 2 } rowGap={ 2 } flexWrap={{ base: 'wrap', lg: 'nowrap' }}>
+        { addressQuery.data && (
+          <AddressEntity
+            address={{ ...addressQuery.data, name: '' }}
+            isLoading={ isLoading }
+            variant="subheading"
+            icon={ multichainContext?.chain ? {
+              shield: { name: 'pie_chart', isLoading },
+            } : undefined }
+          />
+        ) }
+        { !isLoading && tokenQuery.data && <AddressAddToWallet token={ tokenQuery.data } variant="button"/> }
+        { addressQuery.data && <AddressQrCode hash={ addressQuery.data.hash } isLoading={ isLoading }/> }
+        <AccountActionsMenu isLoading={ isLoading }/>
+        <Flex ml={{ base: 0, lg: 'auto' }} columnGap={ 2 } flexGrow={{ base: 1, lg: 0 }}>
+          <TokenVerifiedInfo verifiedInfoQuery={ verifiedInfoQuery }/>
+          <NetworkExplorers type="token" pathParam={ addressHash } ml={{ base: 'auto', lg: 0 }}/>
+        </Flex>
       </Flex>
+      { originTokenUrl && foreignAddress && (
+        <Flex alignItems="center" columnGap={ 2 } rowGap={ 1 } flexWrap="wrap">
+          <Text color="text.secondary" fontSize="sm" flexShrink={ 0 }>
+            { `Origin token on ${ originChain?.title || 'source chain' }` }
+          </Text>
+          <AddressEntity
+            address={{ hash: foreignAddress }}
+            href={ originTokenUrl }
+            isLoading={ isLoading }
+            noIcon
+            noHighlight
+            variant="subheading"
+            link={{ external: true, variant: 'secondary' }}
+          />
+        </Flex>
+      ) }
     </Flex>
   );
 
