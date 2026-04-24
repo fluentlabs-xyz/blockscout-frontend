@@ -2,10 +2,12 @@ import React from 'react';
 
 import type { VerifierBatch } from 'types/api/verifier';
 
+import { route } from 'nextjs-routes';
+
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import { TableCell, TableRow } from 'toolkit/chakra/table';
-import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
 
+import FluentHashValue from './FluentHashValue';
 import FluentVerifierBatchStatus from './FluentVerifierBatchStatus';
 
 type Props = {
@@ -24,17 +26,23 @@ const FluentTxnBatchesTableItem = ({ item, isLoading }: Props) => {
       </TableCell>
       <TableCell verticalAlign="middle" minW="220px">
         <Skeleton loading={ isLoading } display="inline-block">
-          <HashStringShortenDynamic hash={ item.batch_root } noTooltip/>
+          <FluentHashValue hash={ item.batch_root }/>
         </Skeleton>
       </TableCell>
       <TableCell verticalAlign="middle" minW="220px">
         <Skeleton loading={ isLoading } display="inline-block">
-          <HashStringShortenDynamic hash={ item.from_block_hash } noTooltip/>
+          <FluentHashValue
+            hash={ item.from_block_hash }
+            href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: item.from_block_hash } }) }
+          />
         </Skeleton>
       </TableCell>
       <TableCell verticalAlign="middle" minW="220px">
         <Skeleton loading={ isLoading } display="inline-block">
-          <HashStringShortenDynamic hash={ item.to_block_hash } noTooltip/>
+          <FluentHashValue
+            hash={ item.to_block_hash }
+            href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: item.to_block_hash } }) }
+          />
         </Skeleton>
       </TableCell>
       <TableCell verticalAlign="middle" isNumeric>

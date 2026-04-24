@@ -16,6 +16,14 @@ const FluentVerifierBatchStatus = ({ status, isLoading }: Props) => {
     return <StatusTag type="ok" text={ status.name } loading={ isLoading }/>;
   }
 
+  if (normalized.includes('preconfirm')) {
+    return <StatusTag type="pending" text={ status.name } colorPalette="yellow" loading={ isLoading }/>;
+  }
+
+  if (normalized.includes('submitted')) {
+    return <StatusTag type="pending" text={ status.name } colorPalette="gray" loading={ isLoading }/>;
+  }
+
   if (normalized.includes('revert') || normalized.includes('invalid') || normalized.includes('fail')) {
     return <StatusTag type="error" text={ status.name } loading={ isLoading }/>;
   }
