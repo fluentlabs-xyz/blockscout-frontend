@@ -2,10 +2,12 @@ import React from 'react';
 
 import type { VerifierBatch } from 'types/api/verifier';
 
+import { route } from 'nextjs-routes';
+
 import { Skeleton } from 'toolkit/chakra/skeleton';
-import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
 import ListItemMobileGrid from 'ui/shared/ListItemMobile/ListItemMobileGrid';
 
+import FluentHashValue from './FluentHashValue';
 import FluentVerifierBatchStatus from './FluentVerifierBatchStatus';
 
 type Props = {
@@ -49,21 +51,27 @@ const FluentTxnBatchesListItem = ({ item, isLoading }: Props) => {
       <ListItemMobileGrid.Label isLoading={ isLoading }>Batch root</ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <Skeleton loading={ isLoading } display="inline-block">
-          <HashStringShortenDynamic hash={ item.batch_root } noTooltip/>
+          <FluentHashValue hash={ item.batch_root }/>
         </Skeleton>
       </ListItemMobileGrid.Value>
 
       <ListItemMobileGrid.Label isLoading={ isLoading }>From hash</ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <Skeleton loading={ isLoading } display="inline-block">
-          <HashStringShortenDynamic hash={ item.from_block_hash } noTooltip/>
+          <FluentHashValue
+            hash={ item.from_block_hash }
+            href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: item.from_block_hash } }) }
+          />
         </Skeleton>
       </ListItemMobileGrid.Value>
 
       <ListItemMobileGrid.Label isLoading={ isLoading }>To hash</ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
         <Skeleton loading={ isLoading } display="inline-block">
-          <HashStringShortenDynamic hash={ item.to_block_hash } noTooltip/>
+          <FluentHashValue
+            hash={ item.to_block_hash }
+            href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: item.to_block_hash } }) }
+          />
         </Skeleton>
       </ListItemMobileGrid.Value>
 
