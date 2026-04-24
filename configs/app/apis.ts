@@ -176,6 +176,12 @@ const userOpsApi = (() => {
   });
 })();
 
+const verifierApi = (() => {
+  return Object.freeze({
+    endpoint: stripTrailingSlash(getEnvValue('NEXT_PUBLIC_VERIFIER_API_HOST') || generalApi.endpoint),
+  });
+})();
+
 const visualizeApi = (() => {
   const apiHost = getVisualizeApiHost();
   if (!apiHost) {
@@ -235,6 +241,7 @@ const apis: Apis = Object.freeze({
   stats: statsApi,
   tac: tacApi,
   userOps: userOpsApi,
+  verifier: verifierApi,
   visualize: visualizeApi,
   zetachain: zetachainApi,
 });

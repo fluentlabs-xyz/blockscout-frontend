@@ -132,6 +132,7 @@ Also, be aware that if you customize the name of the currency or any of its deno
 | NEXT_PUBLIC_API_HOST | `string` | Main API host | Required (except for multichain) | - | `blockscout.com` | v1.0.x+ |
 | NEXT_PUBLIC_EXPLORER_API_HOST | `string` | Fluent-specific explorer API host override. Takes priority over the API host resolved from `NEXT_PUBLIC_CHAIN` preset. | - | - | `api-testnet.fluentscan.xyz` | fluent-fork |
 | NEXT_PUBLIC_EXPLORER_API_URL | `string` | Fluent-specific explorer API endpoint URL override. Takes priority over the API URL resolved from `NEXT_PUBLIC_CHAIN` preset and is used by Stats/Visualize API defaults. | - | - | `https://api-testnet.fluentscan.xyz` | fluent-fork |
+| NEXT_PUBLIC_VERIFIER_API_HOST | `string` | Verifier service API endpoint URL for Fluent verifier batches page (`/verifier/v1/batches`). If not set, falls back to main API endpoint. | - | main API endpoint | `https://api.gblend.xyz` | fluent-fork |
 | NEXT_PUBLIC_API_PORT | `number` | Port where API is running on the host | - | - | `3001` | v1.0.x+ |
 | NEXT_PUBLIC_API_BASE_PATH | `string` | Base path for Main API endpoint url | - | - | `/poa/core` | v1.0.x+ |
 | NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL | `ws \| wss` | Main API websocket protocol | - | `wss` | `ws` | v1.0.x+ |
