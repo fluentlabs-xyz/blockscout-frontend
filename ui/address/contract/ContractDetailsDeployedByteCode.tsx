@@ -139,7 +139,7 @@ const ContractDetailsDeployedByteCode = ({ bytecode, isLoading: isLoadingProp, a
             loading={ isLoading }
           />
         ) }
-        { showVerificationButton && (
+        { showVerificationButton && !parsedRuntimeOwnedBytecode && (
           <ContractDetailsVerificationButton
             isLoading={ isLoading }
             addressHash={ addressData.hash }

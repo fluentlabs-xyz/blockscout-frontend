@@ -10,6 +10,7 @@ import RawDataSnippet from 'ui/shared/RawDataSnippet';
 
 import ContractDetailsDeployedByteCode from './ContractDetailsDeployedByteCode';
 import ContractDetailsVerificationButton from './ContractDetailsVerificationButton';
+import parseFluentRuntimeOwnedBytecode from './parseFluentRuntimeOwnedBytecode';
 import parseUst20CreationCode from './parseUst20CreationCode';
 
 interface Props {
@@ -19,7 +20,18 @@ interface Props {
 }
 
 const ContractDetailsByteCode = ({ data, isLoading, addressData }: Props) => {
-  const canBeVerified = ![ 'selfdestructed', 'failed' ].includes(data.creation_status || '') && !data?.is_verified && addressData.proxy_type !== 'eip7702';
+  const isOwnableAccount = React.useMemo(() => {
+    if (!data?.deployed_bytecode) {
+      return false;
+    }
+
+    return Boolean(parseFluentRuntimeOwnedBytecode(data.deployed_bytecode));
+  }, [ data?.deployed_bytecode ]);
+
+  const canBeVerified = ![ 'selfdestructed', 'failed' ].includes(data.creation_status || '') &&
+    !data?.is_verified &&
+    addressData.proxy_type !== 'eip7702' &&
+    !isOwnableAccount;
   const parsedCreationCodeArgs = React.useMemo(() => {
     if (!data.creation_bytecode) {
       return null;

@@ -47,6 +47,7 @@ const FormFieldCheckboxContent = <
       onCheckedChange={ handleChange }
       size="md"
       disabled={ isDisabled }
+      readOnly={ readOnly }
       { ...rest }
     >
       { label }
