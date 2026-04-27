@@ -1,38 +1,32 @@
 import { Box, Text } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
 import BigNumber from 'bignumber.js';
 import React from 'react';
 
 import type {
   FluentBridgeTransactionItem,
-  FluentBridgeTransactionsResponse,
   FluentBridgeTransferType,
 } from 'types/api/fluentBridge';
 import type { VerifierBatchStatus } from 'types/api/verifier';
 import type { PaginationParams } from 'ui/shared/pagination/types';
 
-import config from 'configs/app';
-import useFetch from 'lib/hooks/useFetch';
+import useApiQuery from 'lib/api/useApiQuery';
 import { layerLabels } from 'lib/rollups/utils';
 import { Skeleton } from 'toolkit/chakra/skeleton';
-import { TableBody, TableCell, TableColumnHeader, TableHeaderSticky, TableRoot, TableRow } from 'toolkit/chakra/table';
+import { TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow } from 'toolkit/chakra/table';
 import { nbsp, rightLineArrow } from 'toolkit/utils/htmlEntities';
-import { ACTION_BAR_HEIGHT_DESKTOP } from 'ui/shared/ActionBar';
-import CopyToClipboard from 'ui/shared/CopyToClipboard';
 import DataListDisplay from 'ui/shared/DataListDisplay';
 import BatchEntityL2 from 'ui/shared/entities/block/BatchEntityL2';
 import TxEntity from 'ui/shared/entities/tx/TxEntity';
 import TxEntityL1 from 'ui/shared/entities/tx/TxEntityL1';
-import HashStringShorten from 'ui/shared/HashStringShorten';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import StickyPaginationWithText from 'ui/shared/StickyPaginationWithText';
 import TimeFormatToggle from 'ui/shared/time/TimeFormatToggle';
 import TimeWithTooltip from 'ui/shared/time/TimeWithTooltip';
+import FluentHashValue from 'ui/txnBatches/fluent/FluentHashValue';
 import FluentVerifierBatchStatus from 'ui/txnBatches/fluent/FluentVerifierBatchStatus';
 
 const PAGE_LIMIT = 50;
 const SKELETON_ROWS_COUNT = 10;
-const FLUENT_BRIDGE_TRANSACTIONS_API = `${ config.apis.verifier?.endpoint || config.apis.general.endpoint }/indexer/v1/transactions`;
 
 function formatRawAmount(amount?: string) {
   if (!amount) {
@@ -111,10 +105,7 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
     <TableRow>
       <TableCell verticalAlign="middle" minW="220px">
         { item.message_hash ? (
-          <>
-            <HashStringShorten hash={ item.message_hash } type="long"/>
-            <CopyToClipboard text={ item.message_hash }/>
-          </>
+          <FluentHashValue hash={ item.message_hash }/>
         ) : <Text color="text.secondary">-</Text> }
       </TableCell>
       <TableCell verticalAlign="middle">
@@ -152,34 +143,25 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
 };
 
 const FluentBridgeTransactionsPage = ({ transferType }: Props) => {
-  const apiFetch = useFetch();
   const [ page, setPage ] = React.useState(1);
   const offset = (page - 1) * PAGE_LIMIT;
 
-  const query = useQuery({
-    queryKey: [ 'fluent-bridge-transactions', transferType, page, PAGE_LIMIT ],
-    queryFn: async({ signal }) => {
-      const url = new URL(FLUENT_BRIDGE_TRANSACTIONS_API);
-      url.searchParams.set('transfer_type', transferType);
-      url.searchParams.set('limit', String(PAGE_LIMIT));
-      url.searchParams.set('offset', String(offset));
-
-      return apiFetch<FluentBridgeTransactionsResponse, unknown>(
-        url.toString(),
-        { signal },
-        { resource: '/indexer/v1/transactions' },
-      ) as Promise<FluentBridgeTransactionsResponse>;
-    },
-    placeholderData: {
-      items: Array.from({ length: SKELETON_ROWS_COUNT }, () => makeSkeletonItem(transferType)),
+  const { data, isError, isPlaceholderData } = useApiQuery('verifier:bridge_transactions', {
+    queryParams: {
+      transfer_type: transferType,
       limit: PAGE_LIMIT,
       offset,
-      has_more: true,
-      next_offset: offset + PAGE_LIMIT,
+    },
+    queryOptions: {
+      placeholderData: {
+        items: Array.from({ length: SKELETON_ROWS_COUNT }, () => makeSkeletonItem(transferType)),
+        limit: PAGE_LIMIT,
+        offset,
+        has_more: true,
+        next_offset: offset + PAGE_LIMIT,
+      },
     },
   });
-
-  const { data, isError, isPlaceholderData } = query;
 
   const pagination: PaginationParams = React.useMemo(() => ({
     page,
@@ -216,7 +198,7 @@ const FluentBridgeTransactionsPage = ({ transferType }: Props) => {
   const content = data?.items ? (
     <Box overflowX="auto">
       <TableRoot tableLayout="auto" minW="1320px">
-        <TableHeaderSticky top={ pagination.isVisible ? ACTION_BAR_HEIGHT_DESKTOP : 0 }>
+        <TableHeader>
           <TableRow>
             <TableColumnHeader>Message hash</TableColumnHeader>
             <TableColumnHeader>{ layerLabels.parent } txn hash</TableColumnHeader>
@@ -229,7 +211,7 @@ const FluentBridgeTransactionsPage = ({ transferType }: Props) => {
               <TimeFormatToggle/>
             </TableColumnHeader>
           </TableRow>
-        </TableHeaderSticky>
+        </TableHeader>
         <TableBody>
           { data.items.map((item, index) => (
             <FluentBridgeTransactionsTableRow
