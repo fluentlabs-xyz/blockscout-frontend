@@ -1,5 +1,4 @@
 import { Box, Text } from '@chakra-ui/react';
-import BigNumber from 'bignumber.js';
 import React from 'react';
 
 import type {
@@ -22,23 +21,12 @@ import PageTitle from 'ui/shared/Page/PageTitle';
 import StickyPaginationWithText from 'ui/shared/StickyPaginationWithText';
 import TimeFormatToggle from 'ui/shared/time/TimeFormatToggle';
 import TimeWithTooltip from 'ui/shared/time/TimeWithTooltip';
+import NativeCoinValue from 'ui/shared/value/NativeCoinValue';
 import FluentHashValue from 'ui/txnBatches/fluent/FluentHashValue';
 import FluentVerifierBatchStatus from 'ui/txnBatches/fluent/FluentVerifierBatchStatus';
 
 const PAGE_LIMIT = 50;
 const SKELETON_ROWS_COUNT = 10;
-
-function formatRawAmount(amount?: string) {
-  if (!amount) {
-    return '0';
-  }
-
-  try {
-    return BigNumber(amount).toFormat();
-  } catch {
-    return amount;
-  }
-}
 
 interface Props {
   transferType: FluentBridgeTransferType;
@@ -123,7 +111,7 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
         ) }
       </TableCell>
       <TableCell verticalAlign="middle" isNumeric>
-        <Text>{ formatRawAmount(item.amount) }</Text>
+        <NativeCoinValue amount={ item.amount } noSymbol/>
       </TableCell>
       <TableCell verticalAlign="middle">
         { typeof item.batch_index === 'number' ? (
@@ -203,7 +191,7 @@ const FluentBridgeTransactionsPage = ({ transferType }: Props) => {
             <TableColumnHeader>Message hash</TableColumnHeader>
             <TableColumnHeader>{ layerLabels.parent } txn hash</TableColumnHeader>
             <TableColumnHeader>{ layerLabels.current } txn hash</TableColumnHeader>
-            <TableColumnHeader isNumeric>Amount (raw)</TableColumnHeader>
+            <TableColumnHeader isNumeric>Amount</TableColumnHeader>
             <TableColumnHeader>Batch inclusion</TableColumnHeader>
             <TableColumnHeader>Batch status</TableColumnHeader>
             <TableColumnHeader>
