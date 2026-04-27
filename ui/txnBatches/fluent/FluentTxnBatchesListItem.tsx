@@ -4,6 +4,7 @@ import type { VerifierBatch } from 'types/api/verifier';
 
 import { route } from 'nextjs-routes';
 
+import { Link } from 'toolkit/chakra/link';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import ListItemMobileGrid from 'ui/shared/ListItemMobile/ListItemMobileGrid';
 
@@ -16,11 +17,13 @@ type Props = {
 };
 
 const FluentTxnBatchesListItem = ({ item, isLoading }: Props) => {
+  const batchLink = route({ pathname: '/batches/[number]', query: { number: String(item.index) } });
+
   return (
     <ListItemMobileGrid.Container gridTemplateColumns="120px auto">
       <ListItemMobileGrid.Label isLoading={ isLoading }>Batch #</ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
-        <Skeleton loading={ isLoading } display="inline-block">#{ item.index.toLocaleString() }</Skeleton>
+        <Link loading={ isLoading } href={ batchLink }>#{ item.index.toLocaleString() }</Link>
       </ListItemMobileGrid.Value>
 
       <ListItemMobileGrid.Label isLoading={ isLoading }>Status</ListItemMobileGrid.Label>
