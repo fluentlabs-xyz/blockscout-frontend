@@ -73,8 +73,25 @@ const FluentL2TxnBatch = () => {
   const isLoading = batchQuery.isPlaceholderData;
   const isNotFound = !isLoading && !batchQuery.isError && (!batch || batch.index !== batchNumber);
 
+  const nextBatchQuery = useApiQuery<'verifier:batches', unknown, VerifierBatch | undefined>('verifier:batches', {
+    queryParams: isBatchNumberValid ? {
+      limit: PAGE_LIMIT,
+      cursor: batchNumber + 2,
+    } : undefined,
+    queryOptions: {
+      enabled: isBatchNumberValid && !isNotFound,
+      select: (response) => response.items[0],
+    },
+  });
+
+  const hasNextBatch = nextBatchQuery.data?.index === batchNumber + 1;
+
   const handlePrevNextClick = React.useCallback((direction: 'prev' | 'next') => {
     if (!isBatchNumberValid) {
+      return;
+    }
+
+    if (direction === 'next' && !hasNextBatch) {
       return;
     }
 
@@ -84,9 +101,8 @@ const FluentL2TxnBatch = () => {
     if (nextNumber < 0) {
       return;
     }
-
     router.push({ pathname: '/batches/[number]', query: { number: String(nextNumber) } }, undefined);
-  }, [ batchNumber, isBatchNumberValid, router ]);
+  }, [ batchNumber, hasNextBatch, isBatchNumberValid, router ]);
 
   return (
     <>
@@ -108,6 +124,7 @@ const FluentL2TxnBatch = () => {
               prevLabel="View previous txn batch"
               nextLabel="View next txn batch"
               isPrevDisabled={ batch.index === 0 }
+              isNextDisabled={ !hasNextBatch }
               isLoading={ isLoading }
             />
           </DetailedInfo.ItemValue>
