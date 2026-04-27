@@ -30,7 +30,7 @@ import FluentVerifierBatchStatus from 'ui/txnBatches/fluent/FluentVerifierBatchS
 
 const PAGE_LIMIT = 50;
 const SKELETON_ROWS_COUNT = 10;
-const FLUENT_BRIDGE_TRANSACTIONS_API = config.services.fluentBridgeTransactionsApi;
+const FLUENT_BRIDGE_TRANSACTIONS_API = `${ config.apis.verifier?.endpoint || config.apis.general.endpoint }/indexer/v1/transactions`;
 
 interface Props {
   transferType: FluentBridgeTransferType;
