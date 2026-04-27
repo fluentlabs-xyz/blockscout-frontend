@@ -1,5 +1,6 @@
 import { Box, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
+import BigNumber from 'bignumber.js';
 import React from 'react';
 
 import type {
@@ -17,11 +18,12 @@ import { Skeleton } from 'toolkit/chakra/skeleton';
 import { TableBody, TableCell, TableColumnHeader, TableHeaderSticky, TableRoot, TableRow } from 'toolkit/chakra/table';
 import { nbsp, rightLineArrow } from 'toolkit/utils/htmlEntities';
 import { ACTION_BAR_HEIGHT_DESKTOP } from 'ui/shared/ActionBar';
+import CopyToClipboard from 'ui/shared/CopyToClipboard';
 import DataListDisplay from 'ui/shared/DataListDisplay';
 import BatchEntityL2 from 'ui/shared/entities/block/BatchEntityL2';
 import TxEntity from 'ui/shared/entities/tx/TxEntity';
 import TxEntityL1 from 'ui/shared/entities/tx/TxEntityL1';
-import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
+import HashStringShorten from 'ui/shared/HashStringShorten';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import StickyPaginationWithText from 'ui/shared/StickyPaginationWithText';
 import TimeFormatToggle from 'ui/shared/time/TimeFormatToggle';
@@ -31,6 +33,18 @@ import FluentVerifierBatchStatus from 'ui/txnBatches/fluent/FluentVerifierBatchS
 const PAGE_LIMIT = 50;
 const SKELETON_ROWS_COUNT = 10;
 const FLUENT_BRIDGE_TRANSACTIONS_API = `${ config.apis.verifier?.endpoint || config.apis.general.endpoint }/indexer/v1/transactions`;
+
+function formatRawAmount(amount?: string) {
+  if (!amount) {
+    return '0';
+  }
+
+  try {
+    return BigNumber(amount).toFormat();
+  } catch {
+    return amount;
+  }
+}
 
 interface Props {
   transferType: FluentBridgeTransferType;
@@ -96,7 +110,12 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
   return (
     <TableRow>
       <TableCell verticalAlign="middle" minW="220px">
-        { item.message_hash ? <HashStringShortenDynamic hash={ item.message_hash } noTooltip/> : <Text color="text.secondary">-</Text> }
+        { item.message_hash ? (
+          <>
+            <HashStringShorten hash={ item.message_hash } type="long"/>
+            <CopyToClipboard text={ item.message_hash }/>
+          </>
+        ) : <Text color="text.secondary">-</Text> }
       </TableCell>
       <TableCell verticalAlign="middle">
         { item.l1_tx_hash ? (
@@ -113,7 +132,7 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
         ) }
       </TableCell>
       <TableCell verticalAlign="middle" isNumeric>
-        <Text>{ item.amount || '0' }</Text>
+        <Text>{ formatRawAmount(item.amount) }</Text>
       </TableCell>
       <TableCell verticalAlign="middle">
         { typeof item.batch_index === 'number' ? (
