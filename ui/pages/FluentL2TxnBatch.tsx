@@ -1,115 +1,181 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { TabItemRegular } from 'toolkit/components/AdaptiveTabs/types';
+import type { VerifierBatch } from 'types/api/verifier';
 
 import useApiQuery from 'lib/api/useApiQuery';
 import throwOnAbsentParamError from 'lib/errors/throwOnAbsentParamError';
-import throwOnResourceLoadError from 'lib/errors/throwOnResourceLoadError';
-import useIsMobile from 'lib/hooks/useIsMobile';
 import getQueryParamString from 'lib/router/getQueryParamString';
-import { BLOCK } from 'stubs/block';
-import { FLUENT_L2_TXN_BATCH } from 'stubs/fluentL2';
-import { TX } from 'stubs/tx';
-import { generateListStub } from 'stubs/utils';
-import RoutedTabs from 'toolkit/components/RoutedTabs/RoutedTabs';
-import BlocksContent from 'ui/blocks/BlocksContent';
+import { VERIFIER_BATCH } from 'stubs/verifier';
+import { Skeleton } from 'toolkit/chakra/skeleton';
 import TextAd from 'ui/shared/ad/TextAd';
+import CopyToClipboard from 'ui/shared/CopyToClipboard';
+import DataFetchAlert from 'ui/shared/DataFetchAlert';
+import * as DetailedInfo from 'ui/shared/DetailedInfo/DetailedInfo';
+import BlockEntity from 'ui/shared/entities/block/BlockEntity';
+import BlockEntityL1 from 'ui/shared/entities/block/BlockEntityL1';
+import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
 import PageTitle from 'ui/shared/Page/PageTitle';
-import Pagination from 'ui/shared/pagination/Pagination';
-import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
-import ScrollL2TxnBatchDetails from 'ui/txnBatches/scrollL2/ScrollL2TxnBatchDetails';
-import TxsWithFrontendSorting from 'ui/txs/TxsWithFrontendSorting';
+import PrevNext from 'ui/shared/PrevNext';
+import FluentVerifierBatchStatus from 'ui/txnBatches/fluent/FluentVerifierBatchStatus';
 
-const TAB_LIST_PROPS = {
-  marginBottom: 0,
-  py: 5,
-  marginTop: -5,
+const PAGE_LIMIT = 1;
+
+const PLACEHOLDER_DATA = {
+  items: [ VERIFIER_BATCH ],
+  limit: PAGE_LIMIT,
+  has_more: true,
+  next_cursor: VERIFIER_BATCH.index,
+  next_page_params: {
+    cursor: VERIFIER_BATCH.index,
+    limit: PAGE_LIMIT,
+  },
 };
 
-const TABS_HEIGHT = 80;
+interface HashValueProps {
+  hash: string;
+  isLoading?: boolean;
+}
+
+const HashValue = ({ hash, isLoading }: HashValueProps) => {
+  return (
+    <>
+      <Skeleton loading={ isLoading } display="inline-block">
+        <HashStringShortenDynamic hash={ hash }/>
+      </Skeleton>
+      <CopyToClipboard text={ hash } isLoading={ isLoading }/>
+    </>
+  );
+};
 
 const FluentL2TxnBatch = () => {
   const router = useRouter();
   const number = getQueryParamString(router.query.number);
-  const tab = getQueryParamString(router.query.tab);
-  const isMobile = useIsMobile();
-
-  const batchQuery = useApiQuery('general:fluent_l2_txn_batch', {
-    pathParams: { number },
-    queryOptions: {
-      enabled: Boolean(number),
-      placeholderData: FLUENT_L2_TXN_BATCH,
-    },
-  });
-
-  const batchTxsQuery = useQueryWithPages({
-    resourceName: 'general:fluent_l2_txn_batch_txs',
-    pathParams: { number },
-    options: {
-      enabled: Boolean(!batchQuery.isPlaceholderData && batchQuery.data?.number && tab === 'txs'),
-      placeholderData: generateListStub<'general:fluent_l2_txn_batch_txs'>(TX, 50, { next_page_params: {
-        batch_number: 8122,
-        block_number: 1338932,
-        index: 0,
-        items_count: 50,
-      } }),
-    },
-  });
-
-  const batchBlocksQuery = useQueryWithPages({
-    resourceName: 'general:fluent_l2_txn_batch_blocks',
-    pathParams: { number },
-    options: {
-      enabled: Boolean(!batchQuery.isPlaceholderData && batchQuery.data?.number && tab === 'blocks'),
-      placeholderData: generateListStub<'general:fluent_l2_txn_batch_blocks'>(BLOCK, 50, { next_page_params: {
-        batch_number: 8122,
-        block_number: 1338932,
-        items_count: 50,
-      } }),
-    },
-  });
 
   throwOnAbsentParamError(number);
-  throwOnResourceLoadError(batchQuery);
 
-  let pagination;
-  if (tab === 'txs') {
-    pagination = batchTxsQuery.pagination;
-  }
-  if (tab === 'blocks') {
-    pagination = batchBlocksQuery.pagination;
-  }
+  const batchNumber = Number(number);
+  const isBatchNumberValid = Number.isInteger(batchNumber) && batchNumber >= 0;
 
-  const hasPagination = !isMobile && pagination?.isVisible;
-
-  const tabs: Array<TabItemRegular> = React.useMemo(() => ([
-    { id: 'index', title: 'Details', component: <ScrollL2TxnBatchDetails query={ batchQuery }/> },
-    {
-      id: 'txs',
-      title: 'Transactions',
-      component: <TxsWithFrontendSorting query={ batchTxsQuery } top={ hasPagination ? TABS_HEIGHT : 0 }/>,
+  const batchQuery = useApiQuery<'verifier:batches', unknown, VerifierBatch | undefined>('verifier:batches', {
+    queryParams: isBatchNumberValid ? {
+      limit: PAGE_LIMIT,
+      cursor: batchNumber + 1,
+    } : undefined,
+    queryOptions: {
+      enabled: isBatchNumberValid,
+      placeholderData: PLACEHOLDER_DATA,
+      select: (response) => response.items[0],
     },
-    {
-      id: 'blocks',
-      title: 'Blocks',
-      component: <BlocksContent type="block" query={ batchBlocksQuery } enableSocket={ false } top={ hasPagination ? TABS_HEIGHT : 0 }/>,
-    },
-  ].filter(Boolean)), [ batchQuery, batchTxsQuery, batchBlocksQuery, hasPagination ]);
+  });
+
+  const batch = batchQuery.data;
+  const isLoading = batchQuery.isPlaceholderData;
+  const isNotFound = !isLoading && !batchQuery.isError && (!batch || batch.index !== batchNumber);
+
+  const handlePrevNextClick = React.useCallback((direction: 'prev' | 'next') => {
+    if (!isBatchNumberValid) {
+      return;
+    }
+
+    const increment = direction === 'next' ? +1 : -1;
+    const nextNumber = batchNumber + increment;
+
+    if (nextNumber < 0) {
+      return;
+    }
+
+    router.push({ pathname: '/batches/[number]', query: { number: String(nextNumber) } }, undefined);
+  }, [ batchNumber, isBatchNumberValid, router ]);
 
   return (
     <>
       <TextAd mb={ 6 }/>
-      <PageTitle
-        title={ `Txn batch #${ number }` }
-      />
-      <RoutedTabs
-        tabs={ tabs }
-        isLoading={ batchQuery.isPlaceholderData }
-        listProps={ isMobile ? undefined : TAB_LIST_PROPS }
-        rightSlot={ hasPagination && pagination ? <Pagination { ...(pagination) }/> : null }
-        stickyEnabled={ hasPagination }
-      />
+      <PageTitle title={ `Txn batch #${ number }` }/>
+
+      { !isBatchNumberValid || batchQuery.isError || isNotFound ? <DataFetchAlert/> : null }
+
+      { batch ? (
+        <DetailedInfo.Container>
+          <DetailedInfo.ItemLabel>
+            Txn batch number
+          </DetailedInfo.ItemLabel>
+          <DetailedInfo.ItemValue>
+            <Skeleton loading={ isLoading } display="inline-block">{ batch.index.toLocaleString() }</Skeleton>
+            <PrevNext
+              ml={ 6 }
+              onClick={ handlePrevNextClick }
+              prevLabel="View previous txn batch"
+              nextLabel="View next txn batch"
+              isPrevDisabled={ batch.index === 0 }
+              isLoading={ isLoading }
+            />
+          </DetailedInfo.ItemValue>
+
+          <DetailedInfo.ItemLabel>
+            Status
+          </DetailedInfo.ItemLabel>
+          <DetailedInfo.ItemValue>
+            <FluentVerifierBatchStatus status={ batch.status } isLoading={ isLoading }/>
+          </DetailedInfo.ItemValue>
+
+          <DetailedInfo.ItemLabel>
+            Batch root
+          </DetailedInfo.ItemLabel>
+          <DetailedInfo.ItemValue>
+            <HashValue hash={ batch.batch_root } isLoading={ isLoading }/>
+          </DetailedInfo.ItemValue>
+
+          <DetailedInfo.ItemLabel>
+            From block hash
+          </DetailedInfo.ItemLabel>
+          <DetailedInfo.ItemValue>
+            <HashValue hash={ batch.from_block_hash } isLoading={ isLoading }/>
+          </DetailedInfo.ItemValue>
+
+          <DetailedInfo.ItemLabel>
+            To block hash
+          </DetailedInfo.ItemLabel>
+          <DetailedInfo.ItemValue>
+            <HashValue hash={ batch.to_block_hash } isLoading={ isLoading }/>
+          </DetailedInfo.ItemValue>
+
+          <DetailedInfo.ItemLabel>
+            Start block
+          </DetailedInfo.ItemLabel>
+          <DetailedInfo.ItemValue>
+            <BlockEntity number={ batch.start_block } isLoading={ isLoading } noIcon/>
+          </DetailedInfo.ItemValue>
+
+          <DetailedInfo.ItemLabel>
+            End block
+          </DetailedInfo.ItemLabel>
+          <DetailedInfo.ItemValue>
+            <BlockEntity number={ batch.end_block } isLoading={ isLoading } noIcon/>
+          </DetailedInfo.ItemValue>
+
+          <DetailedInfo.ItemLabel>
+            Blocks
+          </DetailedInfo.ItemLabel>
+          <DetailedInfo.ItemValue>
+            <Skeleton loading={ isLoading } display="inline-block">{ batch.block_count.toLocaleString() }</Skeleton>
+          </DetailedInfo.ItemValue>
+
+          <DetailedInfo.ItemLabel>
+            L1 event block
+          </DetailedInfo.ItemLabel>
+          <DetailedInfo.ItemValue>
+            <BlockEntityL1 number={ batch.l1_event_block } isLoading={ isLoading } noIcon/>
+          </DetailedInfo.ItemValue>
+
+          <DetailedInfo.ItemLabel>
+            Resolved
+          </DetailedInfo.ItemLabel>
+          <DetailedInfo.ItemValue>
+            <Skeleton loading={ isLoading } display="inline-block">{ batch.interval_resolved ? 'Yes' : 'No' }</Skeleton>
+          </DetailedInfo.ItemValue>
+        </DetailedInfo.Container>
+      ) : null }
     </>
   );
 };

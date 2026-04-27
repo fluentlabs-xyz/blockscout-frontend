@@ -4,6 +4,7 @@ import type { VerifierBatch } from 'types/api/verifier';
 
 import { route } from 'nextjs-routes';
 
+import { Link } from 'toolkit/chakra/link';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import { TableCell, TableRow } from 'toolkit/chakra/table';
 
@@ -16,10 +17,12 @@ type Props = {
 };
 
 const FluentTxnBatchesTableItem = ({ item, isLoading }: Props) => {
+  const batchLink = route({ pathname: '/batches/[number]', query: { number: String(item.index) } });
+
   return (
     <TableRow>
       <TableCell verticalAlign="middle">
-        <Skeleton loading={ isLoading } display="inline-block">#{ item.index.toLocaleString() }</Skeleton>
+        <Link loading={ isLoading } href={ batchLink }>#{ item.index.toLocaleString() }</Link>
       </TableCell>
       <TableCell verticalAlign="middle">
         <FluentVerifierBatchStatus status={ item.status } isLoading={ isLoading }/>
