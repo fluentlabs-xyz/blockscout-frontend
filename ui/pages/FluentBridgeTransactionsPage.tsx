@@ -21,6 +21,7 @@ import PageTitle from 'ui/shared/Page/PageTitle';
 import StickyPaginationWithText from 'ui/shared/StickyPaginationWithText';
 import TimeFormatToggle from 'ui/shared/time/TimeFormatToggle';
 import TimeWithTooltip from 'ui/shared/time/TimeWithTooltip';
+import AssetValue from 'ui/shared/value/AssetValue';
 import NativeCoinValue from 'ui/shared/value/NativeCoinValue';
 import FluentHashValue from 'ui/txnBatches/fluent/FluentHashValue';
 import FluentVerifierBatchStatus from 'ui/txnBatches/fluent/FluentVerifierBatchStatus';
@@ -44,6 +45,9 @@ function makeSkeletonItem(transferType: FluentBridgeTransferType): FluentBridgeT
     receiver_gateway: '',
     asset_type: '',
     amount: '0',
+    token_name: null,
+    token_symbol: null,
+    token_decimals: null,
     l1_tx_hash: null,
     l2_tx_hash: null,
     sent_tx_hash: null,
@@ -89,6 +93,21 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
     name: item.batch_status_name,
   } : null;
 
+  const amountContent = (() => {
+    if (item.asset_type === 'token' || item.token_symbol || typeof item.token_decimals === 'number') {
+      return (
+        <AssetValue
+          amount={ item.amount }
+          decimals={ typeof item.token_decimals === 'number' ? item.token_decimals : 18 }
+          asset={ item.token_symbol || undefined }
+          noTooltip
+        />
+      );
+    }
+
+    return <NativeCoinValue amount={ item.amount } noSymbol/>;
+  })();
+
   return (
     <TableRow>
       <TableCell verticalAlign="middle" minW="220px">
@@ -111,7 +130,7 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
         ) }
       </TableCell>
       <TableCell verticalAlign="middle" isNumeric>
-        <NativeCoinValue amount={ item.amount } noSymbol/>
+        { amountContent }
       </TableCell>
       <TableCell verticalAlign="middle">
         { typeof item.batch_index === 'number' ? (
