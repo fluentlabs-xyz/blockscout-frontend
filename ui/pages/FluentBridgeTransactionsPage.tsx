@@ -94,14 +94,15 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
   } : null;
 
   const amountContent = (() => {
-    if (item.asset_type === 'token') {
-      const symbol = item.token_symbol || undefined;
-
-      if (typeof item.token_decimals === 'number') {
-        return <AssetValue amount={ item.amount } decimals={ item.token_decimals } asset={ symbol } noTooltip/>;
-      }
-
-      return <AssetValue amount={ item.amount } decimals={ 18 } asset={ symbol } noTooltip/>;
+    if (item.asset_type === 'token' || item.token_symbol || typeof item.token_decimals === 'number') {
+      return (
+        <AssetValue
+          amount={ item.amount }
+          decimals={ typeof item.token_decimals === 'number' ? item.token_decimals : 18 }
+          asset={ item.token_symbol || undefined }
+          noTooltip
+        />
+      );
     }
 
     return <NativeCoinValue amount={ item.amount } noSymbol/>;
