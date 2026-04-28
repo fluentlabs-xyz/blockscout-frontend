@@ -101,7 +101,7 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
         return <AssetValue amount={ item.amount } decimals={ item.token_decimals } asset={ symbol } noTooltip/>;
       }
 
-      return <AssetValue amount={ item.amount } decimals={ 0 } asset={ symbol } noTooltip/>;
+      return <AssetValue amount={ item.amount } decimals={ 18 } asset={ symbol } noTooltip/>;
     }
 
     return <NativeCoinValue amount={ item.amount } noSymbol/>;
