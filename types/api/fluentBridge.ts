@@ -11,6 +11,9 @@ export type FluentBridgeTransactionItem = {
   receiver_gateway: string;
   asset_type: string;
   amount: string;
+  token_name: string | null;
+  token_symbol: string | null;
+  token_decimals: number | null;
   l1_tx_hash: string | null;
   l2_tx_hash: string | null;
   sent_tx_hash: string | null;
