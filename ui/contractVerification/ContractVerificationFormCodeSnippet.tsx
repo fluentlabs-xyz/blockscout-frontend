@@ -7,7 +7,7 @@ interface Props {
 
 const ContractVerificationFormCodeSnippet = ({ code }: Props) => {
   return (
-    <Code whiteSpace="pre-wrap" wordBreak="break-all" p={ 2 } borderRadius="base">
+    <Code whiteSpace="pre-wrap" height="fit-content" wordBreak="break-all" p={ 2 } borderRadius="base">
       { code }
     </Code>
   );
