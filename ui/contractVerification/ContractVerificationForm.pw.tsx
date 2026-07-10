@@ -215,6 +215,11 @@ test('verification of fluent rust contract', async({ render, page }) => {
   await expect(component.getByLabel(/contract abi/i)).toBeVisible();
   await expect(component.getByLabel(/repository url/i)).toBeVisible();
   await expect(component.getByLabel(/commit ref/i)).toBeVisible();
+
+  await expect(component.locator('button').filter({ hasText: 'Rust toolchain' })).toContainText('1.92.0');
+  await component.locator('button').filter({ hasText: 'Rust toolchain' }).click();
+  await expect(page.getByRole('option', { name: '1.92.0' })).toBeVisible();
+  await expect(page.getByRole('option', { name: '1.93.1' })).toBeVisible();
 });
 
 test('verification of stylus rust contract', async({ render, page }) => {

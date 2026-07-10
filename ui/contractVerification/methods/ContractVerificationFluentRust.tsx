@@ -14,6 +14,8 @@ import { FormFieldUrl } from 'toolkit/components/forms/fields/FormFieldUrl';
 import ContractVerificationFormRow from '../ContractVerificationFormRow';
 import ContractVerificationMethod from '../ContractVerificationMethod';
 
+const RUST_TOOLCHAINS = [ '1.92.0', '1.93.1' ];
+
 const ContractVerificationFluentRust = ({ config }: { config: SmartContractVerificationConfig }) => {
   const { watch } = useFormContext<FormFields>();
   const sourceType = watch('source_type')?.[0];
@@ -30,6 +32,13 @@ const ContractVerificationFluentRust = ({ config }: { config: SmartContractVerif
       { label: 'Git repository', value: 'git' },
       { label: 'Archive content', value: 'archive' },
     ],
+  }), []);
+
+  const rustToolchainCollection = React.useMemo(() => createListCollection<SelectOption>({
+    items: RUST_TOOLCHAINS.map((value) => ({
+      label: value,
+      value,
+    })),
   }), []);
 
   const abiValidator = React.useCallback((value: unknown) => {
@@ -151,22 +160,13 @@ const ContractVerificationFluentRust = ({ config }: { config: SmartContractVerif
       </ContractVerificationFormRow>
 
       <ContractVerificationFormRow>
-        <FormFieldText<FormFields>
-          readOnly
-          pointerEvents="none"
-          bgColor="transparent"
+        <FormFieldSelect<FormFields, 'rust_toolchain'>
           name="rust_toolchain"
           placeholder="Rust toolchain"
-          rules={{ maxLength: 255 }}
-          inputProps={{
-            readOnly: true,
-            bg: 'transparent',
-            _readOnly: {
-              bg: 'transparent',
-            },
-          }}
+          collection={ rustToolchainCollection }
+          required
         />
-        <span>Optional. For example, `stable`, `beta`, or a pinned toolchain version.</span>
+        <span>Select the Rust toolchain version used during compilation.</span>
       </ContractVerificationFormRow>
 
       <ContractVerificationFormRow>
