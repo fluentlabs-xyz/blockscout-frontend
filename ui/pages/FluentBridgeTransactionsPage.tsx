@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import type {
@@ -8,8 +8,13 @@ import type {
 import type { VerifierBatchStatus } from 'types/api/verifier';
 import type { PaginationParams } from 'ui/shared/pagination/types';
 
+import { route } from 'nextjs-routes';
+
+import config from 'configs/app';
 import useApiQuery from 'lib/api/useApiQuery';
 import { layerLabels } from 'lib/rollups/utils';
+import { Badge } from 'toolkit/chakra/badge';
+import { Link } from 'toolkit/chakra/link';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import { TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow } from 'toolkit/chakra/table';
 import { nbsp, rightLineArrow } from 'toolkit/utils/htmlEntities';
@@ -17,6 +22,7 @@ import DataListDisplay from 'ui/shared/DataListDisplay';
 import BatchEntityL2 from 'ui/shared/entities/block/BatchEntityL2';
 import TxEntity from 'ui/shared/entities/tx/TxEntity';
 import TxEntityL1 from 'ui/shared/entities/tx/TxEntityL1';
+import HashStringShorten from 'ui/shared/HashStringShorten';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import StickyPaginationWithText from 'ui/shared/StickyPaginationWithText';
 import TimeFormatToggle from 'ui/shared/time/TimeFormatToggle';
@@ -28,6 +34,19 @@ import FluentVerifierBatchStatus from 'ui/txnBatches/fluent/FluentVerifierBatchS
 
 const PAGE_LIMIT = 50;
 const SKELETON_ROWS_COUNT = 10;
+
+const rollupFeature = config.features.rollup;
+
+function getNftTypeLabel(assetType: string): string | null {
+  switch (assetType) {
+    case 'erc721':
+      return 'ERC-721';
+    case 'erc1155':
+      return 'ERC-1155';
+    default:
+      return null;
+  }
+}
 
 interface Props {
   transferType: FluentBridgeTransferType;
@@ -94,12 +113,44 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
   } : null;
 
   const amountContent = (() => {
-    const amount = item.amount ?? item.value;
+    const nftLabel = getNftTypeLabel(item.asset_type);
+
+    if (nftLabel) {
+      const collectionLink = (() => {
+        if (item.token_l2_address) {
+          return (
+            <Link href={ route({ pathname: '/token/[hash]', query: { hash: item.token_l2_address } }) }>
+              <HashStringShorten hash={ item.token_l2_address }/>
+            </Link>
+          );
+        }
+
+        if (item.token_l1_address && rollupFeature.isEnabled) {
+          const href = rollupFeature.parentChain.baseUrl +
+            route({ pathname: '/token/[hash]', query: { hash: item.token_l1_address } });
+
+          return (
+            <Link href={ href } external>
+              <HashStringShorten hash={ item.token_l1_address }/>
+            </Link>
+          );
+        }
+
+        return null;
+      })();
+
+      return (
+        <Flex alignItems="center" justifyContent="flex-end" columnGap={ 2 }>
+          <Badge colorPalette="gray">{ nftLabel }</Badge>
+          { collectionLink }
+        </Flex>
+      );
+    }
 
     if (item.asset_type === 'token' || item.token_symbol || item.token_name || typeof item.token_decimals === 'number') {
       return (
         <AssetValue
-          amount={ amount }
+          amount={ item.amount }
           decimals={ typeof item.token_decimals === 'number' ? item.token_decimals : 18 }
           asset={ item.token_symbol || item.token_name || undefined }
           noTooltip
@@ -107,7 +158,7 @@ const FluentBridgeTransactionsTableRow = ({ item, isLoading }: { item: FluentBri
       );
     }
 
-    return <NativeCoinValue amount={ amount }/>;
+    return <NativeCoinValue amount={ item.amount }/>;
   })();
 
   return (

@@ -10,10 +10,13 @@ export type FluentBridgeTransactionItem = {
   sender_gateway: string;
   receiver_gateway: string;
   asset_type: string;
-  amount: string;
+  amount?: string;
   token_name: string | null;
   token_symbol: string | null;
   token_decimals: number | null;
+  token_l1_address?: string;
+  token_l2_address?: string;
+  retryable?: boolean;
   l1_tx_hash: string | null;
   l2_tx_hash: string | null;
   sent_tx_hash: string | null;
